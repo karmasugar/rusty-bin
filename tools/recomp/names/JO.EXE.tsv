@@ -1,0 +1,744 @@
+# Names for JO.EXE (EXEPACK removed). Address = segment:offset in the file image (code segment 0000, data 06E7).
+# kind: func (create/rename function, plate comment), label (code label), data (data label, EOL comment).
+# "(guess)" in a comment marks a name that is not confirmed yet.
+# address	kind	name	comment
+0000:0000	func	entry_main	Program start: parse command line stage number, init, title menu, main loop at 0000:00D4.
+0000:00D4	label	main_loop	One frame: story/objects/enemies/player logic, stage transition check, end_frame, speed wait.
+0000:0145	func	frame_update_no_input	Frame step used during transitions: story_update, objects, enemies, draw, speed wait. (guess)
+0000:018D	func	wait_frame_time	Wait until the vsync frame counter reaches game_speed_frames [2A8C] (F1/F10 game speed).
+0000:0197	func	stage_transition	Call STORYn entries 2 and 3 (far), reinit, reload page0 sprites, jump back to the main loop.
+0000:0253	func	render_frame	Draw one frame: calls the drawing routines in a fixed order. (guess)
+0000:0276	func	end_frame	render_frame, wait_vsync, graphics driver function 2 (page flip?).
+0000:02A9	func	title_menu	Title screen and main menu (Start / Continue / Options); options submenu with music test and voice switch.
+0000:06A0	func	continue_screen	Screen that saves progress (calls progress_save). (guess)
+0000:07D5	func	continue_load	Load GAMEDATA.CFG, decode with key text, set start stage [2A87]; exit program if the check fails.
+0000:0841	func	progress_save	Encode the current stage into GAMEDATA.CFG with the key text and write it.
+0000:08FE	func	parse_decimal	Parse a decimal number at DS:SI (command line). CF=1 if no digit.
+0000:0929	func	copy_protection_check	Key sector read INT 1Bh AH=56h (cylinder 40, sector ID F7h). INT 1Bh is replaced by MOV AH,A0h in all dumps (cracked).
+0000:0E10	func	video_init	Cursor off, text display on, graphics display on.
+0000:0E5B	func	exit_program	Stop music, remove vsync handler, DOS exit.
+0000:0E6C	func	grp_call	Call graphics driver function AX: far call through the entry table of GRPEGC/GRPGDC at segment 6ED8.
+0000:0F68	func	load_file	Open file DS:DX, read up to CX bytes to ES:BX (LZ files are unpacked), close.
+0000:1050	func	file_open	Open DS:DX (first byte = disk number; tries other drives). Detects the LZ header and inits the LZSS state.
+0000:1145	func	file_read	Read CX bytes to DS:DX in 32 KB parts; uses lzss_read for LZ files.
+0000:11A7	func	file_close	Close the current file handle.
+0000:11C5	func	file_save_args	Save DX, DS, BX, ES, CX of a file call.
+0000:11EC	func	file_read_byte	Buffered read of one byte (4 KB buffer at DS:056E). CF=1 at end of file.
+0000:125D	func	lzss_read	LZSS decoder: 4 KB ring buffer at DS:156F, start position 0FEEh, can continue a stopped read.
+0000:1387	func	save_file	Create file DS:DX and write CX bytes from ES:BX.
+0000:13A7	func	file_create	DOS create.
+0000:13BC	func	file_write	DOS write.
+0000:1404	func	file_close_write	Close the file written by save_file.
+0000:1422	func	load_voices	Load VOICES.PPL/PPT; uses INT 1Fh AH=90h (copy to extended memory). (guess)
+0000:15A0	func	wait_vsync	Wait until the vsync frame counter changes.
+0000:15AE	func	get_frame_counter	AX = vsync frame counter (CS:166D).
+0000:15B3	func	reset_frame_counter	Set the vsync frame counter to 0.
+0000:15BB	func	vsync_install	Hook INT 0Ah (vsync IRQ 2) to vsync_handler, unmask IRQ 2, detect PMD (pmd_present).
+0000:1629	func	vsync_remove	Mask IRQ 2 and restore the old INT 0Ah vector.
+0000:164F	func	vsync_handler	INT 0Ah handler: count frames, EOI, reset CRTV interrupt.
+0000:1680	func	load_sprites	Load a sprite set: DAT file DX and TBL file BX into slot AX (page0/1/2).
+0000:17E4	func	load_graphics_driver	0000:054D bit 6 (EGC present) selects grpegc.com, else grpgdc.com; loads to segment 6ED8.
+0000:1928	func	load_font	Load font.dat to DS:85EF.
+0000:1945	func	load_song	Load PMD song DS:DX into the PMD buffer; adds "2" (.M2) when PMD reports an OPNA board.
+0000:198A	func	load_magload	Load magload.com to segment 6ED8 (same slot as the graphics driver).
+0000:1BAF	func	load_visual	Load visual.com to segment 6A5A (same slot as ENEMYn).
+0000:1BD0	func	wait_input_release	Wait until no input, then flush the key buffer.
+0000:1BDB	func	read_input	Joystick (PMD AH=16h) + keyboard, repeated until stable; result in input_bits [2A90].
+0000:1CEA	func	read_keyboard	INT 18h AH=04h key groups to BX bits: 1 up, 2 down, 4 left, 8 right, 10h jump, 20h whip, 100h ESC, 200h-2000h f1-f5, 4000h f10.
+0000:1DC8	func	joystick_to_input	Convert active-low joystick bits in AL to input bits in BX.
+0000:1DF5	func	flush_key_buffer	Read keys from the BIOS buffer until it is empty.
+0000:2785	func	update_player_world_pos	player_world_x/y [2A15]/[2A17] = player screen position + camera + fixed offset.
+0000:3C2B	func	story_update	Room triggers from the STORYn table (entry 4, room [29F2]) with far calls, then STORYn entry 0.
+0000:49A7	func	objects_activate_by_camera	25 objects of 80h bytes at DS:745D: activate or deactivate by distance to the camera.
+0000:4F24	func	enemy_engine_update	Call ENEMYn entry 4 with the object table DS:745D (not when [2A2C] = 1).
+0000:68A8	func	music_load	Stop music, get the PMD song buffer (AH=06h), load song DS:DX.
+0000:696D	func	music_stop	PMD AH=01h (stop), if PMD is present.
+0000:69AC	func	play_sound_effect	Sound effect BL through PMD AH=03h, if PMD is present and INT 63h AH=02h returns 0. (guess)
+06E7:007A	data	music_test_track	Options menu: selected song (0-27).
+06E7:0558	data	lzss_state	Saved LZSS decoder registers for a continued read.
+06E7:056E	data	file_buffer	4 KB read buffer of file_read_byte.
+06E7:156F	data	lzss_ring	LZSS ring buffer (4 KB).
+06E7:29F2	data	current_room	Current room/area index (STORYn trigger tables); also the menu blink counter.
+06E7:29F7	data	camera_x	Camera (scroll) position X in the world.
+06E7:29F9	data	camera_y	Camera (scroll) position Y in the world.
+06E7:2A07	data	player_screen_x	Player position on screen X. (guess)
+06E7:2A09	data	player_screen_y	Player position on screen Y; also the title menu cursor. (guess)
+06E7:2A15	data	player_world_x	Player position in the world X.
+06E7:2A17	data	player_world_y	Player position in the world Y.
+06E7:2A2A	data	stage_transition_flag	1 = main loop calls stage_transition.
+06E7:2A30	data	frame_parity	Toggled every frame.
+06E7:2A87	data	start_stage	Stage to start from (command line or GAMEDATA.CFG).
+06E7:2A8B	data	voice_enabled	Options menu voice switch.
+06E7:2A8C	data	game_speed_frames	Minimum vsync frames per game frame (game speed).
+06E7:2A90	data	input_bits	Current input bits (see read_keyboard).
+06E7:2A92	data	pmd_present	1 = PMD music driver found (INT 60h).
+06E7:745D	data	objects	Object table: 25 entries of 80h bytes (+02 active, +2A x, +2E y, +3E spawn id).
+06E7:A2F1	data	gamedata_key	Key text of GAMEDATA.CFG (Shift-JIS "奈緒猫さんだよん").
+# Second pass: player, death, stage screens, drawing.
+0000:010F	func	game_over	Fade music, 40 frames, load drums.pps and the game over song, wait for its end, go to continue_screen.
+0000:268D	func	player_update	Player frame: movement delta, read_input, then the player logic steps (35C5, 2994, 2D46, 2B56, 346F, 2AEC, 2E65, 2F5A, 32B0, 334D, 3EE9).
+0000:3A08	func	player_reset_state	Clear player state variables and effect slots.
+0000:3A69	func	player_death_update	check_deadly_tiles, update_time_limit; at health 0: voice 3, music fade, lose_lives, respawn with palette fade.
+0000:3B34	func	player_set_full_health	set_player_health and more. (guess)
+0000:3B81	func	room_restart	Restore camera, scroll limits and player position from the checkpoint, redraw (driver fn 8).
+0000:3BBD	func	player_respawn_at_checkpoint	Player screen/world position from the checkpoint, clear player work area DS:25F0.
+0000:3CD7	func	get_map_attribute	AL = map attribute at world position CX, DX (map at segment 5B59, width map_width). Bit 80h = deadly.
+0000:3D13	func	enemy_contact_damage	For each active object with a hitbox: overlap with the player gives damage_player and hurt timer 15h.
+0000:4286	func	update_time_limit	Count down time_left; warning sound 27h below 320h; at 0 the player health becomes 0.
+0000:42CD	func	check_deadly_tiles	Test 4 map points around the player; attribute bit 80h = instant death (if not hurt).
+0000:4446	func	stage_clear	Stage clear sequence: clear.pps, sound effects, count bonus (5AFC, 5C33, 5BC2). (guess for the bonus part)
+0000:44EC	func	stage_clear_reset	Reset health and effect slots after stage clear.
+0000:45BE	func	draw_objects_back	Draw objects through draw_object (first layer). (guess)
+0000:4601	func	draw_objects_front	Draw objects through draw_object (second layer). (guess)
+0000:4687	func	objects_update	For each active object: far call its AI handler (ENEMYn entry 1 table [group +10][index +11]) after state_frames+1, floor push, linked objects, map collision, then position += velocity, velocity = 0. With time slow ([2A33]) objects of class >= 1Ch update every 4th frame.
+0000:4CA5	func	draw_object	Draw one object sprite. (guess)
+0000:2678	func	clear_effect_slots	Clear 9 effect slots of 20h bytes at DS:733D.
+0000:53D0	func	camera_update	Move the camera 1 pixel per frame to its target (if scrolling is on); screen shake countdown.
+0000:5B7A	func	lose_lives	Subtract AL from player_lives; below 0 go to game_over.
+0000:5BE6	func	damage_player	Subtract AL from player_health (not below 0), mark the health display for redraw.
+0000:5BFC	func	set_player_health	player_health = AL, mark the health display for redraw.
+0000:5C7C	func	stage_map_screen	World map between stages: map_d.mag / map_u.mag, song allmap.m, wait for input.
+0000:62B6	func	eyecatch_screen	Eye-catch screen: song eyecatch.m, ec.pps.
+0000:68D3	func	music_start	PMD AH=00h (start), if PMD is present.
+0000:693C	func	music_fade_out	PMD AH=02h, speed DL, if PMD is present.
+0000:69D7	func	sound_effect_stop	PMD AH=04h. (guess)
+0000:69EF	func	pps_load	Load a .PPS file DS:DX into the PPSDRV buffer (INT 64h AH=04h).
+0000:6A1A	func	pps_play	Play PPS sample DL (INT 64h AH=03h), for example voice 3 at death.
+0000:5486	func	bg_helper	Shared helper of the background drawing routines. (guess)
+0000:54C9	func	draw_background_main	Background layer by stage, room, camera and shake offset (driver fn 09, 19, 03). (guess)
+0000:5571	func	draw_scroll_layer	Layer drawn with driver fn 06 at the camera position. (guess)
+0000:55D3	func	draw_background_far	Background layer by stage and room (driver fn 09, 03). (guess)
+0000:5688	func	draw_map_sprites	Sprites at camera-relative positions (driver fn 04). (guess)
+06E7:25F0	data	player_work	Player work area (4Dh bytes, cleared at respawn).
+06E7:29E0	data	player_hurt_timer	Hurt/invulnerable frames (12h after respawn, 15h after a hit).
+06E7:29E2	data	player_health	Player health (6 at respawn).
+06E7:29E3	data	player_lives	Player lives.
+06E7:29EC	data	time_left	Stage time limit in frames (1F3Fh at start).
+06E7:29F4	data	player_crouching	1 = player crouches (lower hitbox).
+06E7:29FD	data	screen_shake_offset	Current screen shake offset.
+06E7:29FF	data	camera_target_x	Camera target X.
+06E7:2A01	data	camera_target_y	Camera target Y.
+06E7:2A0B	data	player_delta_x	Player movement since the last frame X. (guess)
+06E7:2A0D	data	player_delta_y	Player movement since the last frame Y. (guess)
+06E7:2A19	data	checkpoint	Checkpoint data up to 2A28 (camera, player position, scroll flags).
+06E7:2A26	data	scroll_x_enabled	1 = camera follows the target in X.
+06E7:2A27	data	scroll_y_enabled	1 = camera follows the target in Y.
+06E7:2A83	data	screen_shake_timer	Screen shake frames left.
+06E7:2A93	data	map_width	Map width (bytes per map row).
+06E7:733D	data	effect_slots	9 effect slots of 20h bytes.
+# Third pass: HUD and render parts (after naming the driver API).
+0000:2210	func	draw_player	Draw the player sprite (driver fn 05/04); uses crouch state and hurt timer (blink).
+0000:571A	func	draw_hud	Draw the status display: lives, health bar, weapon/MP, keys, time.
+0000:5730	func	hud_redraw_flags	Check the redraw flags of the HUD parts. (guess)
+0000:5893	func	hud_draw_lives	Draw player_lives.
+0000:58B3	func	hud_draw_weapon_mp	Draw [29EB]/[29EE] (mind power and special weapon). (guess)
+0000:58E8	func	hud_draw_keys	Draw the 4 key counters.
+0000:5947	func	hud_draw_health	Draw the health bar (player_health), 7 glyphs.
+0000:59A6	func	hud_draw_score	Draw the score.
+0000:59D2	func	hud_draw_time	Draw time_left.
+0000:5A02	func	hud_draw_number_a	Number drawing with grp_draw_glyph. (guess)
+0000:5A38	func	hud_draw_number_b	Number drawing with grp_draw_glyph. (guess)
+0000:5A89	func	hud_draw_number_c	Number drawing with grp_draw_glyph. (guess)
+0000:6BA6	func	render_scroll_phase	Called with AL=0 at the start and AL=1 at the end of render_frame: scroll and lower screen area (driver fn 11, 1E, 18). (guess)
+06E7:29E7	data	key_counts	4 key counters (spade, diamond, club, heart; max 9).
+06E7:29EB	data	mind_power	Mind power (max 50; special weapons use it).
+06E7:29EE	data	special_weapon	Current special weapon. (guess)
+# Fourth pass: player logic steps (called from player_update).
+0000:2734	func	handle_speed_keys	F10 (input 4000h) increases game_speed_frames (slower, max 10), F1 (200h) decreases it; then input &= 813Fh.
+0000:2766	func	handle_pause	ESC (input 100h): wait for release, for a second ESC press, and for release.
+0000:43D2	func	check_hook_tile	Map attribute bit 20h at head height (x not on a 4-pixel boundary) sets [25FF]. (guess: hook point)
+0000:35C5	func	player_walk	Direction input (input & 0Fh) selects a handler from the table at DS:35A5.
+0000:2994	func	player_whip_hang	Whip button (20h) held: whip and hook state [2A35]-[2A3E]. (guess)
+0000:2D46	func	player_fall_land	Vertical movement state; plays sound 10h. (guess)
+0000:2B56	func	player_special_weapon	Jump+whip (input 30h, Z+X): use the special weapon, PPS sample. (guess for the details)
+0000:346F	func	player_jump	Jump button (input 10h).
+0000:2AEC	func	player_whip_attack	Whip button (input 20h): attack, sound 0Ch.
+0000:4358	func	player_anim_step	Uses frame parity and movement delta. (guess)
+0000:2E65	func	player_apply_velocity	Uses movement delta and velocity [2A0F]. (guess)
+0000:2F5A	func	player_map_collision	Map collision of the player (several map probes through 3928). (guess)
+0000:3928	func	map_collision_probe	Map probe for player_map_collision. (guess)
+0000:32B0	func	player_screen_bounds	Apply the delta to the screen position and check the bounds. (guess)
+0000:334D	func	camera_follow_player	Move the camera with the player within the map size (scroll_x/y_enabled, map_width). (guess)
+0000:3EE9	func	special_weapon_effects	Effects of the special weapon at the player position (6D40). (guess)
+06E7:2A0F	data	player_velocity_x	Player velocity or speed state (8000h = none). (guess)
+06E7:2A11	data	player_velocity_y	Player velocity or speed state (8000h = none). (guess)
+06E7:25FF	data	on_hook_tile	1 = player is at a hook tile (attribute bit 20h). (guess)
+# Service handlers (generated): overlays far-call JO.EXE at 0000:63FC with AX = service number (table 0000:6360).
+0000:63FC	func	service_dispatch	Overlay service entry: AX = service number, call the handler from the table at CS:6360, RETF.
+0000:6360	data	service_table	78 near pointers to the service handlers.
+0000:0E8C	func	random_seed	Fill the 16-byte random state CS:0F0B with the DOS time and date.
+0000:0EC3	func	random	DL = random value below DH (additive 16-byte generator, state CS:0F0B).
+0000:6576	func	svc_load_object_list	Service 00h. Read a list at DS:SI (until FFFFh) into DS:83DD. (guess)
+0000:640A	func	svc_get_camera	Service 01h. CX, DX = camera_x, camera_y.
+0000:641A	func	svc_set_camera	Service 02h. camera_x, camera_y = CX, DX (FFFFh = keep).
+0000:6437	func	svc_get_player_screen_pos	Service 03h. CX, DX = player_screen_x/y.
+0000:6447	func	svc_set_player_screen_pos	Service 04h. player_screen_x/y = CX, DX (FFFFh = keep).
+0000:6464	func	svc_get_player_pos	Service 05h. CX, DX = player_world_x, player_world_y.
+0000:6474	func	svc_set_mode_2a2c	Service 06h. [2A2C] = DL (stops enemy_engine_update, other death path), clear [2A3F], [2A33]. (guess: boss mode)
+0000:64B9	func	svc_checkpoint_save_scroll	Service 07h. Copy the scroll state into the checkpoint. (guess)
+0000:65FD	func	svc_redraw_map	Service 08h. Draw the map, clear 2A29, set 2A25 and camera follow in X and Y.
+0000:6497	func	svc_camera_targets	Service 09h. Stop the camera; CX / DX (FFFFh = none) become the new follow targets X / Y.
+0000:6620	func	svc_set_2a29	Service 0Ah. [2A29] = BL.
+0000:662C	func	svc_map_op_0b	Service 0Bh. Map operation with the parameter block DS:SI (uses map_width). (guess)
+0000:6686	func	svc_map_op_0c	Service 0Ch. svc_map_op_0b and more. (guess)
+0000:67E4	func	svc_load_sprite_list	Service 0Dh. For each entry DS:SI (until FFFFh) call 17B8. (guess)
+0000:6867	func	svc_load_sprites	Service 0Eh. load_sprites with slot CX.
+0000:6873	func	svc_clear_objects	Service 0Fh. Clear the object table (25 x 80h bytes).
+0000:6889	func	svc_spawn_enemy	Service 10h. Spawn an enemy through the ENEMY overlay (enemy_overlay_spawn): kind BL, x CX, y DI, DL, direction BH.
+0000:6956	func	svc_music_stop_if_present	Service 14h. music_stop if PMD is present.
+0000:6A3B	func	svc_1a	Service 1Ah. Unknown (not executed in coverage).
+0000:6501	func	svc_checkpoint_save_player	Service 1Bh. Save the scroll state and the player position (CX, ...) as checkpoint. (guess)
+0000:6849	func	svc_load_lower_vram_picture	Service 1Ch. load_lower_vram_picture.
+0000:6853	func	svc_load_map	Service 1Dh. load_map.
+0000:685D	func	svc_load_palette_file	Service 1Eh. load_palette_file.
+0000:6A5E	func	svc_fade_in	Service 1Fh. grp_fade_in with the stage palette DS:858F.
+0000:6A73	func	svc_fade_out	Service 20h. grp_fade_out with the stage palette DS:858F.
+0000:6AB2	func	svc_room_restart	Service 21h. Calls 5C4C and room_restart.
+0000:6AF1	func	svc_grp_set_palette_entry	Service 22h. grp_call 0Bh.
+0000:6AFE	func	svc_grp_set_palette	Service 23h. grp_call 0Ah.
+0000:6B0B	func	svc_set_stage_palette	Service 24h. grp_set_palette with DS:858F.
+0000:6B20	func	svc_grp_copy_status_row	Service 25h. grp_call 11h.
+0000:6B2D	func	svc_get_room	Service 26h. DL = current_room.
+0000:6B39	func	svc_set_room	Service 27h. current_room = DL, [2A84] = 1.
+0000:6B4A	func	svc_enemy_overlay_init	Service 28h. enemy_overlay_init.
+0000:66CC	func	svc_copy_map_block	Service 29h. Copy a block of tiles into the map (parameter block DS:SI: width, height, source, destination x/y).
+0000:6741	func	svc_copy_map_block_both	Service 2Ah. svc_copy_map_block into the map and into its backup (+7804h).
+0000:6B59	func	svc_set_floor_push	Service 2Bh. floor_push_enabled = DL.
+0000:6B65	func	svc_get_floor_push	Service 2Ch. DL = floor_push_enabled.
+0000:6B71	func	svc_set_view_offset	Service 2Dh. [29FB], screen_shake_offset = CX, DX. (guess)
+0000:6B81	func	svc_grp_draw_line	Service 2Eh. grp_call 13h.
+0000:6BDB	func	svc_set_input_lock	Service 2Fh. [2A32] = DL (1 = player input cleared). (guess)
+0000:6BE7	func	svc_frame_step	Service 30h. reset_frame_counter, 023B, story_update, update_player_world_pos, ... (guess)
+0000:6C03	func	svc_set_slot_2a41	Service 31h. 2A41 = BL; word 2A52[BL] = CX, word 2A62[BL] = DX. (unknown use)
+0000:6C23	func	svc_set_scroll_x	Service 32h. scroll_x_enabled = CL (FFFFh = keep), ... (guess)
+0000:6A88	func	svc_fade_14	Service 33h. grp_call 14h with DS:858F.
+0000:6A9D	func	svc_fade_15	Service 34h. grp_call 15h with DS:858F.
+0000:6ADC	func	svc_save_map_and_step	Service 35h. Save the map backup, update the enemies, end the frame.
+0000:6C49	func	svc_copy_sprite_to_status_row	Service 36h. Copy frame BL of sprite set BH to the status row DL (grp 11h).
+0000:6C94	func	svc_camera_jump	Service 37h. Move all objects, the player history and the attack slots by (camera - CX/DX) after a camera jump.
+0000:6CC2	func	svc_get_player_health	Service 38h. AL = player_health.
+0000:691B	func	svc_music_start_no_effect	Service 39h. sound_effect_stop, mark effects off, ... (guess)
+0000:6CCD	func	svc_grp_raw_call	Service 3Ah. Far call to the graphics driver segment offset 0 with AX = CX. (guess)
+0000:1B54	func	svc_load_file_checked	Service 3Bh. Load the file DX (name copied to 9C70) to ES:BX with the buffer guard byte 5119:9FFF; exit when it overflows.
+0000:6CE3	func	svc_read_input	Service 3Ch. DX = read_input.
+0000:6B8E	func	svc_draw_sprite_frame	Service 3Dh. grp_draw_sprite_frame with the sprite tables 2AF1/2A99.
+0000:5150	func	svc_random	Service 3Eh. DL = random below DH.
+0000:5154	func	svc_random_range	Service 3Fh. Random value with range DL/DH. (guess for the details)
+0000:6103	func	svc_message_window	Service 40h. Show a message window (position CX/DI, size BL/BH, colors DL/DH) with the text DS:SI and wait. (guess)
+0000:6CF0	func	svc_get_player_velocity	Service 41h. CX, DX = player_velocity_x, player_velocity_y.
+0000:6D40	func	vector_direction	Service 42h. Direction AL (256 steps, table 6DE2) of the vector CX (x), DX (y); CF=1 for a zero vector. Also used by the familiar shot and the enemy aim services.
+0000:6526	func	svc_add_block	Service 43h. Add or update the block CX, DX (kind BL) in the block list 83DD and mark its tiles.
+0000:6D00	func	svc_grp_fill_screen_pattern	Service 44h. grp_call 1Eh.
+0000:67BD	func	svc_map_op_46	Service 46h. Map segment 5B59. (guess)
+0000:6D0D	func	svc_grp_fn18	Service 47h. grp_call 18h.
+0000:1511	func	svc_voice_address	Service 48h. Voice data table 364: CX = count when CX = FFFFh, else the address of voice CX; CF = 1 without voices. (guess)
+0000:6A46	func	svc_music_status	Service 49h. PMD AH=02h path with DX=0. (guess)
+0000:6D1A	func	svc_set_29f3	Service 4Ah. [29F3] = DL.
+0000:6ACA	func	svc_end_frame	Service 4Bh. update_player_world_pos and end_frame.
+0000:648B	func	svc_set_2a2d	Service 4Ch. [2A2D] = DL.
+0000:6D2A	func	svc_set_2a23	Service 4Dh. [2A23] = DX.
+# Enemy service handlers (generated): ENEMYn far-calls JO.EXE at 0000:45B0 with AX = service number (table 0000:4540).
+0000:45B0	func	enemy_service_dispatch	ENEMYn service entry: AX = service number, call the handler from the table at CS:4540, RETF.
+0000:4540	data	enemy_service_table	56 near pointers to the enemy service handlers.
+0000:5AFC	func	add_score	score += AX (0-9999, ten-thousands in [29E6], max 9); extra life (sound 2Dh) when the thousands digit changes.
+0000:5B5F	func	add_lives	player_lives += AL (max 99), mark for redraw.
+0000:5BC2	func	add_health	player_health += AL (max 6), mark for redraw.
+0000:5B8E	func	add_key	key_counts[AH] += AL (max 9), mark for redraw.
+0000:5C18	func	add_mind_power	mind_power += AL (max 50), mark for redraw.
+0000:5C33	func	use_mind_power	mind_power -= AL; CF = 1 if not enough.
+06E7:29E4	data	score	Score 0-9999 (ten-thousands in score_high).
+06E7:29E6	data	score_high	Score ten-thousands digit (max 9).
+0000:4FAD	func	esvc_get_player	Enemy service 00h. CX, DX = player_world_x/y, BX = player_velocity_y.
+0000:4FC1	func	esvc_add_score	Enemy service 01h. add_score(DX).
+0000:4FCE	func	esvc_add_lives	Enemy service 02h. add_lives(DL).
+0000:4FDB	func	esvc_add_health	Enemy service 03h. add_health(DL).
+0000:4FE8	func	esvc_add_key	Enemy service 04h. add_key(DX: DL count, DH type).
+0000:5042	func	esvc_end_stage	Enemy service 05h. stage_transition_flag = 1 and more (boss defeated). (guess for the details)
+0000:5058	func	esvc_map_solid	Enemy service 06h. Solid map test (map_solid_at).
+0000:6A3B	func	pps_stop	Enemy service 10h. INT 64h AH=00h (PPSDRV stop).
+0000:5063	func	esvc_get_room	Enemy service 11h. DL = current_room.
+0000:50EF	func	esvc_get_map_attribute	Enemy service 12h. DL = get_map_attribute(CX, DX).
+0000:510B	func	esvc_carry_player_x	Enemy service 13h. player_world_x = CX, [2A11] = 8006h (player stands on a moving object). (guess)
+0000:5143	func	esvc_get_29f1	Enemy service 14h. AX = [29F1].
+0000:501C	func	esvc_set_special_weapon	Enemy service 15h. special_weapon = DL (item pickup) and more.
+0000:500F	func	esvc_add_mind_power	Enemy service 16h. add_mind_power(DL).
+0000:517F	func	esvc_start_swing	Enemy service 19h. Hang the player on the swing point CX, DX (2A34 = 1, pivot 2A38/2A3A, angle 40h/C0h, speed +-5) when near enough.
+0000:524D	func	esvc_get_flag_80dd	Enemy service 1Ah. Flag table DS:80DD + DX (killed/collected objects). (guess)
+0000:5271	func	esvc_set_flag_80dd	Enemy service 1Bh. Flag table DS:80DD + DX. (guess)
+0000:52B6	func	esvc_player_dx	Enemy service 1Ch. CX = player_world_x - CX, ... (distance to the player).
+0000:4FF5	func	esvc_add_time	Enemy service 1Dh. time_left += DX (maximum 1F3Fh).
+0000:5293	func	esvc_get_flag_82dd	Enemy service 1Eh. Flag table DS:82DD + DX. (guess)
+0000:52A5	func	esvc_set_flag_82dd	Enemy service 1Fh. Flag table DS:82DD + DX. (guess)
+0000:52D7	func	esvc_delta	Enemy service 20h. CX = (BX - CX) * 4, DX from DI - DX. (guess: direction/distance)
+0000:52EC	func	esvc_screen_shake	Enemy service 21h. screen_shake_timer = DL.
+0000:52F8	func	esvc_get_29ef	Enemy service 24h. DX = [29EF].
+0000:5304	func	esvc_get_crouching	Enemy service 25h. DL = player_crouching.
+0000:5310	func	esvc_get_2a84	Enemy service 26h. DL = [2A84].
+0000:531C	func	esvc_set_2a84	Enemy service 27h. [2A84] = DL.
+0000:5328	func	esvc_set_player_velocity	Enemy service 28h. player_velocity_x/y = CX, DX.
+0000:511D	func	esvc_set_player_world_pos	Enemy service 29h. player_world_x/y = CX, DX and screen position.
+0000:5348	func	esvc_set_2a32	Enemy service 2Ah. 2A32 = DL. (unknown use)
+0000:5354	func	esvc_set_2a13	Enemy service 2Bh. [2A13] = DX.
+0000:5360	func	esvc_get_scroll_flags	Enemy service 2Ch. DL, DH = scroll_x_enabled, scroll_y_enabled.
+0000:50FE	func	esvc_floor_type	Enemy service 2Dh. DL = map_floor_type.
+0000:5338	func	esvc_get_player_velocity	Enemy service 2Eh. CX, DX = player_velocity_x/y.
+0000:5370	func	esvc_clear_2a33	Enemy service 2Fh. [2A33] = 0.
+0000:537D	func	esvc_request_object_rescan	Enemy service 30h. [2921] = 1: objects_activate_by_camera runs again.
+0000:538A	func	esvc_get_29f6	Enemy service 31h. DL = [29F6].
+0000:5396	func	esvc_player_delta_x	Enemy service 32h. CX = DX = player_delta_x.
+0000:525F	func	esvc_flag_80dd_33	Enemy service 33h. Flag table DS:80DD + DX. (guess)
+0000:53A6	func	esvc_player_clear_25fd	Enemy service 34h. player_clear_25fd.
+0000:5282	func	esvc_flag_81dd	Enemy service 35h. Flag table DS:81DD + DX. (guess)
+0000:53B1	func	esvc_get_29f3	Enemy service 36h. DL = [29F3].
+0000:53BD	func	esvc_set_2a85	Enemy service 37h. [2A85] = 1.
+# Pass 9: objects_update callees.
+0000:4336	func	map_floor_type	Tile type below a position (used for the floor push). (guess)
+0000:4750	func	move_linked_objects	Objects with the same link_group (+16) get the velocity of this object, then collide and move.
+0000:47A2	func	object_slot_index	AH = slot number of the object at SI.
+0000:47BD	func	object_map_collision	For objects with map_collision (+05): test the hitbox corners at the next position (map_solid_at), set on_ground.
+0000:488A	func	map_solid_at	AX != 0 if the map is solid at CX, DX. (guess for the return value)
+0000:506F	func	object_apply_floor_push	If floor_push_enabled: floor tiles below the object push it (velocity_x) on every second frame. (guess: conveyor)
+0000:50EE	func	object_update_hook	Empty function (RET).
+06E7:2A2E	data	floor_push_x	Horizontal push from the floor this frame (reset every frame).
+06E7:2A31	data	floor_push_enabled	1 = floor tiles push objects and the player (stage setting). (guess)
+06E7:2A33	data	time_slow_active	1 = special weapon time slow is active (enemies update every 4th frame).
+06E7:2A3F	data	time_slow_counter	Frame counter of the time slow effect. (guess)
+# grp_call sites (generated): driver function per call.
+0000:008B	comment	-	grp 02h grp_page_flip
+0000:00D1	comment	-	grp 0Dh grp_fade_in
+0000:0226	comment	-	grp 0Eh grp_fade_out
+0000:027F	comment	-	grp 02h grp_page_flip
+0000:028F	comment	-	grp 02h grp_page_flip
+0000:02A2	comment	-	grp 02h grp_page_flip
+0000:02B2	comment	-	grp 0Ah grp_set_palette
+0000:02B8	comment	-	grp 02h grp_page_flip
+0000:0305	comment	-	grp 17h grp_mode_400_lines
+0000:030B	comment	-	grp 1Fh grp_fn1f
+0000:0314	comment	-	grp 0Dh grp_fade_in
+0000:039F	comment	-	grp 20h grp_fill_rect
+0000:03EE	comment	-	grp 05h grp_draw_sprite_frame
+0000:03FF	comment	-	grp 02h grp_page_flip
+0000:0431	comment	-	grp 0Eh grp_fade_out
+0000:0437	comment	-	grp 16h grp_mode_200_lines
+0000:05A0	comment	-	grp 20h grp_fill_rect
+0000:061C	comment	-	grp 05h grp_draw_sprite_frame
+0000:062D	comment	-	grp 02h grp_page_flip
+0000:0651	comment	-	grp 20h grp_fill_rect
+0000:0657	comment	-	grp 02h grp_page_flip
+0000:066B	comment	-	grp 20h grp_fill_rect
+0000:0671	comment	-	grp 02h grp_page_flip
+0000:0744	comment	-	grp 1Eh grp_fill_screen_pattern
+0000:0770	comment	-	grp 05h grp_draw_sprite_frame
+0000:0799	comment	-	grp 02h grp_page_flip
+0000:07CC	comment	-	grp 0Eh grp_fade_out
+0000:08BE	comment	-	grp 1Bh grp_draw_text2
+0000:08E5	comment	-	grp 1Ah grp_draw_text
+0000:098E	comment	-	grp 17h grp_mode_400_lines
+0000:0997	comment	-	grp 0Dh grp_fade_in
+0000:0E3B	comment	-	grp 0Ch grp_flip_and_copy
+0000:0E45	comment	-	grp 16h grp_mode_200_lines
+0000:0E4B	comment	-	grp 00h grp_init_mode
+0000:0E54	comment	-	grp 0Ah grp_set_palette
+0000:17DD	comment	-	grp 12h grp_copy_lower_area
+0000:18B4	comment	-	grp 12h grp_copy_lower_area
+0000:18E4	comment	-	grp 08h grp_clear_skip_flag
+0000:2385	comment	-	grp 05h grp_draw_sprite_frame
+0000:2390	comment	-	grp 04h grp_draw_sprite
+0000:23F1	comment	-	grp 05h grp_draw_sprite_frame
+0000:246D	comment	-	grp 05h grp_draw_sprite_frame
+0000:2580	comment	-	grp 04h grp_draw_sprite
+0000:25F1	comment	-	grp 13h grp_draw_line
+0000:25F9	comment	-	grp 13h grp_draw_line
+0000:3AE3	comment	-	grp 0Eh grp_fade_out
+0000:3B05	comment	-	grp 0Dh grp_fade_in
+0000:3BB1	comment	-	grp 08h grp_clear_skip_flag
+0000:3EDA	comment	-	grp 05h grp_draw_sprite_frame
+0000:4DF9	comment	-	grp 05h grp_draw_sprite_frame
+0000:4EA5	comment	-	grp 05h grp_draw_sprite_frame
+0000:54D3	comment	-	grp 09h grp_set_params
+0000:5512	comment	-	grp 09h grp_set_params
+0000:551E	comment	-	grp 09h grp_set_params
+0000:5528	comment	-	grp 19h grp_set_mode_byte
+0000:5552	comment	-	grp 03h grp_draw_layer
+0000:55A0	comment	-	grp 06h grp_draw_front_tiles
+0000:55CC	comment	-	grp 07h grp_fn07
+0000:5607	comment	-	grp 09h grp_set_params
+0000:5624	comment	-	grp 03h grp_draw_layer
+0000:5633	comment	-	grp 09h grp_set_params
+0000:5650	comment	-	grp 03h grp_draw_layer
+0000:565D	comment	-	grp 09h grp_set_params
+0000:5681	comment	-	grp 03h grp_draw_layer
+0000:56F5	comment	-	grp 04h grp_draw_sprite
+0000:56FE	comment	-	grp 04h grp_draw_sprite
+0000:570D	comment	-	grp 04h grp_draw_sprite
+0000:5751	comment	-	grp 0Fh grp_draw_glyph
+0000:580E	comment	-	grp 0Fh grp_draw_glyph
+0000:5887	comment	-	grp 10h grp_fn10
+0000:58C5	comment	-	grp 0Fh grp_draw_glyph
+0000:595F	comment	-	grp 0Fh grp_draw_glyph
+0000:5965	comment	-	grp 0Fh grp_draw_glyph
+0000:596B	comment	-	grp 0Fh grp_draw_glyph
+0000:5971	comment	-	grp 0Fh grp_draw_glyph
+0000:5977	comment	-	grp 0Fh grp_draw_glyph
+0000:597D	comment	-	grp 0Fh grp_draw_glyph
+0000:5991	comment	-	grp 0Fh grp_draw_glyph
+0000:59F1	comment	-	grp 0Fh grp_draw_glyph
+0000:59FE	comment	-	grp 0Fh grp_draw_glyph
+0000:5A0C	comment	-	grp 0Fh grp_draw_glyph
+0000:5A12	comment	-	grp 0Fh grp_draw_glyph
+0000:5A28	comment	-	grp 0Fh grp_draw_glyph
+0000:5A34	comment	-	grp 0Fh grp_draw_glyph
+0000:5A42	comment	-	grp 0Fh grp_draw_glyph
+0000:5A48	comment	-	grp 0Fh grp_draw_glyph
+0000:5A4E	comment	-	grp 0Fh grp_draw_glyph
+0000:5A62	comment	-	grp 0Fh grp_draw_glyph
+0000:5A79	comment	-	grp 0Fh grp_draw_glyph
+0000:5A85	comment	-	grp 0Fh grp_draw_glyph
+0000:5A93	comment	-	grp 0Fh grp_draw_glyph
+0000:5A99	comment	-	grp 0Fh grp_draw_glyph
+0000:5A9F	comment	-	grp 0Fh grp_draw_glyph
+0000:5AA5	comment	-	grp 0Fh grp_draw_glyph
+0000:5ABE	comment	-	grp 0Fh grp_draw_glyph
+0000:5AD4	comment	-	grp 0Fh grp_draw_glyph
+0000:5AEA	comment	-	grp 0Fh grp_draw_glyph
+0000:5AF8	comment	-	grp 0Fh grp_draw_glyph
+0000:5CED	comment	-	grp 17h grp_mode_400_lines
+0000:5CF7	comment	-	grp 18h grp_fn18
+0000:5D00	comment	-	grp 0Dh grp_fade_in
+0000:5D29	comment	-	grp 18h grp_fn18
+0000:5E00	comment	-	grp 0Eh grp_fade_out
+0000:5EBC	comment	-	grp 17h grp_mode_400_lines
+0000:5EC5	comment	-	grp 0Dh grp_fade_in
+0000:5F5E	comment	-	grp 0Eh grp_fade_out
+0000:5F6B	comment	-	grp 18h grp_fn18
+0000:5F71	comment	-	grp 16h grp_mode_200_lines
+0000:5F77	comment	-	grp 02h grp_page_flip
+0000:5F7D	comment	-	grp 02h grp_page_flip
+0000:614F	comment	-	grp 02h grp_page_flip
+0000:615B	comment	-	grp 02h grp_page_flip
+0000:61D1	comment	-	grp 1Ah grp_draw_text
+0000:61F7	comment	-	grp 02h grp_page_flip
+0000:624D	comment	-	grp 0Fh grp_draw_glyph
+0000:625D	comment	-	grp 0Fh grp_draw_glyph
+0000:626B	comment	-	grp 0Fh grp_draw_glyph
+0000:6288	comment	-	grp 0Fh grp_draw_glyph
+0000:6298	comment	-	grp 0Fh grp_draw_glyph
+0000:62A6	comment	-	grp 0Fh grp_draw_glyph
+0000:62EB	comment	-	grp 17h grp_mode_400_lines
+0000:6303	comment	-	grp 0Dh grp_fade_in
+0000:631C	comment	-	grp 0Eh grp_fade_out
+0000:6322	comment	-	grp 16h grp_mode_200_lines
+0000:6328	comment	-	grp 02h grp_page_flip
+0000:6A6C	comment	-	grp 0Dh grp_fade_in
+0000:6A81	comment	-	grp 0Eh grp_fade_out
+0000:6A96	comment	-	grp 14h grp_fade_14
+0000:6AAB	comment	-	grp 15h grp_fade_15
+0000:6AF7	comment	-	grp 0Bh grp_set_palette_entry
+0000:6B04	comment	-	grp 0Ah grp_set_palette
+0000:6B19	comment	-	grp 0Ah grp_set_palette
+0000:6B26	comment	-	grp 11h grp_copy_status_row
+0000:6B87	comment	-	grp 13h grp_draw_line
+0000:6B9F	comment	-	grp 05h grp_draw_sprite_frame
+0000:6C8D	comment	-	grp 11h grp_copy_status_row
+0000:6D06	comment	-	grp 1Eh grp_fill_screen_pattern
+0000:6D13	comment	-	grp 18h grp_fn18
+0000:11DF	func	jo_read_word	Read a value from the open file. (guess) (same code as OP.COM 0000:093C)
+0000:0001	func	entry_main_at_0001	Entry inside entry_main: the same code from this address.
+0000:0002	func	entry_main_at_0002	Entry inside entry_main: the same code from this address.
+0000:0003	func	entry_main_at_0003	Entry inside entry_main: the same code from this address.
+0000:0006	func	entry_main_at_0006	Entry inside entry_main: the same code from this address.
+0000:0007	func	entry_main_at_0007	Entry inside entry_main: the same code from this address.
+0000:0008	func	entry_main_at_0008	Entry inside entry_main: the same code from this address.
+0000:000B	func	entry_main_at_000b	Entry inside entry_main: the same code from this address.
+0000:000D	func	entry_main_at_000d	Entry inside entry_main: the same code from this address.
+0000:0017	func	entry_main_at_0017	Entry inside entry_main: the same code from this address.
+0000:001A	func	entry_main_at_001a	Entry inside entry_main: the same code from this address.
+0000:001F	func	entry_main_at_001f	Entry inside entry_main: the same code from this address.
+0000:0022	func	entry_main_at_0022	Entry inside entry_main: the same code from this address.
+0000:0027	func	entry_main_at_0027	Entry inside entry_main: the same code from this address.
+0000:002B	func	entry_main_at_002b	Entry inside entry_main: the same code from this address.
+0000:0032	func	entry_main_at_0032	Entry inside entry_main: the same code from this address.
+0000:0040	func	entry_main_at_0040	Entry inside entry_main: the same code from this address.
+0000:0057	func	entry_main_at_0057	Entry inside entry_main: the same code from this address.
+0000:0064	func	entry_main_at_0064	Entry inside entry_main: the same code from this address.
+0000:006D	func	entry_main_at_006d	Entry inside entry_main: the same code from this address.
+0000:0088	func	entry_main_at_0088	Entry inside entry_main: the same code from this address.
+0000:0099	func	entry_main_at_0099	Entry inside entry_main: the same code from this address.
+0000:00C8	func	entry_main_at_00c8	Entry inside entry_main: the same code from this address.
+0000:013B	func	game_over_at_013b	Entry inside game_over: the same code from this address.
+0000:0140	func	game_over_at_0140	Entry inside game_over: the same code from this address.
+0000:0190	func	wait_frame_time_at_0190	Entry inside wait_frame_time: the same code from this address.
+0000:0210	func	stage_transition_at_0210	Entry inside stage_transition: the same code from this address.
+0000:0229	func	stage_transition_at_0229	Entry inside stage_transition: the same code from this address.
+0000:0365	func	title_menu_at_0365	Entry inside title_menu: the same code from this address.
+0000:03E8	func	title_menu_at_03e8	Entry inside title_menu: the same code from this address.
+0000:0402	func	title_menu_at_0402	Entry inside title_menu: the same code from this address.
+0000:0418	func	title_menu_at_0418	Entry inside title_menu: the same code from this address.
+0000:0640	func	title_menu_at_0640	Entry inside title_menu: the same code from this address.
+0000:299A	func	player_whip_hang_at_299a	Entry inside player_whip_hang: the same code from this address.
+0000:29AA	func	player_whip_hang_at_29aa	Entry inside player_whip_hang: the same code from this address.
+0000:2A42	func	player_whip_hang_at_2a42	Entry inside player_whip_hang: the same code from this address.
+0000:2A62	func	player_whip_hang_at_2a62	Entry inside player_whip_hang: the same code from this address.
+0000:2A86	func	player_whip_hang_at_2a86	Entry inside player_whip_hang: the same code from this address.
+0000:2AF1	func	player_whip_attack_at_2af1	Entry inside player_whip_attack: the same code from this address.
+# Function names from the naming pass of 2026-09-30 (read from the recompiled code).
+0000:023B	func	game_frame_logic	Game frame without drawing: clear floor_push_x, toggle frame_parity, activate and update objects, update the player, end the frame.
+0000:0286	func	render_and_flip	Draw the frame, wait for vsync, flip the pages (grp 02h); keep the result in 2A8F.
+0000:08A4	func	draw_sjis_string2	Draw the Shift-JIS string DS:SI with grp_draw_text2 (grp 1Bh), 4 units per character, color BL, position CX/DX; full-width spaces are skipped.
+0000:08CB	func	draw_sjis_string	Draw the Shift-JIS string DS:SI with grp_draw_text (grp 1Ah), 4 units per character, color BL, position CX/DX; full-width spaces are skipped.
+0000:0F1B	func	load_file_to_vram_lower	Read a file into the lower part of the four VRAM planes (A800/B000/B800/E000, offset 3E80h = line 200, 4000h bytes each).
+0000:0F85	func	ask_insert_disk	The file is on no drive: print the insert-disk message (disk number = first byte of the name), wait for a button, restore the file arguments and try again.
+0000:0FD5	func	print_insert_disk_message	Print the insert-disk message with the disk number, wait for a button (input bits 30h), clear the text, restore the saved file arguments.
+0000:150B	func	store_word_and_byte	Store AX at [DI] and DL at [DI+2] (3-byte table entry).
+0000:175A	func	load_map	Load the map file DX (name copied to 9C70) to 5B59:0000 (cleared first, 7804h bytes); set map_width, map_height (2A95) and map_size (2A97).
+0000:1811	func	load_palette_file	Load the 48-byte palette file DX (16 colors x 3) to 858F.
+0000:1842	func	load_stage_script	Load the stage script overlay (name table A12D by start_stage) to 747B:0000, reset the scroll state, call its init entry (DS:SI = CS:63FC), copy the lower VRAM area (grp 12h), save the start checkpoint.
+0000:197D	func	load_pps_file	load_file with at most C350h bytes (PPS sound effect data).
+0000:19A6	func	load_mag_file	Load the MAG picture file DX into picture slot AX (tables 2A99/2AC5); exit with a message when it overwrites the guard byte 5119:9FFF.
+0000:1A4C	func	mag_read_palette	Read the palette of the MAG picture in slot AX through MAGLOAD (function 0) into 85BF and reorder each entry from GRB to RGB.
+0000:1AA5	func	mag_draw_picture	Decode the MAG picture in slot AL to VRAM through MAGLOAD (function 1, AH = draw option); exit with a message when the guard byte 5119:9FFF changed.
+0000:1C27	func	record_input_step	Record the input bits in the run-length input log at 9C6F (index 2A89; 0 = idle frames counted in 25E2). (debug replay)
+0000:1C9A	func	replay_input_step	Replace the input bits with the next entry of the input log at 9C6F; the end mark FFh exits the program. (debug replay)
+0000:2397	func	player_hide_when_flagged	Show the player sprite again (frame FFh -> 0); hide it (frame FFh) while 260B is set and health is not 0. (guess)
+0000:247D	func	player_history_shift	Shift the player position history (15h words 2613 -> 260D), step the 5-frame cycle 2606, count down the afterimage timer 2604.
+0000:24A5	func	player_history_store_pos	Store player_world_x/y in the newest history entry (2637).
+0000:24B4	func	player_history_store_frame	Store the sprite frame BX in the newest history entry; while the afterimage timer 2604 runs, set BH |= F0h (hidden) on every 5th frame (flicker).
+0000:2590	func	draw_swing_rope	Draw the rope (two lines, grp 13h) from the swing pivot toward the angle 2A37 (table 1E10) to the player.
+0000:27A0	func	player_select_frame	Choose the player sprite frame (player_work+0) from the state: stage exit, death, hurt, whip, hanging, jump, crouch, walk.
+0000:2BE6	func	special_weapon_none	Empty special weapon handler (RET).
+0000:2BE7	func	weapon_afterimage	Special weapon: 10 mind power, PPS sound 1, 200 frames of afterimages (timer 2604, drawn by draw_player_afterimages), clear the history.
+0000:2C06	func	player_history_clear	Clear the player history (18h words at 260D).
+0000:2C1C	func	weapon_ring_shot	Special weapon: 5 mind power, PPS sound 0, eight shots in all directions (angles 00h-E0h).
+0000:2C83	func	weapon_time_slow	Special weapon: 5 mind power, time slow for 100 frames (time_slow_active), PPS sound 2.
+0000:2CA8	func	special_weapon_none2	Empty special weapon handler (RET).
+0000:2CA9	func	spawn_weapon_shot	Spawn the special weapon shot above the player (type 1, direction from the facing 29EF).
+0000:2EEC	func	open_key_door	Use a key of type [SI+5] (key_counts): clear the door tiles (3 rows, both map layers) and play sound 11h.
+0000:2F4F	func	player_clear_25fd	Clear the player bytes 25FD and 25FE (a timer and its flag; used by jump, whip and map collision). (unknown)
+0000:328E	func	player_count_down_25fd	Count down the player timer 25FD. (unknown)
+0000:329A	func	player_stop_vertical_speed	Set player_velocity_y to 8000h (none) unless the player falls and 29F5 = 1.
+0000:3632	func	player_input_idle	Input handler, no direction: set 2602, stop walking (25F6 = 0); a running hang timer (2601) restarts at 4.
+0000:364B	func	player_input_right	Input handler, right: face right and walk right (not in the air, 29F6).
+0000:3669	func	player_input_left	Input handler, left: face left and walk left (not in the air, 29F6).
+0000:3687	func	player_input_down_right	Input handler, down + right: face right, then the down action.
+0000:3693	func	player_input_down_left	Input handler, down + left: face left, then the down action.
+0000:369F	func	player_input_up	Input handler, up: at a hook tile grab it (snap X to 4, stop, hang animation 2600); else set 25FC (look up). (guess)
+0000:374B	func	player_input_down	Down action: drop from a hook (fall speed 8004h) or crouch (player_crouching) when standing still.
+0000:37F6	func	player_walk_left	Walk left: facing, swing push, one pixel left (stop at the screen edge 0).
+0000:3833	func	player_walk_right	Walk right: facing, swing push, one pixel right (stop at the screen edge 48h).
+0000:3872	func	player_check_slide_floor	260C = 1 when 2A85 = 1 (slippery floor). (guess)
+0000:3884	func	player_hang_face_right	While hanging (2601): face right; count down 2601 unless button 10h is held.
+0000:38B2	func	player_hang_face_left	While hanging (2601): face left; count down 2601 unless button 10h is held.
+0000:38E0	func	player_set_facing	Set the facing 29EF and 25F3 to AX (1 right, FFFFh left) when the player can turn.
+0000:38FC	func	player_swing_push	While swinging (2608) near the lowest point (angle 74h-8Ch), push the swing speed 2A3C toward AX. (guess)
+0000:23F8	func	draw_player_afterimages	Update the position history; while the afterimage timer 2604 runs, draw up to 4 older player positions (fewer when it is below 100) with the cycling color table 282D.
+0000:24CE	func	draw_whip	Clear attack slot 0; draw the whip sprite for the whip phase 25FB (standing, crouching or up), or the rope line while swinging (2A34, esvc_start_swing).
+0000:25FD	func	whip_set_hitbox	Set the whip hit box (attack slot 0) in front of the player for whip phases 3-6 (4-6 when whipping up).
+0000:398C	func	object_solid_at_point	Set bit 0 of AX when an active solid object (+00 = 1, +19 = 1) covers the point CX,DX.
+0000:3E18	func	object_mirror_offset	Negate AX when the object is mirrored (+18 set and direction +0A >= 80h).
+0000:3E27	func	draw_player_attacks	Update the whip, then draw the 8 player shot slots (735D, 20h bytes each); special weapon 4 has its own frames.
+0000:4211	func	player_attack_spawn	Set up player attack slot AL (733D + AL*20h): direction AH, kind CL, position DI/BP, size BL/BH, DL/DH; nothing when the position is negative.
+0000:4277	func	player_attack_clear	Clear player attack slot AL.
+0000:3F21	func	attack_update_none	Empty player attack update handler (RET).
+0000:3F22	func	attack_update_spiral	Ring shot update: move out from the player along direction +01 (two steps), turn by 0Ah and speed up by 5 each frame; end when the speed overflows.
+0000:3F84	func	attack_update_none2	Empty player attack update handler (RET).
+0000:3F85	func	attack_update_familiar	Familiar shot update: follow the player history on a circle; on a whip attack take 1 mind power and fly at an enemy on screen (state 1), then return to the player (state 2). (guess)
+0000:4199	func	attack_move_by_angle	Add the step of direction [SI+1] (table 1E10) times the speeds [SI+4]/[SI+5] to the 16.16 moves +0C/+16 (X) and +0E/+1A (Y).
+0000:43B5	func	apply_conveyor_tile	Floor tile AL: F7h-F9h push left (floor_push_x = -1), FDh-FFh push right (+1).
+0000:4405	func	rebase_player_effects	Move the player history and the 9 attack slots by (camera - CX/DX) after a camera jump (svc_camera_jump).
+0000:6D52	func	vector_direction_core	Direction of the vector BX (x), CX (y): quadrant base, then the slope CX*32/BX looked up in the tangent table 6DE2 (40h entries).
+0000:4644	func	draw_objects_kind3	Draw the active objects of kind 3 (+01 = 3) with draw_object.
+0000:4676	func	objects_reset_1d	Set byte +1D of all 25 objects to 0Eh. (unknown)
+0000:47AE	func	object_parent_ptr	DI = object table entry of the index at [SI+16h] (745D + index*80h).
+0000:48E8	func	player_inside_solid_object	Set bit 0 of AX when the player box (smaller when crouching) contains the point CX,DX of the solid object SI.
+0000:4938	func	other_solid_object_at	Set bit 0 of AX when another active solid object (not SI) covers the point CX,DX (box +22/+24 offset, +26/+28 size).
+0000:4A8F	func	spawn_timers_step	Count down the respawn timers 81DD of the killed spawn entries (80DD = FFh); at 0 the entry can spawn again.
+0000:4ABA	func	object_mirror_offset_b	Negate AX when the object is mirrored (+18 set and direction +0A >= 80h). Same as object_mirror_offset.
+0000:4AC9	func	object_check_attack_hits	Check the 9 player attack slots against the box of object SI: mark it hit (+08 bit 7), take the attack power (+02) from its health (+03), 5 frames of protection (+17), hit sound; kill it at 0.
+0000:4BAD	func	object_hit_sound	Hit sound: 1Ah for object kind 0Fh, else 0Bh.
+0000:4BCE	func	object_kill	Kill object SI: mark its spawn entry as killed (80DD = FFh), clear +17 and health +03, call its death handler (far +36/+38) with the enemy service table (ES:DI = CS:45B0) and the camera.
+0000:4C1B	func	object_touch_player	For touch objects (+09 = 1): when the player box overlaps the object box, call its touch handler (far +3A/+3C).
+0000:4EB3	func	object_mirror_frame	When the object is mirrored and faces right, use the next sprite frame (BH, frames 0-4).
+0000:4ECA	func	enemy_overlay_init	Clear the spawn tables (80DD killed, 81DD timers, 82DD start flags) and call the ENEMY overlay init entry (6A5A:[0004]) with the object table and the enemy service table CS:45B0.
+0000:4F64	func	enemy_overlay_spawn	Call the ENEMY overlay spawn entry (6A5A:[0006]); a new object (DI) gets direction BH (+0A) and BL (+0F).
+0000:50D1	func	apply_conveyor_tile_b	Floor tile AL: F7h-F9h push left (floor_push_x = -1), FDh-FFh push right (+1). Same as apply_conveyor_tile.
+0000:51FF	func	objects_clear_on_death	Player death: remove the active objects with +12 = 1 (and clear their start flags 82DD), clear the killed (80DD) and timer (81DD) tables.
+0000:545C	func	camera_x_hold	Camera X target = camera_x, stop following in X.
+0000:5468	func	camera_x_follow	Camera X target = AX, follow in X.
+0000:5471	func	camera_y_hold	Camera Y target = camera_y, stop following in Y.
+0000:547D	func	camera_y_follow	Camera Y target = AX, follow in Y.
+0000:55A7	func	draw_map	Draw the map (5B59:0000, map_width x map_height) at the camera position plus shake (grp 07h).
+0000:57A1	func	draw_small_text	Draw the text record SI (x word, y word, ASCII up to 0; LF = next line +8, space = 2 units) with the small font (grp 0Fh, glyphs 85EF).
+0000:089D	func	draw_text_record_4	Draw the small text record at DS:0004. (guess)
+0000:581A	func	draw_large_text	Draw the text record SI (x word, y word, ASCII up to 0; LF = next line +16, space = 2 units) with the large font (grp 10h, glyphs 85EF).
+0000:59E7	func	hud_draw_counter_digit	Draw glyph 2Eh and then the digit AL with the small font (a HUD counter). (guess)
+0000:5C0A	func	set_lives	player_lives = AL; mark the lives HUD for redraw (2965 = FFh, 2966 = 0). (guess)
+0000:5C4C	func	map_save_copy	Copy the map (5B59:0000, 7804h bytes) to its backup at 5B59:7804.
+0000:5C64	func	map_restore_copy	Copy the map backup (5B59:7804) back to 5B59:0000 (room restart).
+0000:5F84	func	stage_map_draw_progress	Stage map: load the MAG picture of start_stage (table 2988) into slot 3, draw it, and OR it into the intensity plane of both pages. (guess)
+0000:5FCC	func	stage_map_load_marker	Stage map: load and draw the MAG picture of start_stage from table 299A (slot 3); keep BX in 2970. (guess)
+0000:5FF1	func	vram_copy_line_page1_to_0	Copy the VRAM line (190h - [296D]) from page 1 to page 0 in all four planes (port A6h selects the page).
+0000:607A	func	vram_or_intensity_plane	OR CX lines of 50h bytes from BX:SI into the intensity plane E000 at DI with the mask DX (the mask rotates each line).
+0000:609F	func	play_stage_visual_scene	Play the VISUAL scene of start_stage (table 60F8, FFh = none): load_visual, call the scene entry; scene 6 restarts the game (entry_main_at_001a).
+0000:622A	func	draw_window_frame	Draw a text window frame with the small font glyphs 3Fh-45h; position and size in CS:62AE-62B3 (svc_message_window).
+0000:627F	func	draw_window_edge_row	Draw one edge row of the window frame: left glyph BL, middle glyph BL+1, right glyph BL+2; DX += 8.
+0000:632F	func	text_fill_bottom_row	Fill text row 24 with character 80h and attribute 09h.
+0000:65AE	func	map_mark_block_tiles	For each entry of the block list 83DD (x, y, flag; FFFFh ends) with flag 1, set bits 5 of the tile attribute in 3 map rows. (guess)
+0000:666D	func	copy_block_rows	Copy BH rows of BL bytes from DS:SI (source stride AX) to ES:DI (destination stride BP).
+0000:68EB	func	pmd_pause	PMD INT 60h AH=1Ah (pause the music) when PMD is present. (guess)
+0000:6903	func	pmd_resume	PMD INT 60h AH=1Bh (continue the music) when PMD is present. (guess)
+0000:698B	func	pmd_get_status	PMD INT 60h AH=0Ah; AL = FFh (and 69D6 = 0) when the song ended or PMD is missing. (guess)
+0000:17B8	func	load_lower_vram_picture	Load the picture file DX into the lower VRAM area of the four planes and copy it (grp 12h).
+0000:18EB	func	load_enemy_overlay	Load the ENEMY overlay DX to 6A5A:0000 (at most 47E0h bytes), clear the object table, run the overlay init.
+0000:0169	func	game_frame_without_player	Frame without player control (game over): story, player position, enemies, objects, draw with text, wait for the frame time.
+0000:0296	func	render_text_and_flip	Draw the frame and the text record 4, wait for vsync, flip the pages (grp 02h); keep the result in 2A8F.
+0000:260D	func	whip_set_hitbox_at_260d	Entry inside whip_set_hitbox: the same code from this address.
+0000:2613	func	whip_set_hitbox_at_2613	Entry inside whip_set_hitbox: the same code from this address.
+0000:282D	func	player_select_frame_at_282d	Entry inside player_select_frame: the same code from this address.
+0000:2837	func	player_select_frame_at_2837	Entry inside player_select_frame: the same code from this address.
+0000:28B7	func	player_select_frame_at_28b7	Entry inside player_select_frame: the same code from this address.
+0000:28CF	func	player_select_frame_at_28cf	Entry inside player_select_frame: the same code from this address.
+0000:28FF	func	player_select_frame_at_28ff	Entry inside player_select_frame: the same code from this address.
+0000:290F	func	player_select_frame_at_290f	Entry inside player_select_frame: the same code from this address.
+0000:2958	func	player_select_frame_at_2958	Entry inside player_select_frame: the same code from this address.
+0000:2972	func	player_select_frame_at_2972	Entry inside player_select_frame: the same code from this address.
+0000:2988	func	player_select_frame_at_2988	Entry inside player_select_frame: the same code from this address.
+0000:3F80	func	attack_update_spiral_at_3f80	Entry inside attack_update_spiral: the same code from this address.
+0000:4000	func	attack_update_familiar_at_4000	Entry inside attack_update_familiar: the same code from this address.
+0000:4200	func	attack_move_by_angle_at_4200	Entry inside attack_move_by_angle: the same code from this address.
+0000:4C00	func	object_kill_at_4c00	Entry inside object_kill: the same code from this address.
+# Data names, 2026-10-01 (from the use in the named functions; "(guess)" = not confirmed).
+06E7:0364	data	voice_count	Number of loaded voices (VOICES.PPL/PPT); svc_voice_address returns it for CX = FFFFh.
+06E7:0401	data	voice_copy_byte	Byte read while loading the voices (part of the copy to extended memory). (guess)
+06E7:0402	data	voice_xms_address	Extended memory address of the next voice, low word (high byte in voice_xms_address_high). (guess)
+06E7:0404	data	voice_xms_address_high	Extended memory address of the next voice, high byte. (guess)
+06E7:055A	data	lzss_saved_bx	lzss_state: BX of a stopped LZSS read.
+06E7:055C	data	lzss_saved_cx	lzss_state: CX of a stopped LZSS read.
+06E7:055E	data	lzss_saved_dx	lzss_state: DX of a stopped LZSS read.
+06E7:0560	data	lzss_saved_si	lzss_state: SI of a stopped LZSS read.
+06E7:0562	data	lzss_output_count	Bytes the LZSS decoder has written, low word (high word in lzss_output_count_high).
+06E7:0564	data	lzss_output_count_high	Bytes the LZSS decoder has written, high word.
+06E7:0566	data	file_buffer_position	Read position in file_buffer.
+06E7:0568	data	file_buffer_fill	Number of bytes in file_buffer (0 after file_open). (guess)
+06E7:056A	data	file_left	Bytes of the open file not yet read, low word. (guess)
+06E7:056C	data	file_left_high	Bytes of the open file not yet read, high word. (guess)
+06E7:156E	data	file_is_lz	1 = the open file has the LZ header (file_read decodes it with lzss_read).
+06E7:2580	data	lzss_stopped	1 = the last LZSS read stopped early; the next one continues from lzss_state.
+06E7:2581	data	lzss_in_copy	1 = the LZSS decoder stopped inside a back reference. (guess)
+06E7:25E2	data	input_log_idle_frames	Idle frames counted for the next entry of the input log (record_input_step).
+06E7:25F1	data	collision_temp	Temporary word of player_map_collision.
+06E7:25F3	data	player_move_direction	Direction of the run or of the swing push (1 right, FFFFh left, 0 none).
+06E7:25F5	data	player_on_ground	1 = the player stands on the map (set by player_map_collision); needed to jump.
+06E7:25F6	data	player_running	1 = the player runs (up+left/right); 0 = walk or stand.
+06E7:25F7	data	player_braking	1 = the player brakes this frame (player_fall_land). (guess)
+06E7:25F8	data	player_skidding	1 = the run speed points against the facing (skid, sound 10h).
+06E7:25F9	data	player_brake_frame	1 = show the brake frame (player_select_frame). (guess)
+06E7:25FA	data	skid_sound_played	1 = the skid sound was played for this skid.
+06E7:25FB	data	whip_phase	Whip animation phase (0 = no whip, FFh = end).
+06E7:25FC	data	player_looking_up	1 = the player looks up (up without a hook).
+06E7:25FD	data	landing_timer	Frames of the landing pose (2 after a landing). (guess)
+06E7:25FE	data	landing_animation	Animation counter of the landing pose (0-15). (guess)
+06E7:2600	data	hang_animation	Hang animation step (0-11; FFh = not hanging).
+06E7:2601	data	hang_timer	Frames left on a hook (4 when the whip starts while hanging).
+06E7:2602	data	player_idle	1 = no direction input this frame.
+06E7:2603	data	jump_blocked	1 = player_map_collision forbids a jump now. (guess)
+06E7:2604	data	afterimage_timer	Frames left of the afterimage special weapon (200).
+06E7:2606	data	history_cycle	5-frame cycle of the player position history.
+06E7:2607	data	player_animation_counter	Counter of special player animations (player_select_frame; 0Ch = end). (guess)
+06E7:2608	data	player_swinging	1 = the player swings on the whip.
+06E7:2609	data	jump_held	1 = the jump button is still held from the last jump (no new jump until released).
+06E7:260A	data	low_jump	1 = the next jump is low (from a crouch or from a hook).
+06E7:260B	data	player_hit_this_frame	1 = an enemy touched the player this frame (the sprite blinks).
+06E7:260C	data	on_slippery_floor	1 = the player stands on a slippery floor.
+06E7:2920	data	object_collided	1 = object_map_collision found a solid map corner.
+06E7:2921	data	objects_rescan	1 = objects_activate_by_camera runs again (enemy service 30h).
+06E7:295F	data	hud_blink_phase	Toggled by hud_redraw_flags. (guess)
+06E7:2960	data	hud_shown_score	Score on the HUD (FFFFh = redraw).
+06E7:2962	data	hud_score_page	VRAM page of the last score draw (each value is drawn on both pages).
+06E7:2963	data	hud_shown_keys	Key count sum on the HUD (FFh = redraw).
+06E7:2964	data	hud_keys_page	VRAM page of the last key counter draw.
+06E7:2965	data	hud_shown_lives	Lives on the HUD (FFh = redraw).
+06E7:2966	data	hud_lives_page	VRAM page of the last lives draw.
+06E7:2967	data	hud_shown_health	Health on the HUD (FFh = redraw).
+06E7:2968	data	hud_health_page	VRAM page of the last health draw.
+06E7:2969	data	hud_shown_mind_power	Mind power on the HUD (FFh = redraw).
+06E7:296A	data	hud_mind_power_page	VRAM page of the last mind power draw.
+06E7:296B	data	text_line_start_x	X of the line start in draw_small_text and draw_large_text (for LF).
+06E7:296D	data	map_screen_scroll	Scroll line of the stage map screen (0-190h).
+06E7:296F	data	map_screen_done	1 = the stage map screen has finished its scroll.
+06E7:2970	data	map_screen_marker	Picture slot of the stage marker on the map screen (stage_map_load_marker).
+06E7:29E8	data	key_count_diamond	key_counts[1]: diamond keys.
+06E7:29E9	data	key_count_club	key_counts[2]: club keys.
+06E7:29EA	data	key_count_heart	key_counts[3]: heart keys.
+06E7:29EF	data	player_facing	Player facing (1 right, FFFFh left).
+06E7:29F1	data	whip_started	1 = player_whip_attack started a whip this frame (enemy service 14h reads it). (guess)
+06E7:29F3	data	story_flag	Byte shared between the stage script (service 4Ah) and the enemies (enemy service 36h). (guess)
+06E7:29F5	data	jump_rising	1 = the jump still rises (until player_velocity_y reaches 8000h).
+06E7:29F6	data	player_in_air	1 = the player jumps or falls (enemy service 31h reads it).
+06E7:29FB	data	view_offset_x	Horizontal view offset added to all drawing (service 2Dh).
+06E7:2A03	data	checkpoint_camera_target_x	Checkpoint: camera_target_x.
+06E7:2A05	data	checkpoint_camera_target_y	Checkpoint: camera_target_y.
+06E7:2A13	data	jump_bonus	Extra jump speed for the next jump (enemy service 2Bh), cleared after each jump check.
+06E7:2A1B	data	checkpoint_camera_y	Checkpoint: camera_y (checkpoint = camera_x).
+06E7:2A1D	data	checkpoint_player_x	Checkpoint: player_screen_x.
+06E7:2A1F	data	checkpoint_player_y	Checkpoint: player_screen_y.
+06E7:2A21	data	checkpoint_scroll_x_enabled	Checkpoint: scroll_x_enabled.
+06E7:2A22	data	checkpoint_scroll_y_enabled	Checkpoint: scroll_y_enabled.
+06E7:2A23	data	checkpoint_facing	Checkpoint: player_facing (1 at the stage start).
+06E7:2A25	data	camera_active	1 = camera_update moves the camera (after svc_redraw_map).
+06E7:2A28	data	checkpoint_background_mode	Checkpoint: background_mode.
+06E7:2A29	data	background_mode	Background layer mode of the room (service 0Ah; draw_background_main, draw_scroll_layer).
+06E7:2A2B	data	stage_exit_frame	Animation step of the player at a stage exit (FFh = start, up to 10h).
+06E7:2A2C	data	enemy_engine_stopped	1 = enemy_engine_update and the object AI do not run (service 06h). (guess: boss or event)
+06E7:2A2D	data	event_mode	Mode byte of the stage script (service 4Ch); changes the death and time slow paths. (guess)
+06E7:2A32	data	input_locked	1 = the player input is cleared (service 2Fh, enemy service 2Ah).
+06E7:2A34	data	player_on_swing	1 = the player hangs on a swing point (enemy service 19h).
+06E7:2A35	data	swing_radius	Rope length of the swing. (guess)
+06E7:2A37	data	swing_angle	Swing angle (80h = straight down; table 1E10).
+06E7:2A38	data	swing_pivot_x	Swing point X.
+06E7:2A3A	data	swing_pivot_y	Swing point Y.
+06E7:2A3C	data	swing_speed	Angle speed of the swing (signed).
+06E7:2A3E	data	swing_step	4-frame counter of the swing movement.
+06E7:2A41	data	background_slot	Slot index of service 31h (words 2A52[slot], 2A62[slot]); background layers use it. (guess)
+06E7:2A82	data	message_window_open	1 = svc_message_window shows a window (objects are not drawn).
+06E7:2A84	data	room_changed	1 = the room changed (service 27h, respawn; enemy services 26h/27h).
+06E7:2A85	data	slippery_floor	1 = an enemy object made the floor slippery this frame (enemy service 37h).
+06E7:2A88	data	input_mode	Input mode of read_input (0, 1 or 2). (guess: keyboard, joystick, replay)
+06E7:2A89	data	input_log_index	Write and read position in the input log at 9C6F.
+06E7:2A8E	data	hud_redraw_all	1 = redraw the whole HUD (after a stage transition or the map screen).
+06E7:2A8F	data	render_result	AL of the last render and page flip (grp 02h).
+06E7:2A95	data	map_height	Map height (rows).
+06E7:2A97	data	map_layer_size	map_width x map_height: offset of the attribute layer after the tile layer.
+# Code segment data (read with CS:), 2026-10-01.
+0000:08F2	data	far_call_offset	Far pointer for the calls into overlays and drivers (grp_call, STORYn, MAGLOAD), offset.
+0000:08F4	data	far_call_segment	Far pointer for the calls into overlays and drivers, segment.
+0000:08F6	data	file_read_left	Bytes still to read in file_read (read in 32 KB parts; FFFFh = to the end). (guess)
+0000:08F8	data	file_transfer_size	Byte count of load_file / save_file (read result or bytes to write). (guess)
+0000:08FA	data	file_handle	DOS handle of the file open for reading (0 = none).
+0000:08FC	data	write_handle	DOS handle of the file open for writing (save_file; 0 = none).
+0000:0928	data	protection_retry	Retry counter of copy_protection_check.
+0000:0F0B	data	random_state	16-byte state of the additive random generator (filled from the DOS time and date).
+0000:0F0D	data	random_state_02	random_state word 1.
+0000:0F0F	data	random_state_04	random_state word 2.
+0000:0F11	data	random_state_06	random_state word 3.
+0000:0F13	data	random_state_08	random_state word 4.
+0000:0F15	data	random_state_0a	random_state word 5.
+0000:0F17	data	random_state_0c	random_state word 6.
+0000:0F19	data	random_state_0e	random_state word 7.
+0000:0F5D	data	file_args_dx	file_save_args: DX of the file call (name), for a retry after the insert-disk message.
+0000:0F5F	data	file_args_ds	file_save_args: DS of the file call.
+0000:0F61	data	file_args_bx	file_save_args: BX of the file call.
+0000:0F63	data	file_args_es	file_save_args: ES of the file call.
+0000:0F65	data	file_args_cx	file_save_args: CX of the file call.
+0000:0F67	data	requested_disk	Disk number of the file to open (first byte of the name); 0 = any.
+0000:125C	data	file_read_saved_ah	AH saved by file_read_byte. (guess)
+0000:166D	data	frame_counter	Vsync frame counter (vsync_handler counts it).
+0000:1673	data	old_vsync_vector_offset	Original INT 0Ah vector, offset (vsync_install).
+0000:1675	data	old_vsync_vector_segment	Original INT 0Ah vector, segment.
+0000:1677	data	vsync_flag	Byte cleared by vsync_install. (guess)
+0000:62AE	data	window_x	Message window X (svc_message_window, draw_window_frame).
+0000:62B0	data	window_y	Message window Y.
+0000:62B2	data	window_width	Message window width (columns).
+0000:62B3	data	window_height	Message window height (rows).
+0000:62B4	data	window_frame_color	Message window color DL. (guess: frame)
+0000:62B5	data	window_text_color	Message window color DH. (guess: text)
+0000:69D6	data	music_playing	1 = a song plays (cleared by music_stop and at the song end).

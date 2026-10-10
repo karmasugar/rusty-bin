@@ -1,0 +1,15 @@
+# Names for BOOT.COM (the DOS shell of the game: CONFIG.SYS shell = boot.com). DOS COM: segment offsets.
+0000:01A6	func	boot_main	Install the INT 24h handler, read the DIP switches (port 31h), start the drivers and programs one after the other.
+0000:026F	func	boot_fatal	Print a message and halt.
+0000:0292	func	boot_exec_setup	Fill the EXEC parameter block (command line at 80h). (guess)
+0000:02E5	func	boot_helper_02e5	Helper around each EXEC. (unknown)
+0000:02F0	func	boot_clear_fcb	Clear 20h bytes and fill 0Bh spaces (FCB name). (guess)
+0000:0303	func	boot_print	Print the zero-terminated string DX character by character (INT 21h AH=06h).
+0000:0319	func	boot_run_program	Run a program with EXEC and get its return code (INT 21h AH=4Dh). (guess)
+# Function names from the naming pass of 2026-09-30 (read from the recompiled code).
+0000:0100	func	boot_start	COM entry: jump to boot_main.
+0000:0278	func	break_handler	Empty interrupt handler (IRET) for Ctrl-Break. (guess)
+0000:0316	func	critical_error_handler	INT 24h handler: AL = 3 (fail the DOS call). (guess)
+# Data (PSP fields: DS = the PSP in a COM program), 2026-10-01.
+0000:002C	data	psp_environment	PSP +2Ch: segment of the environment.
+0000:0080	data	psp_tail_length	PSP +80h: length of the command tail.

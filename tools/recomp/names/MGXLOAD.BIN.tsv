@@ -1,0 +1,47 @@
+# Names for MGXLOAD.BIN (MGX image decoder, loaded to segment 6ED8 of JO.EXE / by OP.COM).
+0000:0000	func	mgx_entry	Entry: jump to mgx_decode.
+0000:0002	func	mgx_decode	Decode a MGX image (header, flag A/B, pixel data) into the graphics planes.
+0000:01BE	func	mgx_flag_line	Build the flag line of the next image line from the flag A/B data. (guess)
+0000:0204	func	mgx_pixel_line	Decode one line of pixels from the flags (copy from earlier positions or read new data). (guess)
+0000:0290	func	mgx_write_line	Write the decoded line to the 4 graphics planes (A800h ...). (guess)
+0000:0347	func	mgx_offset_calc	32-bit shift / address calculation. (guess)
+# Data (DS = CS), 2026-10-01. The same decoder as MAGLOAD.COM with all data 466h lower (names copied).
+0000:042A	data	line_saved_ax	AX kept for the line loop of mgx_decode. (structural name)
+0000:042C	data	line_saved_bx	BX kept for the line loop of mgx_decode. (structural name)
+0000:042E	data	line_width	Width of a line in units of the flag and pixel routines (CX of the line loop). (guess)
+0000:0430	data	line_saved_dx	DX kept for the line loop of mgx_decode. (structural name)
+0000:0432	data	saved_ss	SS saved by mgx_decode (restored at the end).
+0000:0434	data	saved_sp	SP saved by mgx_decode (restored at the end).
+0000:0436	data	last_line_ax	Value compared and kept by mgx_write_line (AX). (structural name)
+0000:0438	data	last_line_dx	Value compared and kept by mgx_write_line (DX). (structural name)
+0000:043A	data	vram_line_offset	VRAM offset of the next line (+50h per line).
+0000:043C	data	caller_ds	DS of the caller (the MGX file data).
+0000:043E	data	plane_segment_1	Segment of graphics plane 1 (the write routine loads it into ES; MGXLOAD shows it).
+0000:0440	data	plane_segment_2	Segment of graphics plane 2 (the write routine loads it into ES; MGXLOAD shows it).
+0000:0442	data	plane_segment_3	Segment of graphics plane 3 (the write routine loads it into ES; MGXLOAD shows it).
+0000:0444	data	plane_segment_4	Segment of graphics plane 4 (the write routine loads it into ES; MGXLOAD shows it).
+0000:0446	data	caller_di	DI of the call.
+0000:0448	data	caller_es	ES of the call.
+0000:044A	data	line_number	Current image line (counts up).
+0000:044C	data	pixel_write_offset	Write offset of mgx_pixel_line in the line buffer.
+0000:044E	data	caller_si	SI of the call (the MGX data offset). (guess)
+0000:0452	data	flag_a_offset	Read pointer into the flag A data, offset.
+0000:0454	data	flag_a_segment	Read pointer into the flag A data, segment.
+0000:0456	data	flag_b_offset	Read pointer into the flag B data, offset.
+0000:0458	data	flag_b_segment	Read pointer into the flag B data, segment.
+0000:045A	data	pixel_data_offset	Read pointer into the pixel data, offset.
+0000:045C	data	pixel_data_segment	Read pointer into the pixel data, segment.
+0000:46DE	data	flag_a_bit	Bit mask in the flag A data (80h at the start, shifts right).
+0000:46DF	data	decode_option	Option byte (1 changes the decode and pixel line paths). (guess: 200-line or half height)
+0000:46E3	data	mgx_screen_mode	MGX header +3: screen mode.
+0000:46E4	data	mgx_x1	MGX header +4: left X.
+0000:46E6	data	mgx_y1	MGX header +6: top Y.
+0000:46E8	data	mgx_x2	MGX header +8: right X.
+0000:46EA	data	mgx_y2	MGX header +A: bottom Y.
+0000:46EC	data	mgx_flag_a_start	MGX header +C: offset of the flag A data (low word).
+0000:46EE	data	mgx_flag_a_start_high	MGX header +E: offset of the flag A data (high word).
+0000:46F0	data	mgx_flag_b_start	MGX header +10: offset of the flag B data (low word).
+0000:46F2	data	mgx_flag_b_start_high	MGX header +12: offset of the flag B data (high word).
+0000:46F8	data	mgx_pixel_start	MGX header +18: offset of the pixel data (low word).
+0000:46FA	data	mgx_pixel_start_high	MGX header +1A: offset of the pixel data (high word).
+0000:4730	data	write_option	Option byte from AL at the call; mgx_write_line tests it. (guess)

@@ -1,0 +1,293 @@
+# Names for GRPEGC.COM (graphics driver API; JO.EXE calls entry N with grp_call AX=N). Generated from one API list.
+# address	kind	name	comment
+0000:067D	func	grp_init_mode	Driver function 00h. 400-line mode, analog 16-color palette mode.
+0000:06DF	func	grp_wait_vsync	Driver function 01h. Poll the GDC status until the start of vsync.
+0000:06C6	func	grp_page_flip	Driver function 02h. Swap the draw page and the display page. AL = new page state.
+0000:00D6	func	grp_draw_layer	Driver function 03h. Large draw routine with scroll state; SI=0 is a special case. (guess)
+0000:07D5	func	grp_draw_sprite	Driver function 04h. Draw sprite data at CX, DX.
+0000:07A5	func	grp_draw_sprite_frame	Driver function 05h. Frame BL of sprite set BH from table DS:SI at CX, DX (hotspot applied), then grp_draw_sprite.
+0000:0AD8	func	grp_draw_front_tiles	Driver function 06h. Draw the map tiles with attribute bit 40h (front layer) at the scroll position DI/BX: partial rows and columns at the edges; tiles (4 bytes x 16 lines) come from the lower VRAM area (3E80h). (guess)
+0000:06EE	func	grp_fn07	Driver function 07h. Unknown.
+0000:0725	func	grp_clear_skip_flag	Driver function 08h. Clear flag CS:598F (fn 03 and fn 11 skip their work while it is set). (guess)
+0000:1136	func	grp_set_params	Driver function 09h. Store DL and DH+1 for later draw calls. (guess)
+0000:115D	func	grp_set_palette	Driver function 0Ah. Set 16 palette entries from DS:SI (R, G, B 0-15 each), after vsync.
+0000:1143	func	grp_set_palette_entry	Driver function 0Bh. Set palette entry DL from DS:SI.
+0000:0741	func	grp_flip_and_copy	Driver function 0Ch. Helper, page flip, helper. (guess)
+0000:117E	func	grp_fade_in	Driver function 0Dh. Fade from black to palette DS:SI in 16 steps.
+0000:11C4	func	grp_fade_out	Driver function 0Eh. Fade from palette DS:SI to black in 16 steps. (guess)
+0000:12B2	func	grp_draw_glyph	Driver function 0Fh. Draw glyph BL (16 pixels wide, 8 lines) from DS:SI at byte column CX, line DX with the GRCG.
+0000:13D5	func	grp_fn10	Driver function 10h. Unknown GRCG draw routine.
+0000:1598	func	grp_copy_status_row	Driver function 11h. Copy 64 bytes per plane to row DL of the lower screen area (from line 200). (guess)
+0000:10E0	func	grp_copy_lower_area	Driver function 12h. Copy the lower screen area (from line 200) between the pages. (guess)
+0000:4B69	func	grp_draw_line	Driver function 13h. Draw a line (draw_line, GRCG color). (guess)
+0000:1214	func	grp_fade_14	Driver function 14h. Palette fade variant. (guess)
+0000:125E	func	grp_fade_15	Driver function 15h. Palette fade variant. (guess)
+0000:0690	func	grp_mode_200_lines	Driver function 16h. INT 18h AH=42h CH=80h: 200-line graphics.
+0000:06A2	func	grp_mode_400_lines	Driver function 17h. INT 18h AH=42h CH=C0h: 400-line graphics.
+0000:4695	func	grp_fn18	Driver function 18h. Unknown; reads port 31h.
+0000:079F	func	grp_set_mode_byte	Driver function 19h. Store DL in CS:5992. (guess)
+0000:477E	func	grp_draw_text	Driver function 1Ah. Draw text BX at CX, row DI, color DL (kanji ROM). (guess)
+0000:47DF	func	grp_draw_text2	Driver function 1Bh. Text drawing variant. (guess)
+0000:4840	func	grp_empty	Driver function 1Ch. Empty function.
+0000:108C	func	grp_fn1d	Driver function 1Dh. Unknown; writes the draw page port.
+0000:076A	func	grp_fill_screen_pattern	Driver function 1Eh. Fill the screen with pattern DL (GRCG).
+0000:1084	func	grp_fn1f	Driver function 1Fh. Unknown; CX=3E80h.
+0000:4AFA	func	grp_fill_rect	Driver function 20h. Fill rectangle CX,DX - SI,DI with color BL (GRCG).
+0000:4A25	func	grp_fn21	Driver function 21h. Unknown.
+0000:06B0	func	grp_display_on	Driver function 22h. INT 18h AH=40h.
+0000:06BB	func	grp_display_off	Driver function 23h. INT 18h AH=41h.
+0000:4723	func	grp_fn24	Driver function 24h. Unknown; sets the GRCG color.
+0000:472F	func	grp_fn25	Driver function 25h. Unknown; GRCG off.
+0000:4779	func	grcg_off	GRCG off. (same code as GRPGDC.COM 0000:472C)
+0000:4739	func	grcg_set_color	GRCG TDW mode with the 4 tile bytes of color AL (AL=0: other path). (same code as GRPGDC.COM 0000:46EC, data addresses differ)
+0000:00E0	func	grp_draw_layer_at_00e0	Entry inside grp_draw_layer: the same code from this address.
+0000:0103	func	grp_draw_layer_at_0103	Entry inside grp_draw_layer: the same code from this address.
+0000:0159	func	grp_draw_layer_at_0159	Entry inside grp_draw_layer: the same code from this address.
+0000:0190	func	grp_draw_layer_at_0190	Entry inside grp_draw_layer: the same code from this address.
+0000:0230	func	grp_draw_layer_at_0230	Entry inside grp_draw_layer: the same code from this address.
+0000:0245	func	grp_draw_layer_at_0245	Entry inside grp_draw_layer: the same code from this address.
+0000:026F	func	grp_draw_layer_at_026f	Entry inside grp_draw_layer: the same code from this address.
+0000:06E0	func	grp_wait_vsync_at_06e0	Entry inside grp_wait_vsync: the same code from this address.
+0000:0700	func	grp_fn07_at_0700	Entry inside grp_fn07: the same code from this address.
+0000:070F	func	grp_fn07_at_070f	Entry inside grp_fn07: the same code from this address.
+0000:0716	func	grp_fn07_at_0716	Entry inside grp_fn07: the same code from this address.
+0000:07D0	func	grp_draw_sprite_frame_at_07d0	Entry inside grp_draw_sprite_frame: the same code from this address.
+0000:0820	func	grp_draw_sprite_at_0820	Entry inside grp_draw_sprite: the same code from this address.
+0000:0926	func	grp_draw_sprite_at_0926	Entry inside grp_draw_sprite: the same code from this address.
+0000:0A45	func	grp_draw_sprite_at_0a45	Entry inside grp_draw_sprite: the same code from this address.
+0000:1085	func	grp_fn1f_at_1085	Entry inside grp_fn1f: the same code from this address.
+0000:10B8	func	grp_fn1d_at_10b8	Entry inside grp_fn1d: the same code from this address.
+0000:1180	func	grp_fade_in_at_1180	Entry inside grp_fade_in: the same code from this address.
+0000:1245	func	grp_fade_14_at_1245	Entry inside grp_fade_14: the same code from this address.
+0000:1270	func	grp_fade_15_at_1270	Entry inside grp_fade_15: the same code from this address.
+0000:12C0	func	grp_draw_glyph_at_12c0	Entry inside grp_draw_glyph: the same code from this address.
+0000:1360	func	grp_draw_glyph_at_1360	Entry inside grp_draw_glyph: the same code from this address.
+0000:13B0	func	grp_draw_glyph_at_13b0	Entry inside grp_draw_glyph: the same code from this address.
+0000:1400	func	grp_fn10_at_1400	Entry inside grp_fn10: the same code from this address.
+0000:47E0	func	grp_draw_text2_at_47e0	Entry inside grp_draw_text2: the same code from this address.
+0000:4830	func	grp_draw_text2_at_4830	Entry inside grp_draw_text2: the same code from this address.
+# Function names from the naming pass of 2026-09-30 (read from the recompiled code).
+0000:004C	func	egc_begin_copy	Turn the EGC on (mode port 6Ah 07h/05h, GRCG 80h) and set it up for a copy through all planes (registers 4A0h-4AEh).
+0000:0094	func	egc_end	Reset the EGC registers and turn it off (port 6Ah 07h/04h, GRCG off).
+0000:00B9	func	egc_copy_block	EGC copy of 1E00h words (192 lines) from DS:SI to ES:DI.
+0000:072C	func	egc_copy_lower_area_to_top	Copy the lower VRAM area (3E80h, from line 200) to the top of the page with the EGC (192 lines).
+0000:02B8	func	layer_draw_top_part_row	Layer draw: the partial top tile row (16 - (y & 15) lines).
+0000:030D	func	layer_draw_bottom_part_row	Layer draw: the partial bottom tile row (y & 15 lines).
+0000:0335	func	column_restore_edge	When x & 3 = 3: write CX bytes from CS:SI down the column DI+1 of segment AX (stride 50h). (guess)
+0000:035E	func	column_save_edge	When x & 3 = 3: read CX bytes down the column DI of segment AX (stride 50h) into CS:SI. (guess)
+0000:0384	func	layer_draw_left_column	Layer draw: the partial tile column at the left edge (x & 3 != 0).
+0000:0402	func	layer_draw_tile_rows	Layer draw: one tile (index from DS:SI, attribute DS:BP) of [59C4] lines from the lower VRAM area with the EGC; skip front tiles (bit 40h) and rows out of the window.
+0000:0459	func	layer_draw_tile_16	Layer draw: one full tile (16 lines, unrolled) from the lower VRAM area with the EGC; skip front tiles and rows out of the window.
+0000:04DF	func	layer_draw_edge_tile_16	Layer draw: [59CD] bytes of an edge tile, 16 lines, all four planes.
+0000:0541	func	layer_draw_edge_tile_part	Layer draw: [59CD] bytes x [59CE] lines of an edge tile, all four planes.
+0000:05B0	func	blit_tile_part_plane	Copy [59CE] lines of [59CD] bytes of a tile (4 bytes per line) to the screen in plane segment AX.
+0000:05D8	func	blit_tile_16_plane	Copy 16 lines of [59CD] bytes of a tile (4 bytes per line) to the screen in plane segment AX.
+0000:05FB	func	save_vram_scratch	Save the 4 bytes at 3C00h of each plane to CS:5483.
+0000:063B	func	restore_vram_scratch	Restore the 4 bytes at 3C00h of each plane from CS:5483.
+0000:0752	func	clear_draw_page	Fill the draw page (3E80h words) with color 0 through the GRCG.
+0000:0927	func	sprite_write_mask	Sprite: write the mask ([59CF] bytes x [59D1] lines, source stride [59DA]) with the GRCG color [59DE].
+0000:0958	func	sprite_or_plane	Sprite: OR one plane of sprite data into plane segment AX.
+0000:09BF	func	sprite_write_mask_next	Sprite: write the mask with the GRCG color [59DE], then SI += plane size [59D3].
+0000:09F7	func	sprite_or_plane_next	Sprite: OR one plane into plane segment AX, then SI += plane size [59D3].
+0000:0A72	func	sprite_write_mask_next_b	Same as sprite_write_mask_next (other sprite path).
+0000:0AAA	func	sprite_or_plane_next_b	Same as sprite_or_plane_next (other sprite path).
+0000:0BB2	func	front_draw_top_part_row	Front tiles: the partial top tile row.
+0000:0C21	func	front_draw_bottom_part_row	Front tiles: the partial bottom tile row.
+0000:0C58	func	front_draw_tile_rows	Front tiles: one tile of [59C4] lines when its attribute has bit 40h, all four planes.
+0000:0C9C	func	tile_copy_rows_plane	Copy [59C4] lines of 4 bytes from the lower VRAM area to the screen in plane segment AX.
+0000:0CB1	func	front_draw_edge_tile_rows	Front tiles: [59CD] bytes x [59C4] lines of an edge tile when its attribute has bit 40h.
+0000:0CF5	func	tile_copy_edge_rows_plane	Copy [59C4] lines of [59CD] bytes (tile stride 4) in plane segment AX.
+0000:0D18	func	front_draw_edge_tile_16	Front tiles: [59CD] bytes x 16 lines of an edge tile when its attribute has bit 40h.
+0000:0D54	func	tile_copy_edge_16_plane	Copy 16 lines of [59CD] bytes (tile stride 4) in plane segment AX (unrolled).
+0000:0E8E	func	front_draw_tile_16	Front tiles: one full tile (16 lines, unrolled) when its attribute has bit 40h, all four planes.
+0000:0FE8	func	front_draw_left_column	Front tiles: the partial tile column at the left edge (x & 3 != 0).
+0000:1066	func	front_draw_left_tile_16	Front tiles: the left edge tile, 16 lines.
+0000:1075	func	front_draw_left_tile_part	Front tiles: the left edge tile, partial height.
+0000:10BC	func	copy_page_to_page	Copy CX words from DS:SI to ES:DI, reading from one VRAM page and writing to the other (port A6h from [59DD]).
+0000:1112	func	copy_page_to_page_b	Copy CX words between the VRAM pages in the other direction (port A6h from [59DD]).
+0000:163B	func	sprite_draw_by_width	Sprite: write the mask with the GRCG color, then OR the planes; widths 1-28h bytes jump to the unrolled routines of table 15E9.
+0000:1660	func	sprite_blit_general	Sprite blit for any width (the table entry for width 1 and wider sprites): mask, then the planes when the color is 0.
+0000:1684	func	sprite_write_mask_rows	Write [59D1] lines of [59CF] mask bytes (screen stride 50h), then GRCG off.
+0000:16A0	func	sprite_or_plane_rows	OR [59D1] lines of [59CF] bytes into plane segment AX.
+0000:46DB	func	gdc_write_command	Wait until the graphic GDC FIFO is not full (port A0h bit 1), then write the command AL to port A2h.
+0000:46E6	func	gdc_write_param_word	Write the parameter word AX (low byte, high byte) to the graphic GDC (port A0h) when the FIFO has room.
+0000:46F7	func	gdc_set_scroll	GDC SCROLL command (70h) with the two display areas: start AX, lines CX, start BX, lines DX.
+0000:4841	func	kanji_read_glyph	Read the 16x16 glyph of the Shift-JIS character [BP+4] from the kanji ROM (ports A1h/A3h/A5h/A9h, CG access mode 0Bh) to DI.
+0000:48AE	func	sjis_to_jis	Convert the Shift-JIS code AX to the JIS code of the kanji ROM (80h and codes >= F0h: none).
+0000:48DD	func	glyph_double_width	Stretch the glyph bytes 4A04 through the table 57B3 into 49A4 (each byte to a word), then build 49E4. (guess)
+0000:491E	func	text_draw_glyph	Write the glyph DS:SI (CX words x DX lines) to VRAM ES:DI with the GRCG color [4A24].
+0000:4958	func	text_draw_glyph_both_pages	Write the glyph to page 0 and page 1, then select the draw page again.
+0000:4988	func	text_draw_glyph_rows	Write CX words x DX lines of glyph data with the GRCG color [4A24], then GRCG off.
+0000:4B7D	func	draw_line	Draw a line from (x1, y1) to (x2, y2) with the GRCG color (arguments on the stack). (guess)
+0000:4CC0	func	line_abs_dy	AX = |y2 - y1| of the line.
+0000:4CD1	func	line_plot_point	Plot the line point CX, DX (clipped to 640 x [59E0]) with the row offset table 5493.
+0000:16C0	func	sprite_blit_w02	Sprite blit for width 2 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:1734	func	sprite_blit_w03	Sprite blit for width 3 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:17BD	func	sprite_blit_w04	Sprite blit for width 4 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:1845	func	sprite_blit_w05	Sprite blit for width 5 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:18E2	func	sprite_blit_w06	Sprite blit for width 6 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:197E	func	sprite_blit_w07	Sprite blit for width 7 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:1A32	func	sprite_blit_w08	Sprite blit for width 8 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:1AE5	func	sprite_blit_w09	Sprite blit for width 9 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:1BAD	func	sprite_blit_w0a	Sprite blit for width 10 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:1C74	func	sprite_blit_w0b	Sprite blit for width 11 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:1D50	func	sprite_blit_w0c	Sprite blit for width 12 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:1E2B	func	sprite_blit_w0d	Sprite blit for width 13 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:1F1B	func	sprite_blit_w0e	Sprite blit for width 14 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:200A	func	sprite_blit_w0f	Sprite blit for width 15 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:210E	func	sprite_blit_w10	Sprite blit for width 16 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:2211	func	sprite_blit_w11	Sprite blit for width 17 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:2329	func	sprite_blit_w12	Sprite blit for width 18 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:2440	func	sprite_blit_w13	Sprite blit for width 19 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:256C	func	sprite_blit_w14	Sprite blit for width 20 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:2697	func	sprite_blit_w15	Sprite blit for width 21 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:27D7	func	sprite_blit_w16	Sprite blit for width 22 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:2916	func	sprite_blit_w17	Sprite blit for width 23 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:2A6A	func	sprite_blit_w18	Sprite blit for width 24 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:2BBD	func	sprite_blit_w19	Sprite blit for width 25 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:2D25	func	sprite_blit_w1a	Sprite blit for width 26 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:2E8C	func	sprite_blit_w1b	Sprite blit for width 27 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:3008	func	sprite_blit_w1c	Sprite blit for width 28 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:3183	func	sprite_blit_w1d	Sprite blit for width 29 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:3313	func	sprite_blit_w1e	Sprite blit for width 30 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:34A2	func	sprite_blit_w1f	Sprite blit for width 31 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:3646	func	sprite_blit_w20	Sprite blit for width 32 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:37E9	func	sprite_blit_w21	Sprite blit for width 33 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:39A1	func	sprite_blit_w22	Sprite blit for width 34 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:3B58	func	sprite_blit_w23	Sprite blit for width 35 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:3D24	func	sprite_blit_w24	Sprite blit for width 36 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:3EEF	func	sprite_blit_w25	Sprite blit for width 37 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:40CF	func	sprite_blit_w26	Sprite blit for width 38 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:42AE	func	sprite_blit_w27	Sprite blit for width 39 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:44A2	func	sprite_blit_w28	Sprite blit for width 40 bytes (table 15E9): mask with the GRCG color, then OR the planes, unrolled.
+0000:004D	func	egc_begin_copy_at_004d	Entry inside egc_begin_copy: the same code from this address.
+0000:004E	func	egc_begin_copy_at_004e	Entry inside egc_begin_copy: the same code from this address.
+0000:0059	func	egc_begin_copy_at_0059	Entry inside egc_begin_copy: the same code from this address.
+0000:00B8	func	egc_end_at_00b8	Entry inside egc_end: the same code from this address.
+0000:00C3	func	egc_copy_block_at_00c3	Entry inside egc_copy_block: the same code from this address.
+0000:00CC	func	egc_copy_block_at_00cc	Entry inside egc_copy_block: the same code from this address.
+0000:00CF	func	egc_copy_block_at_00cf	Entry inside egc_copy_block: the same code from this address.
+0000:00D2	func	egc_copy_block_at_00d2	Entry inside egc_copy_block: the same code from this address.
+0000:030C	func	layer_draw_top_part_row_at_030c	Entry inside layer_draw_top_part_row: the same code from this address.
+0000:030F	func	layer_draw_bottom_part_row_at_030f	Entry inside layer_draw_bottom_part_row: the same code from this address.
+0000:0316	func	layer_draw_bottom_part_row_at_0316	Entry inside layer_draw_bottom_part_row: the same code from this address.
+0000:0330	func	layer_draw_bottom_part_row_at_0330	Entry inside layer_draw_bottom_part_row: the same code from this address.
+0000:0333	func	layer_draw_bottom_part_row_at_0333	Entry inside layer_draw_bottom_part_row: the same code from this address.
+0000:034E	func	column_restore_edge_at_034e	Entry inside column_restore_edge: the same code from this address.
+0000:0391	func	layer_draw_left_column_at_0391	Entry inside layer_draw_left_column: the same code from this address.
+0000:03A5	func	layer_draw_left_column_at_03a5	Entry inside layer_draw_left_column: the same code from this address.
+0000:03CF	func	layer_draw_left_column_at_03cf	Entry inside layer_draw_left_column: the same code from this address.
+0000:03F0	func	layer_draw_left_column_at_03f0	Entry inside layer_draw_left_column: the same code from this address.
+0000:0410	func	layer_draw_tile_rows_at_0410	Entry inside layer_draw_tile_rows: the same code from this address.
+0000:0445	func	layer_draw_tile_rows_at_0445	Entry inside layer_draw_tile_rows: the same code from this address.
+0000:0460	func	layer_draw_tile_16_at_0460	Entry inside layer_draw_tile_16: the same code from this address.
+0000:04A0	func	layer_draw_tile_16_at_04a0	Entry inside layer_draw_tile_16: the same code from this address.
+0000:04A2	func	layer_draw_tile_16_at_04a2	Entry inside layer_draw_tile_16: the same code from this address.
+0000:04A4	func	layer_draw_tile_16_at_04a4	Entry inside layer_draw_tile_16: the same code from this address.
+0000:04A6	func	layer_draw_tile_16_at_04a6	Entry inside layer_draw_tile_16: the same code from this address.
+0000:04A8	func	layer_draw_tile_16_at_04a8	Entry inside layer_draw_tile_16: the same code from this address.
+0000:04AC	func	layer_draw_tile_16_at_04ac	Entry inside layer_draw_tile_16: the same code from this address.
+0000:04AE	func	layer_draw_tile_16_at_04ae	Entry inside layer_draw_tile_16: the same code from this address.
+0000:04B0	func	layer_draw_tile_16_at_04b0	Entry inside layer_draw_tile_16: the same code from this address.
+0000:0509	func	layer_draw_edge_tile_16_at_0509	Entry inside layer_draw_edge_tile_16: the same code from this address.
+0000:0574	func	layer_draw_edge_tile_part_at_0574	Entry inside layer_draw_edge_tile_part: the same code from this address.
+0000:061E	func	save_vram_scratch_at_061e	Entry inside save_vram_scratch: the same code from this address.
+0000:0645	func	restore_vram_scratch_at_0645	Entry inside restore_vram_scratch: the same code from this address.
+0000:0730	func	egc_copy_lower_area_to_top_at_0730	Entry inside egc_copy_lower_area_to_top: the same code from this address.
+0000:0BBE	func	front_draw_top_part_row_at_0bbe	Entry inside front_draw_top_part_row: the same code from this address.
+0000:0C0F	func	front_draw_top_part_row_at_0c0f	Entry inside front_draw_top_part_row: the same code from this address.
+0000:0C3F	func	front_draw_bottom_part_row_at_0c3f	Entry inside front_draw_bottom_part_row: the same code from this address.
+0000:0CC0	func	front_draw_edge_tile_rows_at_0cc0	Entry inside front_draw_edge_tile_rows: the same code from this address.
+0000:0CCC	func	front_draw_edge_tile_rows_at_0ccc	Entry inside front_draw_edge_tile_rows: the same code from this address.
+0000:0CCF	func	front_draw_edge_tile_rows_at_0ccf	Entry inside front_draw_edge_tile_rows: the same code from this address.
+0000:0CF0	func	front_draw_edge_tile_rows_at_0cf0	Entry inside front_draw_edge_tile_rows: the same code from this address.
+0000:0EB0	func	front_draw_tile_16_at_0eb0	Entry inside front_draw_tile_16: the same code from this address.
+0000:0EE8	func	front_draw_tile_16_at_0ee8	Entry inside front_draw_tile_16: the same code from this address.
+0000:0F00	func	front_draw_tile_16_at_0f00	Entry inside front_draw_tile_16: the same code from this address.
+0000:0F0F	func	front_draw_tile_16_at_0f0f	Entry inside front_draw_tile_16: the same code from this address.
+0000:0F3F	func	front_draw_tile_16_at_0f3f	Entry inside front_draw_tile_16: the same code from this address.
+0000:0F50	func	front_draw_tile_16_at_0f50	Entry inside front_draw_tile_16: the same code from this address.
+0000:0FCF	func	front_draw_tile_16_at_0fcf	Entry inside front_draw_tile_16: the same code from this address.
+0000:1130	func	copy_page_to_page_b_at_1130	Entry inside copy_page_to_page_b: the same code from this address.
+0000:1680	func	sprite_blit_general_at_1680	Entry inside sprite_blit_general: the same code from this address.
+0000:16D0	func	sprite_blit_w02_at_16d0	Entry inside sprite_blit_w02: the same code from this address.
+0000:17C0	func	sprite_blit_w04_at_17c0	Entry inside sprite_blit_w04: the same code from this address.
+0000:1810	func	sprite_blit_w04_at_1810	Entry inside sprite_blit_w04: the same code from this address.
+0000:1875	func	sprite_blit_w05_at_1875	Entry inside sprite_blit_w05: the same code from this address.
+0000:19F0	func	sprite_blit_w07_at_19f0	Entry inside sprite_blit_w07: the same code from this address.
+0000:1A40	func	sprite_blit_w08_at_1a40	Entry inside sprite_blit_w08: the same code from this address.
+0000:1A90	func	sprite_blit_w08_at_1a90	Entry inside sprite_blit_w08: the same code from this address.
+0000:1AE0	func	sprite_blit_w08_at_1ae0	Entry inside sprite_blit_w08: the same code from this address.
+0000:1B30	func	sprite_blit_w09_at_1b30	Entry inside sprite_blit_w09: the same code from this address.
+0000:1B80	func	sprite_blit_w09_at_1b80	Entry inside sprite_blit_w09: the same code from this address.
+0000:1BD0	func	sprite_blit_w0a_at_1bd0	Entry inside sprite_blit_w0a: the same code from this address.
+0000:1CC0	func	sprite_blit_w0b_at_1cc0	Entry inside sprite_blit_w0b: the same code from this address.
+0000:1D10	func	sprite_blit_w0b_at_1d10	Entry inside sprite_blit_w0b: the same code from this address.
+0000:1D60	func	sprite_blit_w0c_at_1d60	Entry inside sprite_blit_w0c: the same code from this address.
+0000:1DB0	func	sprite_blit_w0c_at_1db0	Entry inside sprite_blit_w0c: the same code from this address.
+0000:1E00	func	sprite_blit_w0c_at_1e00	Entry inside sprite_blit_w0c: the same code from this address.
+0000:1ECB	func	sprite_blit_w0d_at_1ecb	Entry inside sprite_blit_w0d: the same code from this address.
+0000:1F07	func	sprite_blit_w0d_at_1f07	Entry inside sprite_blit_w0d: the same code from this address.
+0000:2120	func	sprite_blit_w10_at_2120	Entry inside sprite_blit_w10: the same code from this address.
+0000:2170	func	sprite_blit_w10_at_2170	Entry inside sprite_blit_w10: the same code from this address.
+0000:23A0	func	sprite_blit_w12_at_23a0	Entry inside sprite_blit_w12: the same code from this address.
+0000:23F0	func	sprite_blit_w12_at_23f0	Entry inside sprite_blit_w12: the same code from this address.
+0000:2490	func	sprite_blit_w13_at_2490	Entry inside sprite_blit_w13: the same code from this address.
+0000:24A0	func	sprite_blit_w13_at_24a0	Entry inside sprite_blit_w13: the same code from this address.
+0000:24E0	func	sprite_blit_w13_at_24e0	Entry inside sprite_blit_w13: the same code from this address.
+0000:2620	func	sprite_blit_w14_at_2620	Entry inside sprite_blit_w14: the same code from this address.
+0000:2670	func	sprite_blit_w14_at_2670	Entry inside sprite_blit_w14: the same code from this address.
+0000:44C0	func	sprite_blit_w28_at_44c0	Entry inside sprite_blit_w28: the same code from this address.
+0000:44E8	func	sprite_blit_w28_at_44e8	Entry inside sprite_blit_w28: the same code from this address.
+0000:4510	func	sprite_blit_w28_at_4510	Entry inside sprite_blit_w28: the same code from this address.
+0000:4560	func	sprite_blit_w28_at_4560	Entry inside sprite_blit_w28: the same code from this address.
+0000:4600	func	sprite_blit_w28_at_4600	Entry inside sprite_blit_w28: the same code from this address.
+0000:4650	func	sprite_blit_w28_at_4650	Entry inside sprite_blit_w28: the same code from this address.
+0000:468B	func	sprite_blit_w28_at_468b	Entry inside sprite_blit_w28: the same code from this address.
+# Data (DS = CS), 2026-10-01. GRPEGC and GRPGDC have the same layout (GRPGDC 4Dh lower).
+0000:4721	data	gdc_scroll_bits	Bits added to the start addresses of the GDC SCROLL command (4000h from function 18h). (guess)
+0000:4A24	data	text_color	GRCG color of the text glyphs (DL of functions 1Ah/1Bh, then 0Fh).
+0000:59B3	data	layer_mode	Mode byte of the layer draw (FFh = special case). (guess)
+0000:59B4	data	layer_skip_attribute	Tile attribute compared by the layer draw routines (tiles with it are skipped). (guess)
+0000:59B5	data	layer_column	Column counter of the layer draw.
+0000:59B6	data	layer_data_segment	DS of the layer draw call (the map data).
+0000:59B8	data	layer_arg_di	DI of the layer draw call. (structural name)
+0000:59BA	data	layer_arg_bx	BX of the layer draw call (the Y position). (guess)
+0000:59BC	data	layer_arg_cx	CX of the layer draw call (the X position / map offset). (guess)
+0000:59BE	data	layer_arg_dx	DX of the layer draw call. (structural name)
+0000:59C0	data	layer_columns_left	Tile columns left in the row (14h = 20 at the start).
+0000:59C2	data	layer_rows_left	Tile rows left (0Ch or 0Bh at the start).
+0000:59C4	data	layer_tile_lines	Lines of the current tile row (16, or fewer for a partial row).
+0000:59C5	data	layer_top_skip	Source offset of the partial top row (lines to skip). (guess)
+0000:59C7	data	layer_bottom_skip	Source offset of the partial bottom row or edge column. (guess)
+0000:59C9	data	layer_saved_ax	Value kept by the layer draw (stored from AX, read into BX). (structural name)
+0000:59CB	data	layer_saved_cx	Value kept by the layer draw (stored from CX, cleared). (structural name)
+0000:59CD	data	tile_part_bytes	Bytes per line of a partial tile (edge column).
+0000:59CE	data	tile_part_lines	Lines of a partial tile.
+0000:59CF	data	sprite_width	Sprite width in bytes (after clipping).
+0000:59D1	data	sprite_height	Sprite height in lines (after clipping).
+0000:59D3	data	sprite_plane_size	Size of one sprite plane in the source data.
+0000:59D5	data	sprite_x	Sprite X (CX; 8000h = special). (guess)
+0000:59D7	data	sprite_y	Sprite Y (DX).
+0000:59D9	data	sprite_clipped	1 = the sprite was clipped. (guess)
+0000:59DA	data	sprite_stride	Source bytes per sprite line.
+0000:59DC	data	skip_flag	1 = functions 03h and 11h skip their work (function 07h sets it, 08h clears it).
+0000:59DD	data	page_state	Draw and display page state (xor 3 at each page flip).
+0000:59DE	data	sprite_mask_color	GRCG color for the sprite mask (0 = no mask).
+0000:59DF	data	front_tiles_only	Flag tested by the layer draw routines (front layer tiles). (guess)
+0000:59E0	data	screen_lines	Screen height in lines for the clipping (C0h in 200-line mode, 190h in 400-line mode). (guess for C0h)
+0000:4DED	data	rect_x1	Rectangle or line X1 (fill_rect, draw_line).
+0000:4DEF	data	rect_x2	Rectangle or line X2.
+0000:4DF1	data	rect_y1	Rectangle or line Y1.
+0000:4DF3	data	rect_y2	Rectangle or line Y2.
+0000:4DF5	data	fn21_cx	CX of driver function 21h. (structural name)
+0000:4DF7	data	fn21_si	SI of driver function 21h. (structural name)
+0000:4DF9	data	fn21_dx	DX of driver function 21h. (structural name)
+0000:4DFB	data	fn21_di	DI of driver function 21h. (structural name)
+0000:4DFD	data	fn21_bx	BX of driver function 21h. (structural name)
+0000:4DFF	data	line_step_x	X step of draw_line (FFFFh, 0 or 1). (guess)
+0000:4E01	data	line_step_y	Y step of draw_line (FFFFh, 0 or 1). (guess)
+0000:4E03	data	line_error_x	Error accumulator of draw_line, X. (guess)
+0000:4E05	data	line_fraction_x	Fraction of draw_line, X. (guess)
+0000:4E07	data	line_error_y	Error accumulator of draw_line, Y. (guess)
+0000:4E09	data	line_fraction_y	Fraction of draw_line, Y. (guess)

@@ -1,0 +1,423 @@
+# Names for PMDB2.COM.
+0000:3FDE	func	detect_board_ports	Test a board at ports 8Ch/8Eh ... (26K style). (guess) (same code as ONGCHK.COM 0000:0189)
+0000:4409	func	parse_decimal	Parse a decimal number at DS:SI (command line). CF=1 if no digit. (same code as JO.EXE 0000:08FE)
+# Function names from the naming pass of 2026-09-30. PMD MML command handlers from the command tables
+# 0DBE (FM parts), 0E36 (SSG parts), 0EAE (rhythm part K), 0250 (ADPCM part J); the command byte is FFh - table index.
+0000:0DA3	func	fm_command	Run the FM part command AL (table 0DBE, index FFh - AL).
+0000:0DA8	func	rhythm_command	Run the rhythm part (K) command AL (table 0EAE, index FFh - AL).
+0000:0DAD	func	ssg_command	Run the SSG part command AL (table 0E36, index FFh - AL).
+0000:0F26	func	skip_6	Skip 6 parameter bytes (unused commands).
+0000:0F27	func	skip_5	Skip 5 parameter bytes.
+0000:0F28	func	skip_4	Skip 4 parameter bytes.
+0000:0F29	func	skip_3	Skip 3 parameter bytes.
+0000:0F2A	func	skip_2	Skip 2 parameter bytes.
+0000:0F2B	func	skip_1	Skip 1 parameter byte.
+0000:13A8	func	cmd_voice	Command FFh (@): voice number; FM parts load the voice (voice_set).
+0000:13E1	func	cmd_gate_q	Command FEh (q): gate time.
+0000:13EB	func	cmd_volume	Command FDh (v/V): volume.
+0000:13F0	func	cmd_tempo	Command FCh (t/T): tempo (31ADh).
+0000:13F5	func	cmd_tie	Command FBh (&): tie.
+0000:13FB	func	cmd_detune	Command FAh (D): detune.
+0000:1405	func	cmd_loop_start	Command F9h ([): clear the loop counter of the matching loop end.
+0000:141B	func	cmd_loop_end	Command F8h (]): count the loop and jump back.
+0000:1447	func	cmd_loop_exit	Command F7h (:): leave the loop on its last pass.
+0000:1468	func	cmd_loop_point	Command F6h (L): the loop point of the part.
+0000:146C	func	cmd_transpose	Command F5h (_): transpose.
+0000:1479	func	cmd_volume_up_fm	Command F4h ()): volume up (FM step).
+0000:148E	func	cmd_volume_up_ssg	Command F4h ()): volume up (SSG and rhythm step).
+0000:14A1	func	cmd_volume_down_fm	Command F3h ((): volume down (FM step).
+0000:14BA	func	cmd_volume_down_ssg	Command F3h ((): volume down (SSG and rhythm step).
+0000:14D3	func	cmd_lfo_set	Command F2h (M): software LFO parameters.
+0000:14F2	func	cmd_lfo_switch	Command F1h (*): software LFO on/off.
+0000:1505	func	cmd_ssg_envelope	Command F0h (E): SSG software envelope (4 parameters).
+0000:152D	func	cmd_register_write	Command EFh (y): write a chip register (register, data).
+0000:1536	func	cmd_ssg_noise	Command EEh (w): SSG noise frequency.
+0000:1550	func	cmd_ssg_mix	Command EDh (P): SSG tone/noise mix.
+0000:1555	func	cmd_pan	Command ECh (p): FM pan (also for the FM3 extension parts).
+0000:15A3	func	cmd_rhythm_key	Command EBh (\): rhythm key on.
+0000:15FB	func	cmd_rhythm_volume	Command EAh (\v): rhythm volume.
+0000:1658	func	cmd_rhythm_pan	Command E9h: rhythm pan.
+0000:1668	func	cmd_rhythm_master_volume	Command E8h (\V): rhythm master volume.
+0000:1471	func	cmd_transpose_relative	Command E7h (__): relative transpose.
+0000:168E	func	cmd_rhythm_master_volume_add	Command E6h: rhythm master volume +/-.
+0000:1625	func	cmd_rhythm_volume_add	Command E5h: rhythm volume +/-.
+0000:1488	func	cmd_volume_up_fine_fm	Command E3h ()%): volume up by a value (FM).
+0000:149B	func	cmd_volume_up_fine_ssg	Command E3h ()%): volume up by a value (SSG and rhythm).
+0000:14AC	func	cmd_volume_down_fine_fm	Command E2h ((%): volume down by a value (FM).
+0000:14C5	func	cmd_volume_down_fine_ssg	Command E2h ((%): volume down by a value (SSG and rhythm).
+0000:129D	func	cmd_hw_lfo_set	Command E1h (#): OPNA hardware LFO (AMS/PMS) of the FM part.
+0000:12E5	func	cmd_hw_lfo_speed	Command E0h: OPNA hardware LFO speed (register 22h).
+0000:13A3	func	cmd_bar_length	Command DFh (Z): bar length (31B1h).
+0000:1261	func	cmd_volume_one_up_fm	Command DEh: volume up for the next note only (FM).
+0000:1276	func	cmd_volume_one_up_ssg	Command DEh: volume up for the next note only (SSG and rhythm).
+0000:128F	func	cmd_volume_one_down	Command DDh: volume down for the next note only.
+0000:1253	func	cmd_status_write	Command DCh (~): write the status byte.
+0000:1258	func	cmd_status_add	Command DBh: add to the status byte.
+0000:11A7	func	cmd_portamento_fm	Command DAh ({}): portamento (FM).
+0000:1212	func	cmd_portamento_ssg	Command DAh ({}): portamento (SSG).
+0000:117F	func	cmd_lfo_depth_change	Command D6h (MD): LFO depth change.
+0000:1400	func	cmd_detune_relative	Command D5h (DD): relative detune.
+0000:1124	func	cmd_ssg_effect	Command D4h (n): play an SSG sound effect.
+0000:1139	func	cmd_fm_effect	Command D3h (N): play an FM sound effect.
+0000:117A	func	cmd_fade_out	Command D2h (F): start a fade out.
+0000:153B	func	cmd_ssg_noise_add	Command D0h (w+/-): add to the SSG noise frequency.
+0000:10A9	func	cmd_slot_mask	Command CFh (s): FM slot mask.
+0000:0FB7	func	cmd_ssg_envelope_extended	Command CDh on SSG parts: extended SSG envelope (5 parameters). (guess)
+0000:0F8B	func	cmd_ssg_detune_extend	Command CCh on SSG parts: extended detune mode. (guess)
+0000:0FB2	func	cmd_lfo_waveform	Command CBh (MW): LFO waveform.
+0000:0F96	func	cmd_lfo_extend	Command CAh (MX): LFO extended mode.
+0000:0FA3	func	cmd_ssg_envelope_count_mode	Command C9h on SSG parts: envelope count mode. (guess)
+0000:1035	func	cmd_slot_detune	Command C8h (sd): slot detune.
+0000:0FFB	func	cmd_slot_detune_relative	Command C7h (sdd): relative slot detune.
+0000:0F47	func	cmd_fm3_extension_parts	Command C6h: start the three FM3 extension parts (part addresses in 3 words).
+0000:0F77	func	fm3_extension_part_init	Start the FM3 extension part DI at the music address AX.
+0000:0F2D	func	cmd_volume_mask	Command C5h: FM volume slot mask. (guess)
+0000:13E6	func	cmd_gate_q_ratio	Command C4h (Q): gate time as a ratio of the note length.
+0000:0F36	func	cmd_volume_mask_at_0f36	Entry inside cmd_volume_mask: the same code from this address.
+0000:107F	func	cmd_slot_detune_at_107f	Entry inside cmd_slot_detune: the same code from this address.
+0000:10FF	func	cmd_slot_mask_at_10ff	Entry inside cmd_slot_mask: the same code from this address.
+0000:1244	func	cmd_portamento_ssg_at_1244	Entry inside cmd_portamento_ssg: the same code from this address.
+0000:1475	func	cmd_transpose_relative_at_1475	Entry inside cmd_transpose_relative: the same code from this address.
+0000:167C	func	cmd_rhythm_master_volume_at_167c	Entry inside cmd_rhythm_master_volume: the same code from this address.
+0000:1E75	func	cmd_lfo_switch_at_1e75	Entry inside cmd_lfo_switch: the same code from this address.
+# PMD INT 60h functions (table 2277, AH = function).
+0000:0103	func	int60_handler	INT 60h entry: count the nesting (31DC), functions below 1Fh go to int60_dispatch (or to the second handler 26E8 when 31A3 = 0).
+0000:2198	func	int60_dispatch	Save the caller registers, check the function flags (table 2258: not during timer A/B or nested calls), call the function from table 2277.
+0000:079B	func	int60_music_start	INT 60h AH=00h: start the music.
+0000:09AC	func	int60_music_stop	INT 60h AH=01h: stop the music.
+0000:074C	func	int60_fade_out	INT 60h AH=02h: fade out the music (speed AL).
+0000:059B	func	int60_ssg_effect_on	INT 60h AH=03h: play the SSG sound effect AL.
+0000:06AF	func	int60_ssg_effect_off	INT 60h AH=04h: stop the SSG sound effect.
+0000:22B5	func	int60_get_bar_number	INT 60h AH=05h: AL = the bar number (31B0).
+0000:22BC	func	int60_get_music_address	INT 60h AH=06h: DS:DX = the music data buffer.
+0000:22C9	func	int60_get_voice_address	INT 60h AH=07h: DS:DX = the voice data buffer.
+0000:22E1	func	int60_get_fade_volume	INT 60h AH=08h: AL = the fade out volume.
+0000:22EE	func	int60_driver_check	INT 60h AH=09h: AL = the board type (driver check).
+0000:22F9	func	int60_get_status	INT 60h AH=0Ah: AL = the music status (loop count, FFh = ended).
+0000:22D5	func	int60_get_effect_address	INT 60h AH=0Bh: DS:DX = the sound effect data.
+0000:284E	func	int60_fm_effect_on	INT 60h AH=0Ch: play the FM sound effect AL.
+0000:28B0	func	int60_fm_effect_off	INT 60h AH=0Dh: stop the FM sound effect.
+0000:2304	func	int60_get_pcm_address	INT 60h AH=0Eh: DS:DX = the PCM data table.
+0000:279A	func	int60_pcm_effect_on	INT 60h AH=0Fh: play the PCM sound effect.
+0000:2310	func	int60_get_work_address	INT 60h AH=10h: DS:DX = the part work areas.
+0000:231C	func	int60_get_fm_effect_number	INT 60h AH=11h: AL = the playing FM sound effect.
+0000:2323	func	int60_get_pcm_effect_number	INT 60h AH=12h: AL = the playing PCM sound effect.
+0000:232A	func	int60_set_fm_hook	INT 60h AH=13h: set the far routine called after each timer B tick (3194h).
+0000:2347	func	int60_set_effect_hook	INT 60h AH=14h: set the far routine called after each timer A tick (3198h).
+0000:2364	func	int60_get_effect_on	INT 60h AH=15h: AL = sound effect state.
+0000:239C	func	int60_get_joystick	INT 60h AH=16h: read the joystick (SSG port A/B).
+0000:2371	func	int60_get_pcm_driver_flags	INT 60h AH=17h: AL = the PCM driver flags.
+0000:2378	func	int60_set_pcm_driver_flags	INT 60h AH=18h: set the PCM driver flags.
+0000:22E9	func	int60_set_fade_volume	INT 60h AH=19h: set the fade out volume.
+0000:242C	func	int60_pause_on	INT 60h AH=1Ah: pause the music.
+0000:2441	func	int60_pause_off	INT 60h AH=1Bh: continue the music.
+0000:2540	func	int60_fast_forward	INT 60h AH=1Ch: fast forward.
+0000:24E3	func	int60_get_memo	INT 60h AH=1Dh: DS:DX = the memo text AL of the music data.
+0000:2580	func	int60_part_mask	INT 60h AH=1Eh: mask or unmask part AL.
+0000:28DC	func	opn_interrupt	Board IRQ (OPNA timers): mask the IRQ, EOI, read the timer flags (register 27h), run timer B (music) and timer A (effects), restore.
+0000:29C7	func	timer_b_main	Timer B tick: start/stop requests (3155h), music_main, tempo and fade handling, then the FM hook (3194h).
+0000:2A10	func	timer_a_main	Timer A tick: every 8 ticks the fade step, the SSG effect, the FM effect, the stop key check (0000:052A), then the effect hook (3198h).
+0000:09DF	func	music_main	One music tick: SSG parts G-I, the ADPCM part, the rhythm part, FM parts A-C, the FM3 extension parts, FM parts D-F (port 2); count the loops.
+0000:0751	func	fm_effect_main	Play the FM sound effect part (3592h) on FM3 and end it after the last note.
+0000:0AD6	func	fm_main	One tick of the FM part DI: note length, commands, key on/off, LFO, portamento.
+0000:0C09	func	ssg_main	One tick of the SSG part DI: note length, commands, key on/off, envelope, LFO.
+0000:0146	func	pcm_main	One tick of the ADPCM part (J).
+0000:0D2A	func	rhythm_main	One tick of the rhythm part (K): rhythm patterns, SSG drums through ssg_drum_start.
+0000:024A	func	pcm_command	Run the ADPCM part (J) command AL (table 0250, index FFh - AL).
+0000:02C8	func	cmd_pcm_repeat	Command CEh on the ADPCM part: repeat start, repeat end and release addresses (3 words).
+0000:02F3	func	cmd_portamento_pcm	Command DAh ({}) on the ADPCM part: portamento.
+0000:033B	func	cmd_volume_up_pcm	Command F4h ()) on the ADPCM part: volume + 16.
+0000:0348	func	cmd_volume_up_fine_pcm	Command E3h ()%) on the ADPCM part: volume up by a value.
+0000:034E	func	cmd_volume_down_pcm	Command F3h (() on the ADPCM part: volume - 16.
+0000:0359	func	cmd_volume_down_fine_pcm	Command E2h ((%) on the ADPCM part: volume down by a value.
+0000:0367	func	cmd_pan_pcm	Command ECh (p) on the ADPCM part: pan.
+0000:0372	func	cmd_pcm_voice	Command FFh (@) on the ADPCM part: voice number; start and stop addresses from the PCM table 35D4.
+0000:1282	func	cmd_volume_one_up_pcm	Command DEh on the ADPCM part: volume up for the next note only.
+0000:0AAE	func	select_fm_port_2	Use the second FM register port pair ([3190]/[3192], FM parts D-F); 3141 = 1.
+0000:0AC2	func	select_fm_port_1	Use the first FM register port pair ([318C]/[318E], FM parts A-C, SSG, rhythm); 3141 = 0.
+0000:0B88	func	calc_gate_time	Key off time +05 = note length * gate ratio (+3Fh) + gate time (+3Eh).
+0000:0CF7	func	ssg_effect_priority_check	SSG part 3 and the SSG effect: CF = 1 when the effect keeps the channel (the part note is not played); may end a low priority effect.
+0000:118B	func	portamento_step	Portamento: add the step (+0E) and one unit of the remainder (+10) to the frequency offset (+0C).
+0000:16AA	func	note_transpose	Transpose the note AL (octave in the high nibble) by the part transpose (+13h); 0Fh = rest.
+0000:16FF	func	fm_note_to_fnumber	FM: note AL to F-number and block (table 2AD5) in +06; a rest gives 0.
+0000:1729	func	ssg_note_to_period	SSG: note AL to the tone period (table 2AED shifted by the octave) in +06; a rest gives 0.
+0000:1756	func	fm_frequency_out	FM: write F-number + detune + LFO + portamento to registers A4h/A0h (FM3 extension parts use the FM3 slot registers).
+0000:185C	func	fnumber_normalize	Keep the F-number between 26Ah and 4D4h by moving the block up or down.
+0000:1891	func	ssg_frequency_out	SSG: write the tone period + detune + LFO + portamento to the tone registers.
+0000:191A	func	fm_volume_out	FM: write the carrier total levels from the volume (+12h or the one-note volume +1Dh) with the fade and the master volume.
+0000:1998	func	fm_slot_volume_add	Add the volume CL to the total level of one slot and write it (limit 7Fh).
+0000:19D9	func	ssg_volume_out	SSG: write the volume from the part volume, the envelope, the fade and the master volume.
+0000:1A6F	func	fm_key_on	FM key on (register 28h) for the slots of the part (+38h).
+0000:1AC3	func	ssg_key_on	SSG key on: set the tone/noise bits of the channel in the mixer (register 07h); update the noise frequency.
+0000:1B12	func	ssg_channel_mixer_bits	AH = tone and noise mixer bits of the SSG channel [313C]; AL = the mixer register (ssg_read_mixer).
+0000:1B28	func	fm_key_off	FM key off (register 28h) of the part slots when a note plays.
+0000:1B6B	func	ssg_key_off	SSG key off: start the envelope release (state 2, or 4 for the extended envelope).
+0000:1B82	func	voice_set	Write the FM voice DL (voice data) to the registers of the part; the FM3 extension parts keep the shared algorithm.
+0000:1C35	func	voice_address	BX = address of voice DL (32 bytes each, or a search in the voice list with 1Ah-byte entries).
+0000:1C70	func	voice_mute_slots	Before a voice change: set the total level of the masked slots (+39h) to 7Fh and key off; CF = 1 when there is no mask.
+0000:1CA1	func	lfo_main	Software LFO of the part: delay, speed, step, depth change; several steps when the LFO follows timer A.
+0000:1D6C	func	lfo_depth_step	LFO depth change (MD): every [+1Fh] ticks add [+1Eh] to the step (+16h).
+0000:1D90	func	lfo_random	Random LFO value: linear congruential generator (seed 1DAA) scaled to AX.
+0000:1DAC	func	ssg_note_init	SSG note start: reset the frequency offset, start the envelope (attack) and the LFO (unless the note is tied).
+0000:1E3D	func	fm_lfo_init	FM note start: reset the frequency offset and restart the LFO (unless the note is tied or the LFO keeps running).
+0000:1E90	func	ssg_envelope_main	SSG software envelope step (several steps when it follows timer A).
+0000:1F05	func	ssg_envelope_extended	SSG extended envelope step (attack rate, decay rate, sustain, release like the FM envelope).
+0000:1FDD	func	fade_step	Fade: step the fade volume (31AF) by the speed (31AE); at the end stop the fade, or stop the music (31D8).
+0000:201D	func	timer_init	Tempo C8h, write timer B and timer A (registers 26h, 24h, 25h), start both timers (register 27h = 3Fh), reset the bar counters.
+0000:2049	func	silence_all	Set the FM release rates to FFh on both ports, key off all FM channels, stop the rhythm and the ADPCM.
+0000:2107	func	opn_write_port_1	Write the register DH = DL on the first register port pair (wait for the busy flag).
+0000:212E	func	opn_write_port_2	Write the register DH = DL on the second register port pair (wait for the busy flag).
+0000:2155	func	opn_write	Write the register DH = DL on the selected port pair ([3132]/[3134]).
+0000:217C	func	ssg_read_mixer	AL = SSG mixer register (07h).
+0000:2A82	func	bar_counter_step	Count the ticks of the bar (31B2) up to the bar length (31B1); then the bar number (31B0) + 1.
+0000:2A97	func	timer_b_set_tempo	Write the tempo to timer B (register 26h); while the fast forward key (0000:0538) is held, use the fast tempo [31EE].
+0000:0637	func	ssg_effect_main	SSG sound effect step: write the next frame (tone period, noise, mixer, volume) or end the effect.
+0000:058B	func	ssg_drum_start	Start the SSG effect AL | 80h as a drum of the rhythm part (priority 73Ch = 3).
+0000:06A6	func	effect_write_next	Write the next effect data byte to register DH; DH + 1.
+0000:06B3	func	ssg_effect_stop	Stop the SSG sound effect (and the PPS driver, INT 64h AH=00h), mixer bits of channel 3 off.
+0000:0742	func	get_loop_counters	AH = 31AB, AL = 31AC (music status and loop count).
+0000:088C	func	data_init	Clear the part work areas (3212h, 380h bytes) and the driver state.
+0000:0919	func	opn_init	Initialize the chip: timer reset, noise, FM pan (B4h-B6h = C0h) on both ports, hardware LFO off, SSG, rhythm and ADPCM registers.
+0000:012C	func	int60_exit	Leave INT 60h: nesting count - 1, 31DD = 0, IRET.
+0000:011C	func	int60_handler_at_011c	Entry inside int60_handler: the same code from this address.
+0000:0600	func	int60_ssg_effect_on_at_0600	Entry inside int60_ssg_effect_on: the same code from this address.
+0000:0602	func	int60_ssg_effect_on_at_0602	Entry inside int60_ssg_effect_on: the same code from this address.
+0000:0644	func	ssg_effect_main_at_0644	Entry inside ssg_effect_main: the same code from this address.
+0000:0645	func	ssg_effect_main_at_0645	Entry inside ssg_effect_main: the same code from this address.
+0000:0675	func	ssg_effect_main_at_0675	Entry inside ssg_effect_main: the same code from this address.
+0000:0678	func	ssg_effect_main_at_0678	Entry inside ssg_effect_main: the same code from this address.
+0000:06C3	func	ssg_effect_stop_at_06c3	Entry inside ssg_effect_stop: the same code from this address.
+0000:0700	func	ssg_effect_main_at_0700	Entry inside ssg_effect_main: the same code from this address.
+0000:0705	func	ssg_effect_main_at_0705	Entry inside ssg_effect_main: the same code from this address.
+0000:07AF	func	int60_music_start_at_07af	Entry inside int60_music_start: the same code from this address.
+0000:07E4	func	int60_music_start_at_07e4	Entry inside int60_music_start: the same code from this address.
+0000:0805	func	int60_music_start_at_0805	Entry inside int60_music_start: the same code from this address.
+0000:0874	func	int60_music_start_at_0874	Entry inside int60_music_start: the same code from this address.
+0000:0974	func	opn_init_at_0974	Entry inside opn_init: the same code from this address.
+0000:09C0	func	int60_music_stop_at_09c0	Entry inside int60_music_stop: the same code from this address.
+0000:09C1	func	int60_music_stop_at_09c1	Entry inside int60_music_stop: the same code from this address.
+0000:0A12	func	music_main_at_0a12	Entry inside music_main: the same code from this address.
+0000:0A39	func	music_main_at_0a39	Entry inside music_main: the same code from this address.
+0000:0A3C	func	music_main_at_0a3c	Entry inside music_main: the same code from this address.
+0000:0A45	func	music_main_at_0a45	Entry inside music_main: the same code from this address.
+0000:0A8A	func	music_main_at_0a8a	Entry inside music_main: the same code from this address.
+0000:0AC1	func	select_fm_port_2_at_0ac1	Entry inside select_fm_port_2: the same code from this address.
+0000:0B2B	func	fm_main_at_0b2b	Entry inside fm_main: the same code from this address.
+0000:0B74	func	fm_main_at_0b74	Entry inside fm_main: the same code from this address.
+0000:0CC3	func	ssg_main_at_0cc3	Entry inside ssg_main: the same code from this address.
+0000:0D0A	func	ssg_effect_priority_check_at_0d0a	Entry inside ssg_effect_priority_check: the same code from this address.
+0000:0D29	func	ssg_effect_priority_check_at_0d29	Entry inside ssg_effect_priority_check: the same code from this address.
+0000:0D2E	func	rhythm_main_at_0d2e	Entry inside rhythm_main: the same code from this address.
+0000:0D30	func	rhythm_main_at_0d30	Entry inside rhythm_main: the same code from this address.
+0000:0D34	func	rhythm_main_at_0d34	Entry inside rhythm_main: the same code from this address.
+0000:0D44	func	rhythm_main_at_0d44	Entry inside rhythm_main: the same code from this address.
+0000:1345	func	rhythm_main_at_1345	Entry inside rhythm_main: the same code from this address.
+0000:13A0	func	rhythm_main_at_13a0	Entry inside rhythm_main: the same code from this address.
+0000:1704	func	fm_note_to_fnumber_at_1704	Entry inside fm_note_to_fnumber: the same code from this address.
+0000:1745	func	ssg_note_to_period_at_1745	Entry inside ssg_note_to_period: the same code from this address.
+0000:1789	func	fm_frequency_out_at_1789	Entry inside fm_frequency_out: the same code from this address.
+0000:1800	func	fm_frequency_out_at_1800	Entry inside fm_frequency_out: the same code from this address.
+0000:18BA	func	ssg_frequency_out_at_18ba	Entry inside ssg_frequency_out: the same code from this address.
+0000:1945	func	fm_volume_out_at_1945	Entry inside fm_volume_out: the same code from this address.
+0000:1954	func	fm_volume_out_at_1954	Entry inside fm_volume_out: the same code from this address.
+0000:1B2F	func	fm_key_off_at_1b2f	Entry inside fm_key_off: the same code from this address.
+0000:1B72	func	ssg_key_off_at_1b72	Entry inside ssg_key_off: the same code from this address.
+0000:1BBA	func	voice_set_at_1bba	Entry inside voice_set: the same code from this address.
+0000:1C73	func	voice_mute_slots_at_1c73	Entry inside voice_mute_slots: the same code from this address.
+0000:1CC3	func	lfo_main_at_1cc3	Entry inside lfo_main: the same code from this address.
+0000:1E45	func	fm_lfo_init_at_1e45	Entry inside fm_lfo_init: the same code from this address.
+0000:1E52	func	fm_lfo_init_at_1e52	Entry inside fm_lfo_init: the same code from this address.
+0000:1EA8	func	ssg_envelope_main_at_1ea8	Entry inside ssg_envelope_main: the same code from this address.
+0000:1F00	func	ssg_envelope_main_at_1f00	Entry inside ssg_envelope_main: the same code from this address.
+0000:203D	func	timer_init_at_203d	Entry inside timer_init: the same code from this address.
+0000:2072	func	silence_all_at_2072	Entry inside silence_all: the same code from this address.
+0000:2174	func	opn_write_at_2174	Entry inside opn_write: the same code from this address.
+0000:2178	func	opn_write_at_2178	Entry inside opn_write: the same code from this address.
+0000:21CD	func	int60_dispatch_at_21cd	Entry inside int60_dispatch: the same code from this address.
+0000:2207	func	int60_dispatch_at_2207	Entry inside int60_dispatch: the same code from this address.
+0000:240A	func	int60_get_joystick_at_240a	Entry inside int60_get_joystick: the same code from this address.
+0000:2600	func	int60_part_mask_at_2600	Entry inside int60_part_mask: the same code from this address.
+0000:2900	func	opn_interrupt_at_2900	Entry inside opn_interrupt: the same code from this address.
+0000:2941	func	opn_interrupt_at_2941	Entry inside opn_interrupt: the same code from this address.
+0000:295E	func	opn_interrupt_at_295e	Entry inside opn_interrupt: the same code from this address.
+0000:2A05	func	timer_b_main_at_2a05	Entry inside timer_b_main: the same code from this address.
+0000:0594	func	ssg_effect_start_music	Start the SSG effect AL from the music (command n, priority 1).
+0000:073D	func	get_bar_number	AL = the bar number (31B0).
+0000:27D0	func	pcm_effect_address	Start and stop address of PCM voice AL (table 35D4) to 31C0/31C2.
+0000:27E4	func	pcm_effect_volume	ADPCM volume (register 0Bh) = AL.
+0000:27EC	func	pcm_effect_deltan	ADPCM delta-N (registers 09h/0Ah) = BX.
+0000:27FB	func	pcm_effect_key_on	ADPCM reset, control, start/stop addresses (31C0/31C2), start playing.
+0000:03A0	func	pcm_volume_out	ADPCM volume (register 0Bh) from the part volume with the PCM master volume and the fade.
+0000:043C	func	pcm_key_on	ADPCM key on: reset (00h = 01h), control 01h, start/stop addresses (02h-05h), start (00h = A0h).
+0000:04D5	func	pcm_key_off	ADPCM key off: continue at the release address (3152h) or stop; envelope release.
+0000:0526	func	pcm_frequency_out	ADPCM delta-N (registers 09h/0Ah) = period + detune + LFO + portamento.
+0000:0555	func	pcm_note_to_deltan	ADPCM: note AL to delta-N (table 2B05 shifted by the octave) in +06; a rest gives 0.
+0000:0100	func	pmd_start	COM entry: go to install.
+0000:3B57	func	install	Free the environment, print the title, check whether PMD is already resident (INT 60h handler signature 'PMD').
+0000:3BA0	func	install_with_options	Set the default options, parse the command line, measure the CPU speed, detect the board, hook the vectors, stay resident.
+0000:3D1F	func	install_print_and_stay	Print the wait count and the messages, compute the resident size (code + buffers), keep resident (INT 21h AH=31h).
+0000:3D79	func	board_init	Reset the timers of all possible boards (register ports 88h-8Eh), detect the board, set the register ports and the IRQ.
+0000:3E45	func	detect_pps_and_options	Check for the PPS driver (3149) and apply the related options.
+0000:3EBA	func	set_board_irq	Board IRQ CL: PIC mask bits (315C/315D), EOI command (3159), slave PIC port.
+0000:3EEE	func	pps_driver_present	CF = 0 when the INT 64h handler has the PPSDRV signature 'PMP'.
+0000:3F11	func	driver_reset	Clear the data, initialize the chip, stop the music, start the timers, unmask the board IRQ.
+0000:3F35	func	timer_reset_all_boards	Write register AH = AL through the register ports 88h-8Eh of all board addresses.
+0000:3F61	func	detect_board	Detect the sound board (enable the PC-9801-86 at port A460h, detect_board_ports).
+0000:4173	func	print_byte_decimal	Print AL as a decimal number without leading zeros.
+0000:4188	func	print_decimal_digit	Print the digit of AL for the place value DL (skip a leading zero).
+0000:4262	func	set_irq_mask	Unmask the board IRQ AL at the PIC (slave PIC for IRQ 8 and up) and keep the old mask bit (0110h).
+0000:42B7	func	parse_options	Parse the command line options (/ or -, option letter table); an error prints the usage and exits.
+0000:42EB	func	option_buffer_size_1	Option: first buffer size in KB (4FD3). (guess)
+0000:42F8	func	option_buffer_size_2	Option: second buffer size in KB (4FD4). (guess)
+0000:4305	func	option_buffer_size_3	Option: third buffer size in KB (4FD5). (guess)
+0000:4312	func	option_volume_down	Option: volume down of the FM (F), SSG (S), PCM (P) or rhythm (R) parts.
+0000:434D	func	option_stop_key	Option: the keys that stop the music (- off, G/E key masks). (guess)
+0000:4433	func	print_word_decimal	Print AX as a decimal number without leading zeros.
+0000:4456	func	print_decimal_digit_word	Print the digit of AX for the place value BX (skip a leading zero).
+0000:44E7	func	measure_cpu_speed	Measure the CPU speed with the timer interrupt (IRQ 0) to get the register write delay count (31EA).
+0000:4594	func	measure_timer_handler	IRQ 0 handler during measure_cpu_speed: count, EOI.
+0000:3D45	func	install_print_and_stay_at_3d45	Entry inside install_print_and_stay: the same code from this address.
+0000:4281	func	set_irq_mask_at_4281	Entry inside set_irq_mask: the same code from this address.
+0000:4350	func	option_stop_key_at_4350	Entry inside option_stop_key: the same code from this address.
+0000:4441	func	print_word_decimal_at_4441	Entry inside print_word_decimal: the same code from this address.
+0000:4503	func	measure_cpu_speed_at_4503	Entry inside measure_cpu_speed: the same code from this address.
+0000:4588	func	measure_cpu_speed_at_4588	Entry inside measure_cpu_speed: the same code from this address.
+0000:458A	func	measure_cpu_speed_at_458a	Entry inside measure_cpu_speed: the same code from this address.
+# Data (DS = CS), 2026-10-01. Names from the use in the driver ("structural name" where the purpose is not clear).
+0000:002C	data	psp_environment	PSP +2Ch: segment of the environment.
+0000:0108	data	old_vector_1_offset	Interrupt vector saved at the install, offset.
+0000:010A	data	old_vector_1_segment	Interrupt vector saved at the install, segment.
+0000:010C	data	old_vector_2_offset	Second interrupt vector saved at the install, offset.
+0000:010E	data	old_vector_2_segment	Second interrupt vector saved at the install, segment.
+0000:0110	data	irq_mask_saved	Old PIC mask bit kept by set_irq_mask.
+0000:0111	data	value_0111	Word read by the install into BX. (structural name)
+0000:0113	data	board_option	Byte set by board_init from AL (also read by detect_pps_and_options). (structural name)
+0000:0730	data	effect_data_pointer	SSG effect: pointer to the next effect frame.
+0000:0732	data	effect_tone	SSG effect: tone period.
+0000:0734	data	effect_tone_step	SSG effect: tone period change per frame.
+0000:0736	data	effect_frames_left	SSG effect: frames left of the current entry.
+0000:0737	data	effect_noise	SSG effect: noise frequency.
+0000:0738	data	effect_volume	SSG effect: volume. (guess)
+0000:0739	data	effect_volume_steps	SSG effect: volume change counter. (guess)
+0000:073A	data	drum_effect_mode	Mode of the SSG drums (set at the install; ssg_drum_start tests 2). (guess)
+0000:073B	data	effect_number	SSG effect: number of the running effect.
+0000:073C	data	effect_priority	SSG effect: priority of the running effect (1 music, 3 drum).
+0000:1DAA	data	lfo_random_seed	Seed of the random LFO generator.
+0000:3132	data	fm_port_address	Current FM register address port (copy of port 1 or 2).
+0000:3134	data	fm_port_data	Current FM register data port.
+0000:3136	data	int60_saved_bx	INT 60h: caller BX kept during the call. (guess)
+0000:3138	data	int60_saved_dx	INT 60h: caller DX kept during the call. (guess)
+0000:313A	data	int60_function	INT 60h: function number (AH).
+0000:313B	data	int60_result	INT 60h: result byte returned in AL.
+0000:313C	data	fm_channel	Current FM channel number (the FM effect uses channel 3).
+0000:313D	data	pcm_state_313d	ADPCM part state byte. (structural name)
+0000:313E	data	pcm_state_313e	ADPCM part flag. (structural name)
+0000:313F	data	cleared_313f	Byte cleared by data_init. (structural name)
+0000:3140	data	cleared_3140	Byte cleared by data_init. (structural name)
+0000:3141	data	fm_port_select	Current FM port pair (0 = first, 1 = second).
+0000:3142	data	cleared_3142	Byte cleared by data_init. (structural name)
+0000:3143	data	cleared_3143	Byte cleared by data_init. (structural name)
+0000:3144	data	cleared_3144	Byte cleared by data_init. (structural name)
+0000:3145	data	cleared_3145	Byte cleared by data_init. (structural name)
+0000:3146	data	cleared_3146	Byte cleared by data_init. (structural name)
+0000:3147	data	cleared_3147	Byte cleared by data_init. (structural name)
+0000:3148	data	pcm_state_3148	ADPCM part byte. (structural name)
+0000:3149	data	ppsdrv_present	PPS driver state (FFh = not checked or not present).
+0000:314A	data	slot_detune_channel	Channel of the last relative slot detune.
+0000:314C	data	effect_voice_pointer	Voice data pointer of the FM effect.
+0000:314E	data	pcm_repeat_start	ADPCM part: repeat start address.
+0000:3150	data	pcm_repeat_end	ADPCM part: repeat end address.
+0000:3152	data	pcm_release	ADPCM part: release address (8000h = none).
+0000:3154	data	timer_a_count_at_b	timer_a_count at the last timer B tick.
+0000:3155	data	music_request	Start and stop request bits for timer B.
+0000:3156	data	slot_detune_flag	1 = a slot detune is set.
+0000:3157	data	opn_status_port	Port read by opn_interrupt. (guess: the status port)
+0000:3159	data	board_flags	Byte set by board_init. (structural name)
+0000:315A	data	irq_mask_port	PIC mask port of the board IRQ.
+0000:315C	data	irq_mask_bit	Mask bit of the board IRQ (set while the interrupt runs).
+0000:315D	data	irq_unmask_bits	Mask to unmask the board IRQ.
+0000:315E	data	interrupt_saved_ss	SS saved by opn_interrupt.
+0000:3160	data	interrupt_saved_sp	SP saved by opn_interrupt.
+0000:3162	data	fm3_slot_mask	FM slot mask (command s; voice_set). (guess)
+0000:3163	data	voice_reload	Flag tested by voice_set; continue sets it. (guess)
+0000:3186	data	music_buffer	Offset of the music data buffer.
+0000:3188	data	voice_buffer	Offset of the voice data buffer (INT 60h AH=07h).
+0000:318A	data	effect_buffer	Offset of the FM effect data buffer.
+0000:318C	data	port1_address	First OPNA port pair: address port.
+0000:318E	data	port1_data	First OPNA port pair: data port.
+0000:3190	data	port2_address	Second OPNA port pair: address port.
+0000:3192	data	port2_data	Second OPNA port pair: data port.
+0000:3194	data	timer_b_hook_offset	Far routine called after each timer B tick, offset (INT 60h AH=13h).
+0000:3196	data	timer_b_hook_segment	Far routine called after each timer B tick, segment.
+0000:3198	data	timer_a_hook_offset	Far routine called after each timer A tick, offset (INT 60h AH=14h).
+0000:319A	data	timer_a_hook_segment	Far routine called after each timer A tick, segment.
+0000:319C	data	voice_table	Voice table of the music data.
+0000:319E	data	rhythm_table	Rhythm pattern table of the music data.
+0000:31A0	data	rhythm_pointer	Read pointer of the rhythm part.
+0000:31A2	data	rhythm_mask	Mask of the rhythm keys.
+0000:31A3	data	board_flag_31a3	Byte set by board_init (1 or 0); the INT 60h entry tests it. (structural name)
+0000:31A4	data	stop_key_enabled	Set at the install; timer A tests it (the stop key check). (guess)
+0000:31A5	data	fm_volume_down	FM volume down.
+0000:31A6	data	ssg_volume_down	SSG volume down.
+0000:31A7	data	pcm_volume_down	ADPCM volume down.
+0000:31A8	data	rhythm_volume_down	Rhythm volume down.
+0000:31A9	data	music_has_voices	1 = the music data has its own voices.
+0000:31AA	data	music_flag	Byte from the music start; music_main tests it. (structural name)
+0000:31AB	data	status_byte	Status byte (command ~; INT 60h returns it).
+0000:31AC	data	loop_count	Loop counter of the music.
+0000:31AD	data	tempo	Tempo (timer B value).
+0000:31AE	data	fade_speed	Fade out speed (INT 60h AH=02h).
+0000:31AF	data	fade_volume	Fade out volume.
+0000:31B0	data	bar_number	Bar number.
+0000:31B1	data	bar_length	Bar length (60h at the start).
+0000:31B2	data	tick_counter	Counter cleared by data_init and timer_init. (structural name)
+0000:31B3	data	timer_a_count	Timer A tick counter (the LFO and the envelope step by it).
+0000:31B4	data	effect_lock	Flag tested before an SSG effect starts. (guess)
+0000:31B5	data	ssg_noise_frequency	SSG noise frequency (command w).
+0000:31B6	data	ssg_effect_mixer	Mixer value written by the SSG effect. (guess)
+0000:31B7	data	option_31b7	Option byte (install, music start, data_init). (structural name)
+0000:31B8	data	option_31b8	Option byte (install, music start, data_init). (structural name)
+0000:31B9	data	option_31b9	Option byte tested by int60_dispatch. (structural name)
+0000:31BA	data	pcm_active	ADPCM state byte (pcm_main clears it; silence_all tests it). (guess)
+0000:31BB	data	pcm_voice_start	ADPCM part: start address of the voice.
+0000:31BD	data	pcm_voice_stop	ADPCM part: stop address of the voice.
+0000:31BF	data	pcm_state_31bf	ADPCM part byte (FFh in pcm_main). (structural name)
+0000:31C0	data	pcm_effect_start	ADPCM effect: start address.
+0000:31C2	data	pcm_effect_stop	ADPCM effect: stop address.
+0000:31C4	data	pcm_effect_dx	ADPCM effect: DX of INT 60h AH=0Fh. (structural name)
+0000:31C6	data	pcm_effect_ch	ADPCM effect: CH of the call. (structural name)
+0000:31C7	data	pcm_effect_number	ADPCM effect: number (CL of the call).
+0000:31C8	data	rhythm_key_bits	Rhythm keys that are on.
+0000:31CF	data	rhythm_key_mask	Rhythm key mask (opn_init). (guess)
+0000:31D0	data	rhythm_counter	Word of the rhythm part. (structural name)
+0000:31D6	data	music_playing	1 = the music plays.
+0000:31D7	data	music_paused	1 = the music is paused.
+0000:31D8	data	fade_stops_music	1 = the end of the fade stops the music. (guess)
+0000:31D9	data	ssg_drums_enabled	SSG drums switch of the rhythm part (FFh at the start). (guess)
+0000:31DA	data	timer_a_busy	1 = timer A runs (INT 60h functions wait).
+0000:31DB	data	timer_b_busy	1 = timer B runs (INT 60h functions wait).
+0000:31DC	data	int60_nesting	INT 60h nesting count.
+0000:31DD	data	int60_active	FFh while an INT 60h function runs.
+0000:31DE	data	opna_present	1 = an OPNA (YM2608) is present. (guess)
+0000:31DF	data	timer_a_rate	Timer A value (10h at the start). (guess)
+0000:31E0	data	fast_forward_rate	Value of timer_b_set_tempo for fast forward (10h at the start). (guess)
+0000:31E1	data	hook_flags	Bit 80h = a timer B hook is set.
+0000:31E2	data	slot_detune_1	Relative detune of slot 1.
+0000:31E4	data	slot_detune_2	Relative detune of slot 2.
+0000:31E6	data	slot_detune_3	Relative detune of slot 3.
+0000:31E8	data	slot_detune_4	Relative detune of slot 4.
+0000:31EA	data	measured_speed	CPU speed value measured at the install.
+0000:31EC	data	register_wait_count	Wait loop count for the register writes.
+0000:31EE	data	fast_forward_timer_b	Timer B value while fast forward (FAh).
+0000:31F0	data	timer_b_value	Timer B value written last.
+0000:4598	data	measure_value_1	Word kept by measure_cpu_speed. (structural name)
+0000:459A	data	measure_value_2	Word kept by measure_cpu_speed. (structural name)
+0000:459C	data	measure_value_3	Byte kept by measure_cpu_speed. (structural name)
+0000:459D	data	measure_value_4	Byte kept by measure_cpu_speed. (structural name)
+0000:465E	data	board_init_al	Byte kept by board_init (AL). (structural name)
+0000:4665	data	board_init_ah	Byte kept by board_init (AH). (structural name)
+0000:4FD3	data	music_buffer_kb	Music buffer size in KB (10h; option /M). (guess)
+0000:4FD4	data	voice_buffer_kb	Voice buffer size in KB (8; option /V). (guess)
+0000:4FD5	data	effect_buffer_kb	Effect buffer size in KB (4; option /E). (guess)
+0000:4FD6	data	board_86_found	1 = a PC-9801-86 board answered at A460h.
+0000:4FD7	data	board_type	Board type found by detect_board.

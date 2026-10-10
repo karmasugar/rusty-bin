@@ -1,0 +1,1 @@
+Portable mode: the saves are written into the folder save/ next to the program. Delete this file to use the user data folder (~/.local/share/rusty).

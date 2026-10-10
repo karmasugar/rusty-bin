@@ -1,0 +1,241 @@
+# Names for VISUAL.COM (cut scene player). Script format: docs/visual-script.md.
+0000:000E	func	visual_call_service	Far call to JO.EXE service_dispatch (pointer saved by visual_set_service_ptr); AX = service.
+0000:0026	func	visual_set_service_ptr	Save the service far pointer SI:DS and the work buffer ES:DI; every entry calls it first.
+0000:0070	func	visual_entry_scene1	Entry 0: play scene script 0632h.
+0000:007B	func	visual_entry_scene2	Entry 1: play scene script 1462h.
+0000:0086	func	visual_entry_scene3	Entry 2: play scene script 1800h.
+0000:0091	func	visual_entry_scene4	Entry 3: play scene script 1A0Dh.
+0000:009C	func	visual_entry_scene5	Entry 4: play scene script 1E30h.
+0000:00A7	func	visual_entry_scene6	Entry 5: play scene script 2230h.
+0000:00B2	func	visual_entry_ending	Entry 6: set the text speed values, play the ending script 2940h.
+0000:00E8	label	scene_play	Save SS:SP (for scene_abort), init, run the script SI with script_run, then wait and leave.
+0000:0140	func	script_native_0140	Native code called by script command 13h (scene 3). (guess: floor effect)
+0000:03CA	func	script_native_03ca	Native code called by script command 13h (ending).
+0000:0406	func	script_native_0406	Native code called by script command 13h (ending).
+0000:3014	func	scene_abort	Leave the scene (skip key or end): restore SS:SP saved by scene_play. (guess)
+0000:31C0	func	check_skip_key	CF = 0 if the scene is skipped by a key. (guess for the flag meaning)
+0000:397D	func	script_op_copy_rect	Command 01h: copy a screen rectangle (4 word parameters). (guess)
+0000:3FFE	func	draw_text_char	Draw one text character (Shift-JIS or 1 byte) at the text position.
+0000:40A6	func	script_run	Script interpreter: 00 = end, 01h-1Ah = commands (compare chain), 20h and more = text.
+0000:4501	func	wait_frame	Wait one frame (used in wait loops). (guess)
+0000:40C6	label	script_op_01	Command 01h: copy screen rectangle (4 words; face animation frame) (guess)
+0000:40D1	label	script_op_03	Command 03h: set text attribute (b)
+0000:40DD	label	script_op_04	Command 04h: set text position (w)
+0000:40E7	label	script_op_05	Command 05h: wait b frames (skip key checked)
+0000:4102	label	script_op_06	Command 06h: draw window (w w w b) (guess)
+0000:4126	label	script_op_07	Command 07h: load image S at (w w w)
+0000:417D	label	script_op_08	Command 08h: load image S (w w w), variant
+0000:41EB	label	script_op_09	Command 09h: graphics op (b w) (guess)
+0000:420C	label	script_op_0a	Command 0Ah: graphics op (b) (guess)
+0000:422C	label	script_op_0b	Command 0Bh: set palette/image param (w) (guess)
+0000:4241	label	script_op_0c	Command 0Ch: set palette/image param (w) (guess)
+0000:4256	label	script_op_0d	Command 0Dh: text line feed / scroll
+0000:4260	label	script_op_0e	Command 0Eh: load animation script S (.ani)
+0000:4281	label	script_op_0f	Command 0Fh: animation / face control (w b w) (guess)
+0000:4296	label	script_op_10	Command 10h: music: stop, load song S1/S2, start
+0000:42C7	label	script_op_11	Command 11h: load image part S at (w w) slot b
+0000:42ED	label	script_op_12	Command 12h: (w w) (guess)
+0000:4303	label	script_op_13	Command 13h: call native code at w
+0000:430C	label	script_op_14	Command 14h: play sound effect b
+0000:431F	label	script_op_15	Command 15h: text id and color (b b)
+0000:432E	label	script_op_16	Command 16h: wait for a key
+0000:433C	label	script_op_17	Command 17h: reset a buffer pointer (guess)
+0000:434A	label	script_op_18	Command 18h: wait until timer reaches w (guess: music sync)
+0000:435E	label	script_op_19	Command 19h: (b w) (guess)
+0000:4376	label	script_op_1a	Command 1Ah: page flip / redraw (guess)
+0000:446D	func	visual_set_palette	Set the 16-color palette from DS:SI. (same code as OP.COM 0000:0CFF)
+0000:338B	func	visual_gdc_command	GDC graphic command (scroll?). (guess) (same code as OP.COM 0000:0F19)
+0000:33C6	func	visual_page_flip	Swap the display and draw page. (guess) (same code as OP.COM 0000:0A48, data addresses differ)
+0000:000F	func	visual_call_service_at_000f	Entry inside visual_call_service: the same code from this address.
+0000:0013	func	visual_call_service_at_0013	Entry inside visual_call_service: the same code from this address.
+0000:0017	func	visual_call_service_at_0017	Entry inside visual_call_service: the same code from this address.
+0000:0020	func	visual_call_service_at_0020	Entry inside visual_call_service: the same code from this address.
+0000:0025	func	visual_call_service_at_0025	Entry inside visual_call_service: the same code from this address.
+0000:002C	func	visual_set_service_ptr_at_002c	Entry inside visual_set_service_ptr: the same code from this address.
+0000:0031	func	visual_set_service_ptr_at_0031	Entry inside visual_set_service_ptr: the same code from this address.
+0000:0034	func	visual_set_service_ptr_at_0034	Entry inside visual_set_service_ptr: the same code from this address.
+0000:003B	func	visual_set_service_ptr_at_003b	Entry inside visual_set_service_ptr: the same code from this address.
+0000:003F	func	visual_set_service_ptr_at_003f	Entry inside visual_set_service_ptr: the same code from this address.
+0000:0046	func	visual_set_service_ptr_at_0046	Entry inside visual_set_service_ptr: the same code from this address.
+0000:0067	func	visual_set_service_ptr_at_0067	Entry inside visual_set_service_ptr: the same code from this address.
+0000:0080	func	visual_entry_scene2_at_0080	Entry inside visual_entry_scene2: the same code from this address.
+0000:00A0	func	visual_entry_scene5_at_00a0	Entry inside visual_entry_scene5: the same code from this address.
+0000:00B0	func	visual_entry_scene6_at_00b0	Entry inside visual_entry_scene6: the same code from this address.
+0000:00B6	func	visual_entry_ending_at_00b6	Entry inside visual_entry_ending: the same code from this address.
+0000:00B7	func	visual_entry_ending_at_00b7	Entry inside visual_entry_ending: the same code from this address.
+0000:00B8	func	visual_entry_ending_at_00b8	Entry inside visual_entry_ending: the same code from this address.
+0000:010A	func	visual_entry_ending_at_010a	Entry inside visual_entry_ending: the same code from this address.
+0000:010E	func	visual_entry_ending_at_010e	Entry inside visual_entry_ending: the same code from this address.
+0000:012C	func	visual_entry_ending_at_012c	Entry inside visual_entry_ending: the same code from this address.
+0000:013C	func	visual_entry_ending_at_013c	Entry inside visual_entry_ending: the same code from this address.
+0000:0148	func	script_native_0140_at_0148	Entry inside script_native_0140: the same code from this address.
+0000:0198	func	script_native_0140_at_0198	Entry inside script_native_0140: the same code from this address.
+0000:01B2	func	script_native_0140_at_01b2	Entry inside script_native_0140: the same code from this address.
+0000:01B8	func	script_native_0140_at_01b8	Entry inside script_native_0140: the same code from this address.
+0000:0203	func	script_native_0140_at_0203	Entry inside script_native_0140: the same code from this address.
+0000:0205	func	script_native_0140_at_0205	Entry inside script_native_0140: the same code from this address.
+0000:020A	func	script_native_0140_at_020a	Entry inside script_native_0140: the same code from this address.
+0000:020E	func	script_native_0140_at_020e	Entry inside script_native_0140: the same code from this address.
+0000:0211	func	script_native_0140_at_0211	Entry inside script_native_0140: the same code from this address.
+0000:0275	func	script_native_0140_at_0275	Entry inside script_native_0140: the same code from this address.
+0000:02E9	func	script_native_0140_at_02e9	Entry inside script_native_0140: the same code from this address.
+0000:0300	func	script_native_0140_at_0300	Entry inside script_native_0140: the same code from this address.
+0000:0303	func	script_native_0140_at_0303	Entry inside script_native_0140: the same code from this address.
+0000:0308	func	script_native_0140_at_0308	Entry inside script_native_0140: the same code from this address.
+0000:0309	func	script_native_0140_at_0309	Entry inside script_native_0140: the same code from this address.
+0000:03E8	func	script_native_03ca_at_03e8	Entry inside script_native_03ca: the same code from this address.
+0000:03FF	func	script_native_03ca_at_03ff	Entry inside script_native_03ca: the same code from this address.
+0000:0402	func	script_native_03ca_at_0402	Entry inside script_native_03ca: the same code from this address.
+0000:0403	func	script_native_03ca_at_0403	Entry inside script_native_03ca: the same code from this address.
+0000:0404	func	script_native_03ca_at_0404	Entry inside script_native_03ca: the same code from this address.
+0000:0405	func	script_native_03ca_at_0405	Entry inside script_native_03ca: the same code from this address.
+0000:0407	func	script_native_0406_at_0407	Entry inside script_native_0406: the same code from this address.
+0000:0408	func	script_native_0406_at_0408	Entry inside script_native_0406: the same code from this address.
+0000:040A	func	script_native_0406_at_040a	Entry inside script_native_0406: the same code from this address.
+0000:0475	func	script_native_0406_at_0475	Entry inside script_native_0406: the same code from this address.
+0000:305F	func	scene_abort_at_305f	Entry inside scene_abort: the same code from this address.
+0000:4000	func	draw_text_char_at_4000	Entry inside draw_text_char: the same code from this address.
+0000:406E	func	draw_text_char_at_406e	Entry inside draw_text_char: the same code from this address.
+# Function names from the naming pass of 2026-09-30 (read from the recompiled code).
+0000:030A	func	copy_two_rows_all_planes	Copy two 16-byte rows (source stride 24 bytes) from SI to DI in all four planes. (guess)
+0000:032B	func	copy_two_rows_plane	Copy two 16-byte rows (8 words, skip 8 bytes, 8 words) in plane segment AX. (guess)
+0000:0344	func	floor_draw_strip	Scene 3 floor effect: draw 92h lines of 8 bytes from SI at the scrolled line [03C2] (wraps at 7D00h). (guess)
+0000:0489	func	ending_scroll_line	Ending: wait a frame, scroll the display by one line and copy the next 28h-byte source line into the new bottom line.
+0000:04D6	func	ending_scroll_next_line	Ending: step the source line pointer (516, 400 lines per half, segment 518 += 800h).
+0000:30DA	func	vsync_hook_install	Install the vsync interrupt handler vsync_handler (INT 0Ah), save the old vector and the PIC mask, enable IRQ 2.
+0000:3122	func	vsync_hook_remove	Restore the old vsync vector and the PIC mask.
+0000:3148	func	vsync_handler	Vsync interrupt: count the frames (315A), call the hook (315C), re-arm vsync (port 64h), chain to the old handler.
+0000:3160	func	vsync_hook_none	Empty vsync hook (RETF).
+0000:3161	func	pmd_check_present	PMD INT 60h AH=09h (driver check): 3176 = 1 when PMD answers.
+0000:3177	func	pdr_play_voice	When voices are on (3FFD): load the voice data (service 48h) and play it (INT 63h AH=03h).
+0000:319A	func	pdr_voice_playing	CF = 1 while a voice plays (INT 63h AH=02h); CF = 0 when voices are off.
+0000:31B0	func	pdr_stop	Stop the voice (INT 63h AH=00h) when voices are on.
+0000:31DB	func	text_clear_screen	Reset the text GDC display areas and fill text VRAM with spaces (attribute E1h).
+0000:3217	func	text_scroll_up	Scroll the text screen up by one row (F00h words).
+0000:3231	func	visual_graphics_init	400-line graphics, display on, analog palette, display page 0 / draw page 1, clear both pages, check the EGC (0000:054D bit 2).
+0000:327D	func	scroll_reset	Reset the display areas (area 1 = 400 lines) and write them to the GDC.
+0000:32A5	func	scroll_apply	Scroll by AX lines and write the display areas to the GDC.
+0000:32AC	func	scroll_by	Move the display start by AX lines (wraps at 400 lines).
+0000:3328	func	scroll_write_gdc	Write the two display areas (331B-3326) to the graphic GDC.
+0000:3396	func	clear_both_pages	Fill both pages with the color CL.
+0000:33A7	func	clear_page_color	Fill the draw page with the color CL (GRCG TDW).
+0000:33E5	func	skip_name_string	Skip the zero-terminated name at DS:BX (a segment wrap moves DS); the image record follows it.
+0000:33FB	func	rect_screen_offset	DI (and CS:3421) = VRAM offset of the image record after the name DX: y1 * 80 + x1 / 8.
+0000:3423	func	draw_halftone_rect	Darken the image rectangle with the dither patterns 55h/AAh in color 0 (GRCG RMW).
+0000:3480	func	fill_row_pattern	Write one row of the pattern AH with the GRCG RMW; DI += BP.
+0000:3497	func	rect_move_to	Move the image record after the name DX to BX, CX (the size stays); FFFFh = no change.
+0000:34CD	func	draw_window_border	Draw the window border around the image rectangle: corners, edges (outer color [3803], inner color [3802]) and the shadow.
+0000:3518	func	border_corner_top_left	Window border: top left corner.
+0000:355A	func	border_corner_top_right	Window border: top right corner.
+0000:35AE	func	border_corner_bottom_left	Window border: bottom left corner.
+0000:35FD	func	border_corner_bottom_right	Window border: bottom right corner.
+0000:365E	func	border_edge_top	Window border: top edge (two outer rows, two inner rows).
+0000:3685	func	border_edge_left	Window border: left edge.
+0000:36A5	func	border_edge_bottom	Window border: bottom edge.
+0000:36DB	func	border_edge_right	Window border: right edge.
+0000:370D	func	border_shadow_right	Window border: black shadow at the right side.
+0000:375C	func	border_shadow_bottom	Window border: black shadow below.
+0000:37A3	func	border_draw_column	Write the pattern AL down a column of the rectangle height (GRCG RMW).
+0000:37BD	func	border_draw_row	Fill one row of the rectangle width with the tile color (GRCG TDW); DI += 50h.
+0000:37E6	func	fill_row_rmw	Fill CX bytes with the pattern AH (GRCG RMW).
+0000:3804	func	load_image_to_slot	Load an image file with service 3Bh into the next free buffer and move its record to BX, CX. (guess)
+0000:385A	func	draw_image_slot_both_pages	Draw the image of slot AL (segment table 4390) on both pages; with AH = 1 also its window border.
+0000:387C	func	draw_image_slot_page	Draw the current image with service 3Ah (and the border when [389D] = 1), then flip the pages.
+0000:389E	func	draw_image_slot	Draw the image of slot AL (segment table 4390) with service 3Ah.
+0000:38BE	func	copy_rect_other_page	Copy the rectangle (x AX, y BX, CX bytes x DX lines) from the display page to the draw page in all planes.
+0000:38FF	func	copy_rect_other_page_plane	Copy the rectangle in plane segment AX, reading one page and writing the other (port A6h).
+0000:39EC	func	copy_rect_plane	Copy DX lines of BX bytes in plane segment AX (strides BP).
+0000:3A08	func	text_window_line_feed	Scroll the text part of the picture up by 8 lines (6A40h -> 6900h) on both pages and clear the new line with color 0.
+0000:3A55	func	text_window_scroll_plane	Move 960h words from 6A40h to 6900h in plane segment AX.
+0000:3A65	func	text_window_clear_last_line	Clear the last text line (7BC0h, A0h words) with the tile color (GRCG TDW).
+0000:3A76	func	grcg_set_tile_color	GRCG RMW mode with the tile registers from color CL (one bit per plane).
+0000:3AA9	func	text_render_char	Build the glyph image of the character AX (kanji ROM through ports A1h-A9h, or 1-byte characters) in 3C04/3C26.
+0000:3C02	func	native_nop	Empty routine (RET).
+0000:3E37	func	sjis_to_jis	Convert the Shift-JIS code AX to JIS for the kanji ROM.
+0000:3E48	func	text_draw_glyph_rmw	Write the glyph column 3C06 (16 lines) with the GRCG RMW.
+0000:3EFE	func	text_draw_glyph_both_pages	Copy the glyph image 3C26 to both pages in all four planes.
+0000:3F1E	func	text_draw_glyph_planes	Copy the glyph image 3C26 in all four planes.
+0000:3F3A	func	text_draw_glyph_plane	Copy 16 lines of BP words of the glyph image in plane segment AX.
+0000:43A4	func	fill_rect_color	Fill DX lines of CX bytes at DI with the color AL (GRCG TDW).
+0000:43D4	func	draw_animation_frame	Draw frame AL of the animation data (segment [30D8]) at the image position [3421], all four planes.
+0000:4414	func	blit_plane_rows	Copy BX rows of CX bytes into plane segment AX (screen stride DX).
+0000:4492	func	clamp_color_level	AL = AL + BL, limited to 0-15.
+0000:44A1	func	palette_fade	Fade: set the palette with the brightness BL every 4 frames, BL += DL until it equals BH.
+0000:459F	func	credits_text_line	Ending: write a text line from SI into the bottom text row and scroll it in smoothly (text GDC). (guess)
+0000:4604	func	text_vram_put_char	Put the character AL into text VRAM (a Shift-JIS lead byte waits for the second byte; kanji take 2 cells).
+0000:030C	func	copy_two_rows_all_planes_at_030c	Entry inside copy_two_rows_all_planes: the same code from this address.
+0000:0314	func	copy_two_rows_all_planes_at_0314	Entry inside copy_two_rows_all_planes: the same code from this address.
+0000:0328	func	copy_two_rows_all_planes_at_0328	Entry inside copy_two_rows_all_planes: the same code from this address.
+0000:0330	func	copy_two_rows_plane_at_0330	Entry inside copy_two_rows_plane: the same code from this address.
+0000:0375	func	floor_draw_strip_at_0375	Entry inside floor_draw_strip: the same code from this address.
+0000:048A	func	ending_scroll_line_at_048a	Entry inside ending_scroll_line: the same code from this address.
+0000:0500	func	ending_scroll_next_line_at_0500	Entry inside ending_scroll_next_line: the same code from this address.
+0000:0506	func	ending_scroll_next_line_at_0506	Entry inside ending_scroll_next_line: the same code from this address.
+0000:0509	func	ending_scroll_next_line_at_0509	Entry inside ending_scroll_next_line: the same code from this address.
+0000:325F	func	visual_graphics_init_at_325f	Entry inside visual_graphics_init: the same code from this address.
+0000:3273	func	visual_graphics_init_at_3273	Entry inside visual_graphics_init: the same code from this address.
+0000:3373	func	scroll_write_gdc_at_3373	Entry inside scroll_write_gdc: the same code from this address.
+0000:360A	func	border_corner_bottom_right_at_360a	Entry inside border_corner_bottom_right: the same code from this address.
+0000:3673	func	border_edge_top_at_3673	Entry inside border_edge_top: the same code from this address.
+# Data (VISUAL sets DS = CS: the same names for CS and DS), 2026-10-01.
+0000:013F	data	ending_mode	1 = the ending entry runs (the scene entries test it).
+0000:03BA	data	floor_phase	Phase of the scene 3 floor effect (1, 0, FFh). (guess)
+0000:03BB	data	floor_value	Byte of the scene 3 floor effect (F1h at the start). (guess)
+0000:03BC	data	floor_flag	Flag of the scene 3 floor effect. (guess)
+0000:03BE	data	floor_step	Step counter of the scene 3 floor effect.
+0000:03C0	data	floor_timer	Frames left of the scene 3 floor effect (222h at the start).
+0000:03C2	data	floor_scroll_line	Scrolled source line of floor_draw_strip (FF6Eh at the start, counts up).
+0000:03C4	data	floor_source_segment	Segment of the floor image data.
+0000:0513	data	ending_scroll_half	Which half of the ending picture is the scroll source (toggles every 400 lines).
+0000:0514	data	ending_scroll_left	Lines left of the ending scroll (C80h at the start).
+0000:0516	data	ending_source_offset	Offset of the next source line of the ending scroll.
+0000:0518	data	ending_source_segment	Segment of the next source line (A800h, += 800h for the next half).
+0000:051A	data	ending_half_left	Lines left in the current half (190h = 400).
+0000:30C2	data	saved_ss	SS saved by scene_play for scene_abort.
+0000:30C4	data	saved_sp	SP saved by scene_play for scene_abort.
+0000:30C6	data	service_call_offset	Far pointer for the call in visual_call_service, offset.
+0000:30C8	data	service_call_segment	Far pointer for the call in visual_call_service, segment.
+0000:30CA	data	service_offset	Far pointer to JO.EXE service_dispatch, offset (SI at each entry).
+0000:30CC	data	service_segment	Far pointer to JO.EXE service_dispatch, segment (DS at each entry).
+0000:30CE	data	work_buffer_offset	Work buffer far pointer, offset (0).
+0000:30D0	data	work_buffer_segment	Work buffer far pointer, segment (ES at the entry); the image loader starts here.
+0000:30D2	data	second_buffer_offset	Second buffer far pointer, offset (0).
+0000:30D4	data	second_buffer_segment	Second buffer far pointer, segment (BX at the entry). (guess)
+0000:30D6	data	animation_offset	Animation data far pointer, offset (0).
+0000:30D8	data	animation_segment	Animation data far pointer, segment (AX at the entry; draw_animation_frame).
+0000:311C	data	vsync_hooked	1 = vsync_hook_install has hooked INT 0Ah.
+0000:311D	data	old_pic_mask	PIC mask saved by vsync_hook_install.
+0000:311E	data	old_vsync_offset	Original INT 0Ah vector, offset.
+0000:3120	data	old_vsync_segment	Original INT 0Ah vector, segment.
+0000:315A	data	frame_counter	Vsync frame counter (vsync_handler).
+0000:315C	data	vsync_hook_offset	Far pointer of the routine vsync_handler calls, offset.
+0000:315E	data	vsync_hook_segment	Far pointer of the routine vsync_handler calls, segment.
+0000:3176	data	pmd_present	1 = PMD answered the driver check.
+0000:31DA	data	skip_locked	1 = the scene cannot be skipped now (the ending sets it). (guess)
+0000:327B	data	display_page	Displayed VRAM page.
+0000:327C	data	draw_page	VRAM page for drawing.
+0000:331B	data	scroll_area1_start	GDC display area 1: start address (scroll_by moves it).
+0000:331D	data	scroll_area1_flags	GDC display area 1: flag byte. (guess)
+0000:331E	data	scroll_area1_lines	GDC display area 1: lines (190h = 400 after scroll_reset).
+0000:3320	data	scroll_area2_start	GDC display area 2: start address.
+0000:3322	data	scroll_area2_flags	GDC display area 2: flag byte. (guess)
+0000:3323	data	scroll_area2_lines	GDC display area 2: lines.
+0000:3325	data	scroll_position	Current scroll position (VRAM offset of the top line).
+0000:3327	data	scroll_gdc_bits	Bits added to the line counts written to the GDC. (guess)
+0000:3421	data	image_vram_offset	VRAM offset of the current image rectangle (y1 * 80 + x1 / 8).
+0000:3802	data	border_inner_color	Inner color of the window border.
+0000:3803	data	border_outer_color	Outer color of the window border.
+0000:3858	data	image_load_segment	Segment of the next free image buffer (load_image_to_slot).
+0000:389D	data	image_with_border	1 = draw_image_slot_page also draws the window border.
+0000:3AA8	data	grcg_color	Color set by grcg_set_tile_color.
+0000:3E36	data	text_font_mode	Character mode set by script_run for text_render_char. (guess)
+0000:3FFD	data	voices_on	1 = voices play (CL at the scene entry).
+0000:409D	data	text_lead_byte	First byte of a Shift-JIS character waiting for its second byte.
+0000:409E	data	text_delay_a	Text speed value A (the ending changes it; draw_text_char). (structural name)
+0000:40A0	data	text_delay_b	Text speed value B. (structural name)
+0000:40A2	data	text_delay_c	Text speed value C. (structural name)
+0000:40A4	data	text_delay_d	Text speed value D. (structural name)
+0000:455F	data	abort_clear_1	Byte cleared by scene_abort. (unknown)
+0000:4563	data	abort_clear_2	Byte cleared by scene_abort. (unknown)
+0000:4567	data	abort_clear_3	Byte cleared by scene_abort. (unknown)
+0000:456B	data	abort_clear_4	Byte cleared by scene_abort. (unknown)

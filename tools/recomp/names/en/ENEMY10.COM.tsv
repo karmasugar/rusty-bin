@@ -1,0 +1,2 @@
+# Names for en/ENEMY10.COM.
+0000:01BB	func	enemy_entry_frame_at_01bb	Entry inside enemy_entry_frame: the same code from this address.

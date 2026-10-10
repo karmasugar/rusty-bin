@@ -1,0 +1,99 @@
+# Names for CLABLOGO.EXE (the C-Lab logo, Turbo Pascal). Segment 0000 = the program, segment 0051 = the Turbo
+# Pascal System unit. 0051:xxxx is linear 510h + xxxx, so some System routines also appear as 0000:07xx aliases.
+# Function names from the naming pass of 2026-09-30 (read from the recompiled code).
+0000:03A5	func	clablogo_main	Main program: copy the jingle into the PMD music buffer (INT 60h AH=06h) and the PPS data into PPSDRV (INT 64h AH=04h), start the music; show the logo with palette fades and the wave effect; clear the screen at the end.
+0000:0000	func	graphics_on	Graphics display on (INT 18h AH=40h).
+0000:0005	func	graphics_off	Graphics display off (INT 18h AH=41h).
+0000:000A	func	set_400_lines_analog	400-line graphics (INT 18h AH=42h CH=C0h) and the analog palette mode (port 6Ah = 1).
+0000:0015	func	set_display_and_draw_page	Display page = first argument (port A4h), draw page = second argument (port A6h).
+0000:0026	func	wait_vsync	Wait for the end and the start of vsync (GDC status bit 20h).
+0000:0033	func	wait_frames	Wait the given number of frames (wait_vsync).
+0000:005C	func	grcg_set_color	Write the 4 GRCG tile bytes of color N (table DS:0002) to port 7Eh.
+0000:007F	func	fill_memory_words	Fill count bytes at a far address with a word value.
+0000:0094	func	copy_memory_words	Copy count bytes (as words) from a far source to a far destination.
+0000:00AE	func	clear_screen_color	Fill the draw page with color N through the GRCG (TDW mode).
+0000:00D7	func	set_palette	Copy the 16-color palette (48 bytes) to the current palette 3E3E and write it (ports A8h-AEh).
+0000:0140	func	buffer_shift_right_bits	Shift a byte buffer (length DX) right by CL bits, carrying the bits between the bytes.
+0000:0169	func	palette_lerp	Linear interpolation of one color component between the start and the target value for step i of n (32-bit math).
+0000:01C3	func	palette_fade_to	Fade from the current palette to the target palette in n frames (palette_lerp for each component, set_palette each frame).
+0000:02C0	func	draw_logo_wave	Draw the logo lines with a sine wave offset (table 3C6C) for the frame and amplitude arguments. (guess)
+0000:074F	func	text_assign_seg0	Alias of System text_assign (the same bytes seen from segment 0000).
+0000:07BF	func	text_reset_seg0	Alias of System text_reset (the same bytes seen from segment 0000).
+0000:07C4	func	text_rewrite_seg0	Alias of System text_rewrite (the same bytes seen from segment 0000).
+0000:0819	func	text_close_seg0	Alias of System text_close (the same bytes seen from segment 0000).
+0000:0855	func	text_call_seg0	Alias of System text_call_function (the same bytes seen from segment 0000).
+0051:0000	func	system_init	Turbo Pascal System initialization: data segment, stack and heap limits, PrefixSeg, interrupt vectors, Input/Output files.
+0051:00AE	func	system_interrupt_error_entry	Interrupt error entry (divide error, Ctrl-Break): restore the DOS state and select the runtime error. (guess)
+0051:00D7	func	system_runtime_error_208	Runtime error 208 at the caller address.
+0051:00DF	func	system_runtime_error_200	Runtime error 200 (division by zero) at the caller address.
+0051:00E6	func	system_halt_255	Halt with exit code 255 (Ctrl-Break).
+0051:00E9	func	system_halt	Halt with the exit code AX (no error address).
+0051:0123	func	system_terminate	Run the exit procedures, close Input and Output, restore the interrupt vectors, print the runtime error message, terminate.
+0051:01A5	func	system_print_string_cs	Print the zero-terminated string at CS:BX (DOS AH=06h).
+0051:01B3	func	system_print_decimal_byte	Print AL as a 3-digit decimal number.
+0051:01CD	func	system_print_hex_word	Print AX as 4 hex digits.
+0051:01D4	func	system_print_hex_byte	Print AL as 2 hex digits.
+0051:01DF	func	system_print_hex_digit	Print the hex digit AL.
+0051:01E7	func	system_print_char	Print the character AL (DOS AH=06h).
+0051:023F	func	text_assign	Assign(Text): fill the text file record (mode fmClosed D7B0h, buffer 80h bytes, open function 0356h) and copy the name.
+0051:02AF	func	text_reset	Reset(Text): close the file if open, mode fmInput (D7B1h), call its open function.
+0051:02B4	func	text_rewrite	Rewrite(Text): close the file if open, mode fmOutput (D7B2h), call its open function.
+0051:0309	func	text_close	Close(Text): flush an output file, call its close function, mode fmClosed.
+0051:0345	func	text_call_function	Call the text file function at [DI+BX] (open, in/out, flush, close); keep an error in InOutRes (3E36).
+0051:0356	func	text_open	Text file open function: open (3D00h) or create (3Ch) the named file; for Append seek to the end.
+0051:03D8	func	text_seek_eof	Append: seek to the last 128 bytes and to the Ctrl-Z end mark of the text file.
+0051:0487	func	text_write_buffer	Text file in/out function for output: write the buffer (DOS AH=40h).
+0051:04A7	func	text_close_handle	Text file close function: close the DOS handle when it is above 4.
+0051:04C0	func	system_copy_bytes	Copy count bytes from a far source to a far destination (forward).
+0051:04DC	func	system_long_mul	32-bit multiply: DX:AX = DX:AX * BX:CX.
+0051:04F7	func	system_long_div	32-bit signed divide of DX:AX by BX:CX; a zero divisor gives runtime error 200.
+0051:058C	func	system_move	Move(source, destination, count) with overlap handling.
+0000:0002	func	clablogo_graphics_on_at_0002	Entry inside clablogo_graphics_on: the same code from this address.
+0000:0007	func	graphics_off_at_0007	Entry inside graphics_off: the same code from this address.
+0000:000E	func	set_400_lines_analog_at_000e	Entry inside set_400_lines_analog: the same code from this address.
+0000:0010	func	set_400_lines_analog_at_0010	Entry inside set_400_lines_analog: the same code from this address.
+0000:0014	func	set_400_lines_analog_at_0014	Entry inside set_400_lines_analog: the same code from this address.
+0000:0028	func	wait_vsync_at_0028	Entry inside wait_vsync: the same code from this address.
+0000:0030	func	wait_vsync_at_0030	Entry inside wait_vsync: the same code from this address.
+0000:0042	func	wait_frames_at_0042	Entry inside wait_frames: the same code from this address.
+0000:0066	func	grcg_set_color_at_0066	Entry inside grcg_set_color: the same code from this address.
+0000:0080	func	fill_memory_words_at_0080	Entry inside fill_memory_words: the same code from this address.
+0000:00C8	func	clear_screen_color_at_00c8	Entry inside clear_screen_color: the same code from this address.
+0000:00DF	func	set_palette_at_00df	Entry inside set_palette: the same code from this address.
+0000:00FF	func	set_palette_at_00ff	Entry inside set_palette: the same code from this address.
+0000:0123	func	set_palette_at_0123	Entry inside set_palette: the same code from this address.
+0000:01EC	func	palette_fade_to_at_01ec	Entry inside palette_fade_to: the same code from this address.
+0000:04A7	func	clablogo_main_at_04a7	Entry inside clablogo_main: the same code from this address.
+0051:0010	func	system_init_at_0010	Entry inside system_init: the same code from this address.
+0051:0014	func	system_init_at_0014	Entry inside system_init: the same code from this address.
+0051:0028	func	system_init_at_0028	Entry inside system_init: the same code from this address.
+0051:0067	func	system_init_at_0067	Entry inside system_init: the same code from this address.
+0051:0080	func	system_init_at_0080	Entry inside system_init: the same code from this address.
+0000:0201	func	palette_fade_to_frame	Loop of palette_fade_to: interpolate the 16 colors for step i, set the palette, wait for vsync.
+0000:00E6	func	set_palette_misaligned_00e6	False entry inside an instruction of set_palette (a data value equal to an executed address); never called.
+0051:01BF	func	system_print_decimal_digit	Print the digit of AL for the place value CL.
+0000:0210	func	palette_fade_to_frame_at_0210	Entry inside palette_fade_to_frame: the same code from this address.
+# Data segment 00AE, 2026-10-01: the Turbo Pascal 7 System unit variables (standard layout and names), then the
+# program's own variables.
+00AE:3DFE	data	OvrHeapSize	System: overlay buffer size (added to the stack top at the start).
+00AE:3E04	data	OvrHeapOrg	System: overlay buffer start segment.
+00AE:3E06	data	OvrHeapPtr	System: overlay buffer pointer.
+00AE:3E08	data	OvrHeapEnd	System: overlay buffer end segment.
+00AE:3E0A	data	OvrLoadList	System: list of loaded overlays (the error handler maps the error address with it).
+00AE:3E12	data	HeapOrg	System: heap start (segment word of the pointer).
+00AE:3E16	data	HeapPtr	System: heap top (segment word of the pointer).
+00AE:3E1A	data	HeapEnd	System: heap end (segment word of the pointer).
+00AE:3E1E	data	FreeList	System: free list of the heap (segment word of the pointer).
+00AE:3E24	data	HeapError	System: heap error function, offset (CS:00A9 at the start).
+00AE:3E26	data	HeapError_segment	System: heap error function, segment.
+00AE:3E28	data	ExitProc	System: exit procedure, offset.
+00AE:3E2A	data	ExitProc_segment	System: exit procedure, segment.
+00AE:3E2C	data	ExitCode	System: exit code.
+00AE:3E2E	data	ErrorAddr	System: address of a runtime error, offset.
+00AE:3E30	data	ErrorAddr_segment	System: address of a runtime error, segment.
+00AE:3E32	data	PrefixSeg	System: segment of the PSP.
+00AE:3E36	data	InOutRes	System: I/O result (66h = 102 file not assigned, 67h = 103 file not open).
+00AE:BB6E	data	wave_value_a	Byte of draw_logo_wave (kept between the steps). (structural name)
+00AE:BB6F	data	wave_value_b	Second byte of draw_logo_wave. (structural name)
+00AE:BB70	data	logo_block_row	Row of the logo block (VRAM offset = row * 0FA0h, i.e. 50 lines).
+00AE:BB72	data	logo_block_column	Column of the logo block (offset = column * 28h).

@@ -1,0 +1,65 @@
+# Names for MAGLOAD.COM (MAG image decoder, loaded to segment 6ED8 of JO.EXE / by OP.COM).
+0000:0000	func	mag_entry	Entry: jump to mag_decode.
+0000:0002	func	mag_decode	Decode a MAG image (header, flag A/B, pixel data) into the graphics planes.
+0000:01C0	func	mag_flag_line	Build the flag line of the next image line from the flag A/B data. (guess)
+0000:0206	func	mag_pixel_line	Decode one line of pixels from the flags (copy from earlier positions or read new data). (guess)
+0000:02D2	func	mag_write_line	Write the decoded line to the 4 graphics planes (A800h ...). (guess)
+0000:03AD	func	mag_offset_calc	32-bit shift / address calculation. (guess)
+0000:0008	func	mag_decode_at_0008	Entry inside mag_decode: the same code from this address.
+0000:0011	func	mag_decode_at_0011	Entry inside mag_decode: the same code from this address.
+0000:0013	func	mag_decode_at_0013	Entry inside mag_decode: the same code from this address.
+0000:0020	func	mag_decode_at_0020	Entry inside mag_decode: the same code from this address.
+0000:0040	func	mag_decode_at_0040	Entry inside mag_decode: the same code from this address.
+0000:0044	func	mag_decode_at_0044	Entry inside mag_decode: the same code from this address.
+0000:0048	func	mag_decode_at_0048	Entry inside mag_decode: the same code from this address.
+0000:004C	func	mag_decode_at_004c	Entry inside mag_decode: the same code from this address.
+0000:0050	func	mag_decode_at_0050	Entry inside mag_decode: the same code from this address.
+0000:0102	func	mag_decode_at_0102	Entry inside mag_decode: the same code from this address.
+0000:0121	func	mag_decode_at_0121	Entry inside mag_decode: the same code from this address.
+0000:0201	func	mag_flag_line_at_0201	Entry inside mag_flag_line: the same code from this address.
+0000:0212	func	mag_pixel_line_at_0212	Entry inside mag_pixel_line: the same code from this address.
+0000:0213	func	mag_pixel_line_at_0213	Entry inside mag_pixel_line: the same code from this address.
+0000:0310	func	mag_write_line_at_0310	Entry inside mag_write_line: the same code from this address.
+0000:0313	func	mag_write_line_at_0313	Entry inside mag_write_line: the same code from this address.
+# Data (DS = CS), 2026-10-01. The MAG header is read to 4B46 (MAG format: +3 screen mode, +4 x1, +6 y1, +8 x2,
+# +A y2, +C flag A offset, +10 flag B offset, +18 pixel offset; the offsets are double words).
+0000:0890	data	line_saved_ax	AX kept for the line loop of mag_decode. (structural name)
+0000:0892	data	line_saved_bx	BX kept for the line loop of mag_decode. (structural name)
+0000:0894	data	line_width	Width of a line in units of the flag and pixel routines (CX of the line loop). (guess)
+0000:0896	data	line_saved_dx	DX kept for the line loop of mag_decode. (structural name)
+0000:0898	data	saved_ss	SS saved by mag_decode (restored at the end).
+0000:089A	data	saved_sp	SP saved by mag_decode (restored at the end).
+0000:089C	data	last_line_ax	Value compared and kept by mag_write_line (AX). (structural name)
+0000:089E	data	last_line_dx	Value compared and kept by mag_write_line (DX). (structural name)
+0000:08A0	data	vram_line_offset	VRAM offset of the next line (+50h per line).
+0000:08A2	data	caller_ds	DS of the caller (the MAG file data).
+0000:08A4	data	plane_segment_1	Segment of graphics plane 1 (the write routine loads it into ES; MGXLOAD shows it).
+0000:08A6	data	plane_segment_2	Segment of graphics plane 2 (the write routine loads it into ES; MGXLOAD shows it).
+0000:08A8	data	plane_segment_3	Segment of graphics plane 3 (the write routine loads it into ES; MGXLOAD shows it).
+0000:08AA	data	plane_segment_4	Segment of graphics plane 4 (the write routine loads it into ES; MGXLOAD shows it).
+0000:08AC	data	caller_di	DI of the call.
+0000:08AE	data	caller_es	ES of the call.
+0000:08B0	data	line_number	Current image line (counts up).
+0000:08B2	data	pixel_write_offset	Write offset of mag_pixel_line in the line buffer.
+0000:08B4	data	caller_si	SI of the call (the MAG data offset). (guess)
+0000:08B8	data	flag_a_offset	Read pointer into the flag A data, offset.
+0000:08BA	data	flag_a_segment	Read pointer into the flag A data, segment.
+0000:08BC	data	flag_b_offset	Read pointer into the flag B data, offset.
+0000:08BE	data	flag_b_segment	Read pointer into the flag B data, segment.
+0000:08C0	data	pixel_data_offset	Read pointer into the pixel data, offset.
+0000:08C2	data	pixel_data_segment	Read pointer into the pixel data, segment.
+0000:4B44	data	flag_a_bit	Bit mask in the flag A data (80h at the start, shifts right).
+0000:4B45	data	decode_option	Option byte (1 changes the decode and pixel line paths). (guess: 200-line or half height)
+0000:4B49	data	mag_screen_mode	MAG header +3: screen mode.
+0000:4B4A	data	mag_x1	MAG header +4: left X.
+0000:4B4C	data	mag_y1	MAG header +6: top Y.
+0000:4B4E	data	mag_x2	MAG header +8: right X.
+0000:4B50	data	mag_y2	MAG header +A: bottom Y.
+0000:4B52	data	mag_flag_a_start	MAG header +C: offset of the flag A data (low word).
+0000:4B54	data	mag_flag_a_start_high	MAG header +E: offset of the flag A data (high word).
+0000:4B56	data	mag_flag_b_start	MAG header +10: offset of the flag B data (low word).
+0000:4B58	data	mag_flag_b_start_high	MAG header +12: offset of the flag B data (high word).
+0000:4B5E	data	mag_pixel_start	MAG header +18: offset of the pixel data (low word).
+0000:4B60	data	mag_pixel_start_high	MAG header +1A: offset of the pixel data (high word).
+0000:4B96	data	write_option	Option byte from AL at the call; mag_write_line tests it. (guess)
+0000:4B97	data	write_value	Byte from AL at the call; mag_write_line uses it. (guess)

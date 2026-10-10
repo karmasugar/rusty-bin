@@ -1,0 +1,3 @@
+# Names for en/STORY2.COM.
+0000:0920	func	room_trigger_08a5_at_0920	Entry inside room_trigger_08a5 (English code): the same code from this address.
+0000:0D2E	func	story_entry3_next_at_0d2e	Entry inside story_entry3_next: the same code from this address.

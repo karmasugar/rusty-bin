@@ -1,0 +1,7 @@
+# Names for ONGCHK.COM (sound board check). DOS COM: segment offsets. Exit code = board type + 1 (0 = none).
+0000:0100	func	ongchk_main	Detect the sound board and exit with its type as return code.
+0000:0113	func	detect_sound_board	Sound BIOS signature at FD80:0002, then the 86 board ID port A460h. (guess for the details)
+0000:0189	func	detect_board_ports	Test a board at ports 8Ch/8Eh ... (26K style). (guess)
+# Data, 2026-10-01.
+0000:01C1	data	sound_bios_found	1 = the sound BIOS signature was found at FD80:0002.
+0000:01C2	data	board_type	Sound board type (0 none, 1, 2 ...; the exit code).

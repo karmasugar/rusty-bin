@@ -1,0 +1,26 @@
+#include <winuser.h>
+#include <winver.h>
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "@CMAKE_SOURCE_DIR@/packaging/rusty.manifest"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION @VERSION_NUMBERS@
+PRODUCTVERSION @VERSION_NUMBERS@
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "FileDescription", "Rusty (PC-98), native recompilation"
+            VALUE "FileVersion", "@PROJECT_VERSION@"
+            VALUE "ProductName", "Rusty (recompiled)"
+            VALUE "ProductVersion", "@PROJECT_VERSION@"
+            VALUE "OriginalFilename", "rusty.exe"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

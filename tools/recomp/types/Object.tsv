@@ -1,0 +1,45 @@
+# Object structure: 25 entries of 80h bytes at DS:745D (JO.EXE), used by JO.EXE and all ENEMYn files.
+# Directives: #struct <name> <size>, #apply <program> <segment:offset> <count>. Rows: offset, type, name, comment.
+#struct	Object	0x80
+#apply	JO.EXE	06E7:745D	25
+00	byte	in_view	1 = inside the active area around the camera (objects_activate_by_camera).
+01	byte	kind	Low 7 bits: object kind (contact damage needs kind >= 4); bit 7 is toggled often (facing?). (guess for bit 7)
+02	byte	active	1 = slot in use.
+03	byte	substate	Sub-state, set and compared with constants. (guess)
+04	byte	gravity	1 = gravity applies (object_apply_gravity).
+05	byte	map_collision	1 = collide with the map (object_map_collision).
+06	byte	gravity_pause	Cleared by object_map_collision every frame; 1 = no gravity. (guess)
+07	byte	on_ground	1 = on the ground (object_stop_on_ground, object_bounce_on_ground).
+08	byte	hit_flags	Bit 7 = hit by a player attack this frame (object_check_attack_hits); low bits cleared there.
+09	byte	contact_damage	1 = touching the object hurts the player (JO enemy_contact_damage).
+0A	byte	direction	Movement direction (256 steps, table C90; 80h-FFh = left); object_move_by_direction uses it.
+0B	byte	anim_timer	Animation counter, cleared by object_set_state. (guess)
+0C	byte	anim_frame	Animation frame, cleared by object_set_state; hit box tables are indexed by it.
+0D	byte	anim_delay	Animation counter, cleared by object_set_state. (guess)
+0E	byte	class	Class >= 1Ch is slowed by the time slow weapon. (guess for the other values)
+10	byte	handler_group	AI handler table group (ENEMYn entry 1 table).
+11	byte	handler_index	AI handler index in the group.
+12	byte	despawn_mode	FFh = never despawn; 1 = clear the spawn flag when despawned.
+13	byte	speed_x	Speed along the direction, X part (object_move_by_direction).
+14	byte	speed_y	Speed along the direction, Y part (object_move_by_direction).
+15	byte	fall_speed	Fall speed: gravity adds 1 up to 12 and adds it to velocity_y.
+16	byte	link_group	FFh = none; objects with the same group move together (move_linked_objects).
+17	byte	timer	Counted down every frame by JO objects_activate_by_camera.
+19	byte	solid	1 = solid for the player and other objects (object_solid_at_point).
+1A	byte	animation	Animation number (object_set_state AL).
+1B	byte	hitbox_dx	Signed hitbox X offset.
+1C	byte	hitbox_dy	Signed hitbox Y offset.
+1E	byte	damage	Damage to the player on contact.
+20	word	state_frames	Frames in the current state: objects_update adds 1 before the handler; handlers compare it with constants.
+22	word	velocity_x	X movement this frame (next X = x + velocity_x).
+24	word	velocity_y	Y movement this frame (next Y = y + velocity_y).
+26	word	hitbox_half_width	Hitbox half width.
+28	word	hitbox_height	Hitbox height (up from y).
+2A	word	x	World X position.
+2C	word	x_fraction	16-bit fraction of the X movement (object_move_by_direction).
+2E	word	y	World Y position (bottom).
+30	word	y_fraction	16-bit fraction of the Y movement (object_move_by_direction).
+3E	word	spawn_id	Spawn flag index: below 8000h in the flag table DS:82DD, else DS:80DD + (id - 8000h); FFFFh = none.
+40	byte	state_timer	Second state counter. (guess)
+44	word	origin_x	Saved X coordinate. (guess)
+46	word	origin_y	Saved Y coordinate. (guess)

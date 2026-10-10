@@ -1,0 +1,31 @@
+[project]
+name = "rusty-recomp-tools"
+version = "0.1.0"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+    "capstone>=5",
+    "pillow>=12.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1",
+    "ruff>=0.16",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint.isort]
+known-first-party = ["lz_unpack", "pc98disk", "extract", "exepack", "analysis", "lift", "hashing"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+pythonpath = ["tools"]
+testpaths = ["tests"]

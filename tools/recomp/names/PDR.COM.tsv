@@ -1,0 +1,71 @@
+# Names for PDR.COM.
+0000:0AFD	func	print_word_decimal	Print AX as a decimal number without leading zeros. (same code as PMDB2.COM 0000:4433)
+0000:0CB5	func	measure_timer_handler	IRQ 0 handler during measure_cpu_speed: count, EOI. (same code as PMDB2.COM 0000:4594)
+0000:0B0B	func	print_word_decimal_at_4441	Entry inside print_word_decimal: the same code from this address. (same code as PMDB2.COM 0000:4441)
+# Function names from the naming pass of 2026-09-30 (read from the recompiled code). PDR plays 4-bit PCM voices
+# through the SSG channel 3 volume register, driven by the PIT timer 0 interrupt; INT 63h is its interface.
+0000:0100	func	pdr_start	COM entry: parse the options, measure the CPU, detect the board, install the driver (or uninstall it).
+0000:0103	func	int63_handler	INT 63h: AH=00h stop, 01h play, 02h AL = 1 while playing, 03h play with the PMD parts masked; else AL = 24h.
+0000:0140	func	pdr_stop	Stop the voice when one plays.
+0000:0150	func	pdr_stop_playback	End the playback: restore the timer, unmask the PMD parts. (guess)
+0000:0188	func	pit_set_timer0	PIT counter 0 (port 71h) in mode 3 with the count CX.
+0000:01BB	func	pdr_play	Start playing the voice at ES:DX (length CX, rate AL, flags BL): set the timer 0 rate and hook the interrupt.
+0000:027F	func	pmd_mask_voice_parts	When PMD is present: mask its parts 08h and 0Ah (INT 60h AH=1Eh) while the voice plays.
+0000:0294	func	pmd_unmask_voice_parts	When PMD is present: clear the mask bit of the two parts in the PMD part work (INT 60h AH=10h).
+0000:02C1	func	pmd_present	CF = 0 when PMD version 4.2 or later is resident (INT 60h signature 'PMD', AH=09h) and a board is present.
+0000:02FC	func	pdr_sample_interrupt	Timer 0 interrupt: EOI, output the next 4-bit sample (low or high nibble) to the SSG channel 3 volume, end at the voice end.
+0000:0882	func	check_timer_running	5BC = 1 when the timer interrupt counter (106B) changes during a delay loop.
+0000:0944	func	detect_board_ports	Find a board at the register ports 88h-8Eh (and +100h steps) by a register write and read.
+0000:08A8	func	detect_board	Detect the sound board (PC-9801-86 at port A460h, detect_board_ports).
+0000:0ACD	func	parse_decimal_byte	Parse a decimal number at DS:SI into AL; CF = 1 when there is no digit.
+0000:0B20	func	print_decimal_digit_word	Print the digit of AX for the place value BX (skip a leading zero).
+0000:0B64	func	uninstall	Restore the IRQ mask and the INT 63h and timer vectors from the resident copy and free its memory.
+0000:0BF4	func	timer_count_handler	Timer interrupt while measuring: count (106B), EOI.
+0000:0C00	func	measure_cpu_speed	Measure the CPU speed with the timer interrupt to get the delay count for register writes.
+0000:013A	func	int63_handler_at_013a	Entry inside int63_handler: the same code from this address.
+0000:018C	func	pit_set_timer0_at_018c	Entry inside pit_set_timer0: the same code from this address.
+0000:02DC	func	pmd_present_at_02dc	Entry inside pmd_present: the same code from this address.
+0000:02E3	func	pmd_present_at_02e3	Entry inside pmd_present: the same code from this address.
+0000:0373	func	pdr_sample_interrupt_at_0373	Entry inside pdr_sample_interrupt: the same code from this address.
+0000:0C0C	func	measure_cpu_speed_at_0c0c	Entry inside measure_cpu_speed: the same code from this address.
+# Data, 2026-10-01. 0020/0022 and 018C/018E are written with DS = 0 by uninstall: the interrupt vector table.
+0000:0020	data	ivt_int08_offset	Interrupt vector table (DS = 0): INT 08h (timer 0) offset.
+0000:0022	data	ivt_int08_segment	Interrupt vector table (DS = 0): INT 08h segment.
+0000:002C	data	psp_environment	PSP +2Ch: segment of the environment.
+0000:0108	data	old_vector_1_offset	Interrupt vector saved by pdr_start (INT 21h AH=35h), offset.
+0000:010A	data	old_vector_1_segment	Interrupt vector saved by pdr_start, segment.
+0000:010C	data	old_vector_2_offset	Second interrupt vector saved by pdr_start, offset.
+0000:010E	data	old_vector_2_segment	Second interrupt vector saved by pdr_start, segment.
+0000:0110	data	saved_ah	Byte saved by pdr_start from AH. (structural name)
+0000:018C	data	ivt_int63_offset	Interrupt vector table (DS = 0): INT 63h offset.
+0000:018E	data	ivt_int63_segment	Interrupt vector table (DS = 0): INT 63h segment.
+0000:05A7	data	value_5a7	Word set by pdr_start; play and stop load it into DX. (structural name)
+0000:05A9	data	value_5a9	Word set by pdr_start (delay count?); pdr_play uses it. (structural name)
+0000:05AB	data	voice_offset	Voice data far pointer, offset (DX of pdr_play).
+0000:05AD	data	voice_segment	Voice data far pointer, segment (ES of pdr_play).
+0000:05AF	data	voice_length	Voice length (CX of pdr_play).
+0000:05B1	data	play_flags	Flags of the playback (BL of pdr_play).
+0000:05B2	data	sample_position	Current sample position (the timer interrupt counts it up).
+0000:05B4	data	sample_value_5b4	Word read by the sample interrupt into DX. (structural name)
+0000:05B6	data	sample_value_5b6	Word set by pdr_play. (structural name)
+0000:05B8	data	sample_bias	Value subtracted from each sample.
+0000:05B9	data	sample_rate	Rate of the playback (AL of pdr_play).
+0000:05BA	data	playing	1 = a voice plays (INT 63h AH=02h returns it).
+0000:05BB	data	nibble_high	Which nibble of the sample byte comes next (toggles).
+0000:05BC	data	timer_works	1 = the timer interrupt counter changes (check_timer_running).
+0000:05BD	data	parts_masked	1 = the playback masks the PMD parts (INT 63h AH=03h).
+0000:05BE	data	option_5be	Option byte (pdr_start; the sample interrupt tests it). (structural name)
+0000:05BF	data	ready_flag	Set by pdr_start; pdr_play tests it. (structural name)
+0000:05C0	data	sample_flag	Flag of the sample interrupt. (structural name)
+0000:05C1	data	pmd_mask_value	PMD part mask of the playback (compared in the sample interrupt).
+0000:05C2	data	timer_count	Timer 0 count restored after the playback.
+0000:05C4	data	value_5c4	Word set by pdr_start. (structural name)
+0000:0CB9	data	measure_value_1	Word kept by measure_cpu_speed. (structural name)
+0000:0CBB	data	measure_value_2	Word kept by measure_cpu_speed. (structural name)
+0000:0CBD	data	measure_value_3	Byte kept by measure_cpu_speed. (structural name)
+0000:0CBE	data	measure_value_4	Byte kept by measure_cpu_speed. (structural name)
+0000:1012	data	board_id	Board ID byte read by detect_board (DH).
+0000:106B	data	timer_ticks	Timer interrupt counter while measuring.
+0000:106D	data	option_106d	Option byte (pdr_start tests it). (structural name)
+0000:106E	data	board_86_found	1 = a PC-9801-86 board answered at A460h.
+0000:106F	data	board_type	Board type found by detect_board (1 or 2).

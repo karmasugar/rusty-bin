@@ -1,0 +1,181 @@
+# Names for OP.COM (opening / attract loop). DOS COM: addresses are segment offsets (file offset + 100h).
+0000:0100	func	op_main	Resize memory, change to A:\RUSTY (tries other drives), load rusty.fot, mgxload.bin, drums.pps, run the scene table at 0480h in a loop, exit with a key flag in AL.
+0000:01E0	label	op_scene_loop	For each word of the scene table at 0480h: clear_text_screen, CALL scene; 0 = start again.
+0000:0277	func	op_read_input	Joystick (PMD AH=16h) and keys.
+0000:0299	func	op_install_handlers	Ctrl-Break state and interrupt vectors (INT 21h AH=33h/35h/25h). (guess)
+0000:02EB	func	dos_alloc_a	DOS memory allocation.
+0000:02F3	func	dos_alloc_b	DOS memory allocation.
+0000:02FB	func	op_vsync_install	Hook the vsync interrupt, unmask IRQ 2. (guess for the details)
+0000:0344	func	op_vsync_remove	Mask IRQ 2, restore the vectors. (guess)
+0000:04B3	func	op_file_open	DOS open.
+0000:050E	func	op_console_setup	Text screen setup: INT DCh CL=10h (console control), graphics display off/on. (guess)
+0000:08E9	func	op_file_open_at	Open file DX and seek (AL). (guess)
+0000:0928	func	op_file_close	DOS close.
+0000:093C	func	op_read_word	Read a value from the open file. (guess)
+0000:0949	func	op_file_read	DOS read.
+0000:09FE	func	op_video_init	Graphics mode, mode flip-flops, display page.
+0000:0A48	func	op_page_flip	Swap the display and draw page. (guess)
+0000:0A78	func	op_grcg_fill	Fill with the GRCG. (guess)
+0000:0CFF	func	op_set_palette	Set the 16-color palette from DS:SI.
+0000:0F19	func	op_gdc_command	GDC graphic command (scroll?). (guess)
+0000:0FD2	func	op_pmd_board	PMD AH=09h (board type).
+0000:0FD7	func	op_pps_load	Load a .PPS file into PPSDRV (INT 64h AH=04h).
+0000:0FFD	func	op_load_mgx	Load an MGX image file DX. (guess)
+0000:1055	func	op_wait	Wait AL frames; CF = 1 if a key was pressed. (guess)
+0000:1067	func	op_pmd_call	PMD INT 60h call with the function AH (when PMD is present).
+0000:10C2	func	op_load_font	Allocate memory and load rusty.fot (font). (guess)
+0000:1109	func	op_read_kanji	Read a glyph from the kanji ROM (ports A1h, A3h, A5h, A9h).
+0000:11DD	func	clear_text_screen	Text display off, fill text VRAM, text display on.
+0000:122E	func	op_scene_01	Scene 1 of the opening loop (scene table entry 0).
+0000:128C	func	op_scene_02	Scene 2 of the opening loop (scene table entry 1).
+0000:1788	func	op_scene_03	Scene 3 of the opening loop (scene table entry 2).
+0000:19C8	func	op_scene_04	Scene 4 of the opening loop (scene table entry 3).
+0000:1ACC	func	op_scene_05	Scene 5 of the opening loop (scene table entry 4).
+0000:1BA8	func	op_scene_06	Scene 6 of the opening loop (scene table entry 5).
+0000:1DDE	func	op_scene_07	Scene 7 of the opening loop (scene table entry 6).
+0000:1ED6	func	op_scene_08	Scene 8 of the opening loop (scene table entry 7).
+0000:20B4	func	op_scene_09	Scene 9 of the opening loop (scene table entry 8).
+0000:21B6	func	op_scene_10	Scene 10 of the opening loop (scene table entry 9).
+0000:2316	func	op_scene_11	Scene 11 of the opening loop (scene table entry 10).
+0000:2374	func	op_scene_12	Scene 12 of the opening loop (scene table entry 11).
+0000:246C	func	op_scene_13	Scene 13 of the opening loop (scene table entry 12).
+0000:261A	func	op_scene_14	Scene 14 of the opening loop (scene table entry 13).
+0000:29E8	func	op_scene_15	Scene 15 of the opening loop (scene table entry 14).
+0000:2B34	func	op_scene_16	Scene 16 of the opening loop (scene table entry 15).
+0000:2C5A	func	op_scene_17	Scene 17 of the opening loop (scene table entry 16).
+0000:2D42	func	op_scene_18	Scene 18 of the opening loop (scene table entry 17).
+0000:2F14	func	op_scene_19	Scene 19 of the opening loop (scene table entry 18).
+0000:3020	func	op_scene_20	Scene 20 of the opening loop (scene table entry 19).
+0000:325E	func	op_scene_21	Scene 21 of the opening loop (scene table entry 20).
+0000:352C	func	op_scene_22	Scene 22 of the opening loop (scene table entry 21).
+0000:0A67	func	clear_both_pages	Fill both pages with the color CL. (same code as VISUAL.COM 0000:3396)
+0000:0D24	func	clamp_color_level	AL = AL + BL, limited to 0-15. (same code as VISUAL.COM 0000:4492)
+0000:0E22	func	scroll_reset	Reset the display areas (area 1 = 400 lines) and write them to the GDC. (same code as VISUAL.COM 0000:327D, data addresses differ)
+# Function names from the naming pass of 2026-09-30 (read from the recompiled code).
+0000:0367	func	int_handler_nop_a	Empty interrupt handler (IRET).
+0000:0368	func	int_handler_nop_b	Empty interrupt handler (IRET).
+0000:0369	func	int_handler_nop_c	Empty interrupt handler (IRET).
+0000:036B	func	op_vsync_handler	Vsync interrupt: count the frames (32-bit 3A16, and 3A1A), call the hook [3A12], re-arm vsync (port 64h), chain to the old handler.
+0000:03A4	func	op_vsync_hook_none	Empty vsync hook (RETF).
+0000:04AE	func	dos_read	DOS read (INT 21h AH=3Fh).
+0000:0572	func	text_vram_save	Copy text VRAM A000:0000 (2000h words) to A100:0000. (guess)
+0000:057A	func	text_vram_restore	Copy A100:0000 (2000h words) back to text VRAM A000:0000. (guess)
+0000:058E	func	text_vram_clear	Fill the text codes with spaces and the attributes with E1h.
+0000:07CF	func	load_whole_file	Open the file DX, allocate 64 KB (INT 21h AH=48h) and read the file into it; AX = its segment, CF = 1 on an error.
+0000:0834	func	load_lzss_file	Open the file DX, read its header, LZSS-decode it to ES:DI (lzss_decode_file), close it.
+0000:0863	func	lzss_decode_file	LZSS-decode the open file to ES:DI (4 KB ring buffer 3B2F).
+0000:0AEE	func	load_and_show_mgx	Load the MGX file DX, decode it with MGXLOAD function 0 (buffer DI), free the file memory.
+0000:0B0D	func	show_mgx_and_free	Decode the loaded MGX data (DS) with MGXLOAD function 0 and free its memory.
+0000:0B25	func	load_and_show_mgx_1	Load the MGX file DX, decode it with MGXLOAD function 1, free the file memory.
+0000:0B44	func	show_mgx_and_free_1	Decode the loaded MGX data (DS) with MGXLOAD function 1 and free its memory.
+0000:0BB0	func	copy_rect_pages	Copy the rectangle (x AX, y BX, CX bytes x DX lines, destination DI or the same place) between the pages in all planes.
+0000:0D33	func	palette_fade	Fade: set the palette with the brightness BL every 4 frames, BL += DL until it equals BH.
+0000:0D64	func	palette_step_toward	Move every palette value one step toward the target palette.
+0000:0D9E	func	step_toward	Move AL one step toward AH.
+0000:0DAB	func	vsync_palette_fade_hook	Vsync hook: one fade step every [39DF] frames until the brightness [39DD] is reached.
+0000:0E4A	func	scroll_apply	Scroll the display by AX lines (wraps at 400 lines) and write the display areas to the GDC.
+0000:0EBC	func	scroll_write_gdc	Write the two display areas (39CE-39D9) to the graphic GDC.
+0000:0F24	func	vsync_scroll_hook	Vsync hook: scroll by [39E8] lines every [39E4] frames, [39E6] times.
+0000:0F53	func	wait_vsync_edge	Wait for the end and then the start of vsync (GDC status bit 20h).
+0000:103B	func	pmd_start	PMD: start the music (AH=00h).
+0000:1043	func	pmd_stop_all	PMD: stop the music (01h) and the sound effects (04h, 0Dh). (guess)
+0000:1072	func	pdr_restart_voice	When voices are on ([39F0] != FFh): stop the voice and play it (INT 63h AH=00h, 03h).
+0000:1137	func	text_draw_letterbox	Fill text rows at the top (DI = 0) and near the bottom (DI = D20h) with the user-defined glyphs 7640h/7632h/7642h/7650h (the black bars).
+0000:1166	func	text_fill_row_glyph	Fill one text row (40 double cells) with the glyph DX, attribute 1; DI += A0h.
+0000:119C	func	text_fill_cells_glyph	Fill CX double cells at DI with the glyph AX, attribute 1.
+0000:1669	func	mgx_decode_picture	Decode picture AX (segment table 176F) with MGXLOAD function 0 into the page [39EE]; keep its size (177F-1785). (guess)
+0000:1727	func	copy_segments_4x32k	Copy 4 x 8000h bytes from segment [39FA] to segment [39FC].
+0000:1747	func	copy_segment_32k	Copy 8000h bytes from DS to ES, then both segments += 800h.
+0000:190F	func	vsync_scroll_script_hook	Vsync hook: scroll like vsync_scroll_hook and step the command list [39EC] every [39EA] frames. (guess)
+0000:2845	func	reveal_picture_top_bottom	Copy the picture from the buffer line by line from the top (FA0h) and from the bottom (6D10h) toward the middle, on both pages.
+0000:289F	func	copy_line_from_buffer_all_planes	Copy the line AX (28h words) from the picture buffer [39FA] (parts 2000h-3800h) to VRAM in all four planes.
+0000:28CE	func	copy_line_from_buffer_plane	Copy 28h words from the buffer part AX to the plane segment DX.
+0000:28E1	func	xor_picture_planes	XOR the four buffer parts into the parts 2000h higher (xor_picture_plane_part).
+0000:2903	func	xor_picture_plane_part	XOR 12Ch lines (from FA0h) of the buffer part AX into the part AX + 2000h (unrolled).
+0000:2B10	func	wait_raster_lines	Wait for a number of hblank edges after vsync (a raster delay). (guess)
+0000:2EE1	func	text_animate_glyphs_until_key	Show the user-defined glyphs 7621h and up one after the other with a delay until a key is pressed. (guess)
+0000:344D	func	swap_page_blocks	swap_page_blocks_plane for the four planes.
+0000:346F	func	swap_page_blocks_plane	Swap blocks of 7 x 8 bytes between page 0 and page 1 (port A6h) in plane segment BX, 12Ch lines.
+0000:34A7	func	copy_buffer_to_window	Copy the window part of the picture buffer AX to VRAM (FB0h, 1Bh words x 12Ch lines) in all four planes.
+0000:34D1	func	copy_buffer_to_window_plane	Copy 1Bh words x 12Ch lines to the window at FB0h in plane segment AX.
+0000:34E4	func	load_mgx_to_window_buffer	Load the MGX file DX, then copy the window (FB0h, 1Bh words x 12Ch lines) of the four planes into the picture buffer.
+0000:3519	func	copy_window_to_buffer_plane	Copy the window (FB0h, 1Bh words x 12Ch lines) of plane segment AX to ES:DI.
+0000:36C1	func	copy_buffer_line_all_planes	Copy one line (50h words) from the picture buffer parts to VRAM in all four planes.
+0000:36ED	func	copy_buffer_line_plane	Copy 50h words from the buffer part AX to the plane segment BX.
+0000:3700	func	clear_line_all_planes	Clear the line BX (50h words) in all four planes.
+0000:3722	func	clear_line_plane	Clear 50h words at DI in the plane segment BX.
+0000:372C	func	show_staff_picture	Show the staff picture staffN.mgx (N = AL): clear the page, load it, flip, fade in; a key stops it (CF = 1).
+0000:378E	func	staff_fade_out	Fade out the staff picture palette (3AEC) from brightness 0 to F0h.
+# Data (DS = CS), 2026-10-01.
+0000:0422	data	drive_letter	Drive letter tried for A:\RUSTY (counts up to 'Z').
+0000:042B	data	old_pic_mask	PIC mask restored by op_vsync_remove.
+0000:042C	data	ctrl_break_state	Ctrl-Break state saved by op_install_handlers (INT 21h AH=33h).
+0000:042D	data	saved_mode	Byte kept by op_main (AL, restored at the end). (guess)
+0000:054C	data	console_setting	Byte read by op_console_setup. (guess)
+0000:0830	data	load_saved_ss	SS saved by load_whole_file.
+0000:0832	data	load_saved_sp	SP saved by load_whole_file.
+0000:09C6	data	read_saved_ah	AH kept by op_file_read.
+0000:1723	data	picture_arg_a	Word read by mgx_decode_picture into DX. (structural name)
+0000:1725	data	picture_arg_b	Second word read by mgx_decode_picture into DX. (structural name)
+0000:177F	data	picture_saved_ax	AX kept by mgx_decode_picture.
+0000:1781	data	picture_saved_bx	BX kept by mgx_decode_picture.
+0000:1783	data	picture_saved_cx	CX kept by mgx_decode_picture.
+0000:1785	data	picture_saved_dx	DX kept by mgx_decode_picture.
+0000:378A	data	staff_saved_ss	SS saved by show_staff_picture (a key leaves it).
+0000:378C	data	staff_saved_sp	SP saved by show_staff_picture.
+0000:37AA	data	staff_number	Number N of the staffN.mgx picture.
+0000:39CE	data	scroll_area1_start	GDC display area 1: start address (the same code as VISUAL.COM).
+0000:39D0	data	scroll_area1_flags	GDC display area 1: flag byte. (guess)
+0000:39D1	data	scroll_area1_lines	GDC display area 1: lines.
+0000:39D3	data	scroll_area2_start	GDC display area 2: start address.
+0000:39D5	data	scroll_area2_flags	GDC display area 2: flag byte. (guess)
+0000:39D6	data	scroll_area2_lines	GDC display area 2: lines.
+0000:39D8	data	scroll_position	Current scroll position (VRAM offset of the top line).
+0000:39DA	data	scroll_gdc_bits	Bits added to the line counts written to the GDC. (guess)
+0000:39DB	data	fade_active	1 = the vsync hook fades the palette.
+0000:39DC	data	fade_brightness	Current brightness of the fade.
+0000:39DD	data	fade_target	Target brightness of the fade.
+0000:39DE	data	fade_step	Brightness step per fade step.
+0000:39DF	data	fade_interval	Frames per fade step.
+0000:39E0	data	fade_countdown	Frames until the next fade step.
+0000:39E1	data	fade_palette	Offset of the palette that the fade scales.
+0000:39E3	data	scroll_countdown	Frames until the next scroll step.
+0000:39E4	data	scroll_interval	Frames per scroll step.
+0000:39E5	data	scroll_active	1 = the vsync hook scrolls (the scene waits for 0).
+0000:39E6	data	scroll_steps_left	Scroll steps left.
+0000:39E8	data	scroll_lines	Lines per scroll step.
+0000:39EA	data	script_countdown	Frames until the next command of the scroll command list.
+0000:39EB	data	script_interval	Frames per command of the scroll command list.
+0000:39EC	data	script_pointer	Next command of the scroll command list.
+0000:39EE	data	display_page	Displayed VRAM page.
+0000:39EF	data	draw_page	VRAM page for drawing (MGX pictures are decoded into it).
+0000:39F0	data	voice_mode	Voice setting from AL at the start (FFh = no voices).
+0000:39F2	data	scene_segment_1	Segment of a loaded scene file (scenes 2/4 set it, 3/6 use it). (guess)
+0000:39F4	data	scene_segment_2	Segment of a loaded scene file (scenes 2/4/14 set it, 7 uses it). (guess)
+0000:39F6	data	scene_segment_3	Segment of a loaded scene file (scene 2). (guess)
+0000:39F8	data	scene_segment_4	Segment of a loaded scene file (scene 2 sets it, 4 uses it). (guess)
+0000:39FA	data	picture_buffer_segment	Segment of the picture buffer (MGX decode source).
+0000:39FC	data	second_buffer_segment	Segment of a second buffer (scenes 4, 7, 12). (guess)
+0000:39FE	data	mgxload_offset	Far pointer to MGXLOAD.BIN, offset (0).
+0000:3A00	data	mgxload_segment	Far pointer to MGXLOAD.BIN, segment.
+0000:3A02	data	old_vector_1_offset	First interrupt vector saved by op_install_handlers, offset.
+0000:3A04	data	old_vector_1_segment	First interrupt vector saved by op_install_handlers, segment.
+0000:3A06	data	old_vector_2_offset	Second interrupt vector saved by op_install_handlers, offset.
+0000:3A08	data	old_vector_2_segment	Second interrupt vector saved by op_install_handlers, segment.
+0000:3A0A	data	old_vector_3_offset	Third interrupt vector saved by op_install_handlers, offset.
+0000:3A0C	data	old_vector_3_segment	Third interrupt vector saved by op_install_handlers, segment.
+0000:3A12	data	vsync_hook_offset	Routine called by op_vsync_handler, offset (fade, scroll or 03A4h).
+0000:3A14	data	vsync_hook_segment	Routine called by op_vsync_handler, segment.
+0000:3A16	data	frames_total	32-bit vsync frame counter, low word.
+0000:3A18	data	frames_total_high	32-bit vsync frame counter, high word.
+0000:3A1A	data	frame_timer	Vsync frame counter that the scenes reset.
+0000:3A1C	data	old_vsync_offset	Original INT 0Ah vector, offset.
+0000:3A1E	data	old_vsync_segment	Original INT 0Ah vector, segment.
+0000:3A24	data	scene_saved_ss	SS saved by scenes 2 and 3 (a key leaves the scene).
+0000:3A28	data	scene_saved_sp	SP saved by scenes 2 and 3.
+0000:3B22	data	file_handle	DOS handle of the open file.
+0000:3B24	data	read_buffer_segment	Segment of the file read buffer.
+0000:3B26	data	read_buffer_position	Read position in the file read buffer.
+0000:3B28	data	read_buffer_fill	Bytes in the file read buffer. (guess)
+0000:3B2A	data	file_position	File position after the seek, low word. (guess)
+0000:3B2C	data	file_position_high	File position after the seek, high word. (guess)

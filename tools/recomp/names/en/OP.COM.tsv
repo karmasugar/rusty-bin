@@ -1,0 +1,3 @@
+# Names for en/OP.COM.
+0000:013E	func	op_main_at_013e	Entry inside op_main: the same code from this address.
+0000:01E0	func	op_main_at_01e0	Entry inside op_main: the same code from this address.

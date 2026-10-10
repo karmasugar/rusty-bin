@@ -1,0 +1,56 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "linux-dev",
+      "displayName": "Linux development build (build/linux-dev)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/linux-dev"
+    },
+    {
+      "name": "linux-release",
+      "displayName": "Linux release build and package (build/linux-release)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/linux-release",
+      "cacheVariables": {
+        "RUSTY_RELEASE": "ON"
+      }
+    },
+    {
+      "name": "win-release",
+      "displayName": "Windows release build, cross-compiled with MinGW-w64 (build/win-release)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/win-release",
+      "toolchainFile": "${sourceDir}/cmake/mingw-w64-x86_64.cmake",
+      "cacheVariables": {
+        "RUSTY_RELEASE": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux-dev",
+      "configurePreset": "linux-dev"
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release"
+    },
+    {
+      "name": "win-release",
+      "configurePreset": "win-release"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "packageDirectory": "${sourceDir}/build/packages"
+    },
+    {
+      "name": "win-release",
+      "configurePreset": "win-release",
+      "packageDirectory": "${sourceDir}/build/packages"
+    }
+  ]
+}

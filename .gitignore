@@ -1,0 +1,9 @@
+roms/
+build/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
+ost/
+tools/external/
+PLAN.md

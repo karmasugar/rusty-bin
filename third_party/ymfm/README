@@ -1,0 +1,2 @@
+ymfm (YM2608 emulation) by Aaron Giles, BSD 3-Clause (see LICENSE).
+Source: https://github.com/aaronsgiles/ymfm commit 81aec25ccbb98f4873a255f7551ac4dadac59b4a (src/, only the files the OPNA needs).

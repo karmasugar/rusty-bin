@@ -1,0 +1,22 @@
+# Names for PPSDRV.COM (PPS driver: PCM sound effects played through PDR, interface INT 64h).
+# Function names from the naming pass of 2026-09-30 (read from the recompiled code).
+0000:0100	func	ppsdrv_start	COM entry: go to install.
+0000:0103	func	int64_handler	INT 64h: AH=00h stop, 01h/03h play the effect AL, 02h status, 04h load a PPS file, FFh driver check.
+0000:0146	func	pps_play	Play the PPS effect AL through PDR (INT 63h): address and length from the PPS table, rate from the entry; nothing without PDR.
+0000:01C7	func	pdr_present	CF = 0 when the INT 63h handler has the PDR signature 'PDR'.
+0000:025C	func	install	Parse the options, load the PPS file, hook INT 64h, stay resident (or print an error).
+0000:039B	func	set_default_file_name	Write the default PPS file name (858h) as the command line at 80h.
+0000:03B2	func	open_pps_file	Open the PPS file DX; on an error try again with the name without its path. (guess)
+0000:04E2	func	ppsdrv_resident	CF = 1 when the INT 64h handler has the PPSDRV signature 'PMP' (already resident).
+0000:0502	func	parse_decimal_byte	Parse a decimal number at DS:SI into AL; CF = 1 on an overflow.
+0000:052C	func	copy_file_name_add_extension	Copy the file name from DS:SI to ES:DI; add the extension from BX when the name has none.
+0000:0190	func	pps_play_at_0190	Entry inside pps_play: the same code from this address.
+# Data, 2026-10-01. 0190/0192 are written with DS = 0: the INT 64h entry of the interrupt vector table.
+0000:002C	data	psp_environment	PSP +2Ch: segment of the environment.
+0000:0190	data	ivt_int64_offset	Interrupt vector table (DS = 0): INT 64h offset.
+0000:0192	data	ivt_int64_segment	Interrupt vector table (DS = 0): INT 64h segment.
+0000:01E7	data	pps_table_offset	Offset of the loaded PPS data (the effect table).
+0000:01E9	data	pps_data_size	Size of the loaded PPS data. (guess)
+0000:022E	data	option_flag	Flag set by an option; install tests it three times. (structural name)
+0000:022F	data	file_handle	DOS handle of the PPS file.
+0000:0867	data	environment_segment	Copy of the environment segment (the PPS file path is searched there). (guess)
